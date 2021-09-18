@@ -108,7 +108,7 @@ let inv = () => {
   }
 
   println(`You have the following items in your inventory:`);
-  disk.inventory.forEach(item => {
+  disk.inventory.filter(i => i).forEach(item => {
     println(`${bullet} ${getName(item.name)}`);
   });
 };
