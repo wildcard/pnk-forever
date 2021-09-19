@@ -733,7 +733,8 @@ let autocomplete = () => {
     }
   } else if (words.length === 2) {
     const optionMap = {
-      talk: ['to', 'about'],
+      talk: ['to', 'with', 'about'],
+      fly: ['to'],
       take: itemNames,
       use: itemNames,
       go: (room.exits || []).map(exit => exit.dir),
@@ -747,6 +748,9 @@ let autocomplete = () => {
       at: characterNames.concat(itemNames),
     };
     options = (optionMap[words[1]] || []).flat().map(string => string.toLowerCase());
+    if (words[0] === 'fly'){
+      options = disk.rooms.filter((r) => r.isFlyableFrom).map(r => r.id);
+    }
   }
 
   const stubRegex = new RegExp(`^${stub}`);

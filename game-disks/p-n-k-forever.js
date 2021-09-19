@@ -3,18 +3,23 @@
 
 bullet = "&ast;";
 
-
-
+const updateHelpCommand = (additionalCommands) => {
 // customize the help menu
 help = () =>
   println(`
   The following commands are available:
+  ========================================================
+
     LOOK :: repeat room description
+    
     LOOK AT [OBJECT NAME] e.g. 'look at key'
     TAKE [OBJECT NAME] e.g. 'take book'
     TALK TO [CHARACTER NAME]  e.g. 'talk to mary'
     GO [DIRECTION] e.g. 'go north'
     USE [OBJECT NAME] e.g. 'use door'
+
+    ${additionalCommands || ``}
+
     ITEMS:  list items in the room
     INV :: list inventory items
     SAVE:   save the current game
@@ -23,22 +28,46 @@ help = () =>
   `);
 
 commands[0].help = help;
+}
+updateHelpCommand();
 
 document.getElementById("styles").setAttribute("href", "styles/retro.css");
 
+const getFlyableRooms = () => {
+  return disk.rooms.filter((r) => r.isFlyableFrom);
+};
+
 const fly = (args) => {
   const [_, name] = args;
-  if (["japan", "home"].includes(name)) {
-    println(`You fly to ${name}!`);
-    getCharacter("k").roomId = name;
-    enterRoom(name);
+  const flyableRooms = getFlyableRooms();
+  const flyableRoomsNames = flyableRooms.map((r) => r.id);
+  if (flyableRoomsNames.includes(name)) {
+    const destRoom = flyableRooms.find((r) => r.id === name);
+    if (disk.roomId === destRoom.isFlyableFrom) {
+      println(`You fly to ${name}!`);
+
+      const k = getCharacter("k");
+      if (k.agreedToTravel) {
+        k.roomId = name;
+      }
+      enterRoom(name);
+    } else {
+      println(`You can't fly to ${name} from ${disk.roomId}!`);
+    }
   } else {
-    println(`You don't know how to fly to ${name}.`);
+    if (name) {
+      println(`You don't know how to fly to ${name}.`);
+    }
     println("You hover in the sky! 🐦");
   }
 };
 
-const debug_room = 'beach'
+commands[0].fly = fly;
+commands[2] = Object.assign(commands[2], { fly });
+
+let isFlyOn = false;
+
+const debug_room = "japan";
 
 const talesOfPhonixAndK = {
   roomId: debug_room || "beach_rest", // Set this to the ID of the room you want the player to start in.
@@ -146,7 +175,7 @@ const talesOfPhonixAndK = {
       id: "beach",
       img: `
        _\\/_                 |                _\\/_
-       /o\\             \\       /            //o\\
+       /o\\              \\       /            //o\\
         |                 .---.                |
        _|_______     --  /     \\  --     ______|__
              \`~^~^~^~^~^~^~^~^~^~^~^~\`
@@ -163,20 +192,21 @@ const talesOfPhonixAndK = {
           desc: `a bicycle`,
         },
         {
-          name: ['shekel', 'dime', 'coin'],
+          name: ["shekel", "dime", "coin"],
           desc: `Wow, you found a Shekel in the sand.`,
           isTakeable: true, // allow the player to TAKE this item
-          onTake: () => println(`You bend down and pick up the tiny, shiny coin.
+          onTake: () =>
+            println(`You bend down and pick up the tiny, shiny coin.
 
           *Now it's in your **inventory**, and you can use it at any time, in anywhere. (Don't spend it all in one place!)
 
           Type **INV** to see a list of items in your inventory.*`),
           // using the dime randomly prints HEADS or TAILS
           onUse: () => {
-            const side = Math.random() > 0.5 ? 'HEADS' : 'TAILS';
+            const side = Math.random() > 0.5 ? "HEADS" : "TAILS";
             println(`You flip the shekel. It lands on ${side}.`);
-          }
-        }
+          },
+        },
       ],
       exits: [
         {
@@ -193,6 +223,163 @@ const talesOfPhonixAndK = {
       
       It's good time as any to talk with K.
       `,
+      onEnter: () => {
+        println(
+          `P. says: "You know I'm living near here in Jaffa we can go to my place`
+        );
+        const k = getCharacter("k");
+        k.roomId = "beach_sunset";
+        k.roomTopics["beach"] = k.topics;
+        k.topics = k.roomTopics["beach_sunset"] || [
+          {
+            option: "What's your favorite type of **FOOD**?",
+            line: "Easy Fruits & Vegetables 🍓🥦 What's yours?",
+            removeOnRead: true,
+          },
+          {
+            option: "**MANGO**! 🥭",
+            line: "I like them so much, I eat them all the time",
+            prereqs: ["food"],
+            removeOnRead: true,
+            onSelected: () => {
+              fetch(
+                `https://maker.ifttt.com/trigger/pnk_mango/with/key/buN0S2VUtrVLjyoCLowl7X?value1=mango`
+              );
+            },
+          },
+          {
+            option:
+              "What's your favorite type of hot beverage you like to **DRINK**? Coffee or Tea?",
+            removeOnRead: true,
+            line: "Coffee 🍵 & yours?",
+          },
+          {
+            option: "**TEA** 🫖",
+            line: "YES! I love to take my tea with herbs: Mint & Lemon verbena. no suger please",
+            removeOnRead: true,
+            prereqs: ["drink"],
+            onSelected: () => {
+              fetch(
+                `https://maker.ifttt.com/trigger/pnk_drink/with/key/buN0S2VUtrVLjyoCLowl7X?value1=tea`
+              );
+            },
+          },
+          {
+            option: "Do you have a **SWEET** you can't resist?",
+            line: "I like many sweets, I love Ice cream 🍨. You?",
+            removeOnRead: true,
+          },
+          {
+            option: "**CHOCOLATE** 🍫",
+            prereqs: ["sweet"],
+            removeOnRead: true,
+            line: `I like many chocolates, I love them all. But many dark chocolate
+            
+            **TIP** look for a drawer it number is four
+            `,
+            onSelected: () => {
+              fetch(
+                `https://maker.ifttt.com/trigger/pnk_chocolate/with/key/buN0S2VUtrVLjyoCLowl7X`
+              );
+            },
+          },
+          {
+            option: "Do you want to **TRAVEL** the world?",
+            line: `I love to travel, I've traveled a lot.
+            I want to be a digital nomad in the future`,
+            removeOnRead: true,
+          },
+          {
+            option: `Digital what? What's a digital **NOMAD**`,
+            line: `A digital nomad is a person who lives all over the world traveling & working in a remote manner.
+            
+            Read more about it: https://en.wikipedia.org/wiki/Digital_nomad`,
+            prereqs: ["travel"],
+            removeOnRead: true,
+          },
+          {
+            option: "Do you want to travel with me around the **WORLD**?",
+            line: `I would love to travel with you, Where do you think we should head first?.`,
+            prereqs: ["travel", "nomad"],
+            removeOnRead: true,
+          },
+          {
+            option: "**JAPAN** 🇯🇵",
+            line: `I love asian culture. The food, the people & their style
+            My ancestors are from Japan`,
+            prereqs: ["travel", "nomad", "world"],
+            removeOnRead: true,
+            onSelected: () => {
+              const k = getCharacter("k");
+              k.agreedToTravel = true;
+            },
+          },
+          {
+            option: "How can we **FLY** to **Japan** ✈️?",
+            line: `Maybe we should take a plane? 
+            P. says: I know! I can take us their. I can fly ✈️
+            
+            Use **FLY** to [a place] to use your skill to fly, it's your secret trick`,
+            prereqs: ["travel", "nomad", "world", "japan"],
+            removeOnRead: true,
+            onSelected: () => {
+              if (!isFlyOn) {
+                commands[2] = Object.assign(commands[2], { fly });
+
+                updateHelpCommand(`FLY TO [ROOM NAME] e.g. 'fly to room'`)
+
+                isFlyOn = true;
+              }
+            },
+          },
+          {
+            option: "**GERMANY** 🇩🇪",
+            line: `I love Berlin. Ich bin berliner 🐻 
+            P. says: On a second thought I hate german people.
+            Did I tell you about my german teacher 😖`,
+            prereqs: ["travel", "nomad", "world"],
+            removeOnRead: true,
+          },
+          {
+            option: "**CHINA** 🇨🇳",
+            line: `I'm looking for something more western civilization`,
+            prereqs: ["travel", "nomad", "world"],
+            removeOnRead: true,
+          },
+          {
+            option: "**HONG KONG** 🇭🇰",
+            line: `Sounds good, but I'll pass`,
+            prereqs: ["travel", "nomad", "world", "china"],
+            removeOnRead: true,
+          },
+          {
+            option: "**INDIA** 🇮🇳",
+            line: `Indians are sticky, love their food though 🙈`,
+            prereqs: ["travel", "nomad", "world"],
+            removeOnRead: true,
+          },
+          {
+            option: "**FRANCE** 🇫🇷",
+            line: `I hate French people`,
+            prereqs: ["travel", "nomad", "world"],
+            removeOnRead: true,
+          },
+          {
+            option: "**ITALY** 🇮🇹",
+            line: `I love italy, I love their food 🍝
+            but I don't see myself living their. at least for now`,
+            prereqs: ["travel", "nomad", "world"],
+            removeOnRead: true,
+          },
+          {
+            option: "**USA** 🇺🇸",
+            line: `YES! let's go right now! USA USA I love america
+            P. says: In second thought, I don't this it is the right move for us right now`,
+            prereqs: ["travel", "nomad", "world"],
+            removeOnRead: true,
+          },
+        ];
+      },
       exits: [
         {
           dir: "south",
@@ -216,16 +403,26 @@ const talesOfPhonixAndK = {
       items: [
         {
           name: "bed",
-          desc: `K. cuddles you & you sleep togther until morning 💤`,
+          desc: `K. is laying on the bed`,
           onUse: () => {
             const street = getRoom("jaffa_street");
             street.items.push({
               name: ["Kite equipement", "Kite", "Kite Board"],
               desc: `You found your Kite Board.`,
+              isTakeable: true,
+              onTake: () => {
+                println(`You took your Kite Board
+              
+              Use this code in the future for a special discout: \`PNK-n3zk7MAMBG-GIFT
+              \` `);
+                fetch(
+                  `https://maker.ifttt.com/trigger/pnk_kite/with/key/buN0S2VUtrVLjyoCLowl7X`
+                );
+              },
             });
             street.exits.push({
               dir: "north",
-              id: "beach",
+              id: "beach_sunset",
             });
 
             println([
@@ -256,7 +453,7 @@ const talesOfPhonixAndK = {
         {
           name: "door",
           desc: `You can go SOUTH to the Jaffa Apartment.`,
-          onUse: () => println(`Type GO SOUTH to go to the Jaffa Apartment.`),
+          onUse: () => println(`Type GO SOUTH to enter the Jaffa Apartment.`),
         },
       ],
       exits: [
@@ -265,6 +462,47 @@ const talesOfPhonixAndK = {
           id: "jaffa_apt",
         },
       ],
+    },
+    {
+      name: "Kyoto, Japan 🏯",
+      id: "japan",
+      img: `
+                                      /\\
+                                      /\\
+                                      /\\
+                                      /\\
+                                    _\`=='_
+                                 _-~......~-_
+                             _--~............~--_
+                       __--~~....................~~--__
+           .___..---~~~................................~~~---..___,
+            \`=.________________________________________________,='
+               @^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^@
+                        |  |  I   I   II   I   I  |  |
+                        |  |__I___I___II___I___I__|  |
+                        | /___I_  I   II   I  _I___\ |
+                        |'_     ~~~~~~~~~~~~~~     _\`|
+                    __-~...~~~~~--------------~~~~~...~-__
+            ___---~~......................................~~---___
+.___..---~~~......................................................~~~---..___,
+ \`=.______________________________________________________________________,='
+    @^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^@
+              |   |    | |    |  |    ||    |  |    | |    |   |
+              |   |____| |____|  |    ||    |  |____| |____|   |
+              |__________________|____||____|__________________|
+            _-|_____|_____|_____|__|------|__|_____|_____|_____|-_
+
+      `,
+      desc: `You're in Kyoto, Japan 🏯
+      
+      K. is with you 🖤`,
+      isFlyableFrom: "beach_sunset",
+    },
+    {
+      name: "TLV Apartment",
+      id: "home",
+      desc: `You're in your home.`,
+      isFlyableFrom: "japan",
     },
   ],
   characters: [
@@ -278,6 +516,7 @@ const talesOfPhonixAndK = {
       onTalk: () => {
         println(`"Hi," he says, "How can I help you?"`);
       },
+      roomTopics: {},
       topics: [
         {
           option: "What's your **NAME**?",
@@ -288,47 +527,51 @@ const talesOfPhonixAndK = {
             );
 
             const k = getCharacter("k");
-            k.name.unshift("K.")
-            k.desc = `It's K.`
-            
+            k.name.unshift("K.");
+            k.desc = `It's K.`;
+
             const room = getRoom("beach");
             room.desc = `You are on the beach.
             **K.** is here
-            `
-            const bike = getItemInRoom('bicycle', room.id);
-            bike.desc = `K's bicycle`
+            `;
+            const bike = getItemInRoom("bicycle", room.id);
+            bike.desc = `K's bicycle`;
           },
         },
         {
           option: "Your **BICYCLE** is cool, what's it?",
-          line: `It's a Brompton, it's a folding bicycle`
+          line: `It's a Brompton, it's a folding bicycle`,
         },
         {
           option: "I've a **BUSINESS** question, do you mind?",
           line: `Not at all, ask away`,
+          prereqs: ["name"],
           removeOnRead: true,
         },
         {
-          option: "I'm an **ARTIST**, I thought to start dog portrait business. since you're a dog I thought you would know a thing or two about it",
+          option:
+            "I'm an **ARTIST**, I thought to start dog portrait business. since you're a dog I thought you would know a thing or two about it",
           line: `I'm not sure I'm up to it, but I'm sure I you can help me out here. I know various dog association persona & I've some business experince myself
           I'll be glad to help out`,
           removeOnRead: true,
-          prereqs: ['business'],
+          prereqs: ["business"],
         },
         {
-          option: "The sun is going down but, I think we have much to talk about. Want to **CONTINUE** our conversation to the sunset?",
-          line: `Sure, I've never met someone like you. I would love that`,
+          option:
+            "The sun is going down but, I think we have much to talk about. Want to **CONTINUE** our conversation to the sunset?",
+          line: `Sure, I've never met someone like you. I would love that
+          Let's walk beside the sunset to Jaffa it's **SOUTH** of here`,
           removeOnRead: true,
-          prereqs: ['business', 'artist'],
+          prereqs: ["business", "artist"],
           onSelected: () => {
             const room = getRoom("beach");
-            const exit = getExit('south', room.exits)
+            const exit = getExit("south", room.exits);
 
             if (exit.block) {
-              delete exit.block; 
+              delete exit.block;
             }
           },
-        }
+        },
       ],
     },
   ],
