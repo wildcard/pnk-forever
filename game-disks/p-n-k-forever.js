@@ -4,9 +4,9 @@
 bullet = "&ast;";
 
 const updateHelpCommand = (additionalCommands) => {
-// customize the help menu
-help = () =>
-  println(`
+  // customize the help menu
+  help = () =>
+    println(`
   The following commands are available:
   ========================================================
 
@@ -27,8 +27,8 @@ help = () =>
     HELP :: this help menu
   `);
 
-commands[0].help = help;
-}
+  commands[0].help = help;
+};
 updateHelpCommand();
 
 document.getElementById("styles").setAttribute("href", "styles/retro.css");
@@ -37,14 +37,27 @@ const getFlyableRooms = () => {
   return disk.rooms.filter((r) => r.isFlyableFrom);
 };
 
-const fly = (args) => {
+const fly = (name) => {
+  if (name && name.length > 0) {
+    flyTo([null, name]);
+  } else {
+    flyTo(name);
+  }
+};
+
+const flyTo = (args) => {
   const [_, name] = args;
+
   const flyableRooms = getFlyableRooms();
   const flyableRoomsNames = flyableRooms.map((r) => r.id);
   if (flyableRoomsNames.includes(name)) {
     const destRoom = flyableRooms.find((r) => r.id === name);
     if (disk.roomId === destRoom.isFlyableFrom) {
       println(`You fly to ${name}!`);
+
+      if (typeof destRoom.onFly === "function") {
+        destRoom.onFly({ disk, println });
+      }
 
       const k = getCharacter("k");
       if (k.agreedToTravel) {
@@ -63,11 +76,13 @@ const fly = (args) => {
 };
 
 commands[0].fly = fly;
-commands[2] = Object.assign(commands[2], { fly });
+commands[1].fly = fly;
+commands[2] = Object.assign(commands[2], { fly: flyTo });
 
 let isFlyOn = false;
+let isLove = false;
 
-const debug_room = "japan";
+const debug_room = null //"japan";
 
 const talesOfPhonixAndK = {
   roomId: debug_room || "beach_rest", // Set this to the ID of the room you want the player to start in.
@@ -326,7 +341,7 @@ const talesOfPhonixAndK = {
               if (!isFlyOn) {
                 commands[2] = Object.assign(commands[2], { fly });
 
-                updateHelpCommand(`FLY TO [ROOM NAME] e.g. 'fly to room'`)
+                updateHelpCommand(`FLY TO [ROOM NAME] e.g. 'fly to room'`);
 
                 isFlyOn = true;
               }
@@ -497,11 +512,204 @@ const talesOfPhonixAndK = {
       
       K. is with you 🖤`,
       isFlyableFrom: "beach_sunset",
+      onEnter: () => {
+        println(`You landed in Kyoto, Japan. 
+        3 Year have passed...
+        
+        You're now outside of your Kyoto apartment`);
+      },
+      items: [
+        {
+          name: ["book"],
+          desc: `you found a book with Japanese drawing.`,
+        },
+      ],
+      exits: [
+        {
+          dir: "north",
+          id: "kyoto_apt",
+        },
+      ],
+    },
+    {
+      name: "Kyoto Apartment",
+      desc: `You're in your cusy Japanese apratment
+      
+      You smell a wonderful smell, something is cooking in the **KITCHEN**.
+      `,
+      id: "kyoto_apt",
+      onEnter: () => {
+        const k = getCharacter("k");
+        k.roomId = "kitchen";
+        k.roomTopics["beach_sunset"] = k.topics;
+        k.topics = k.roomTopics["kitchen"] || [
+          {
+            option: "What're you **MAKING**? 🍜",
+            line: `I'm making dim sum.`,
+            removeOnRead: true,
+          },
+          {
+            option: "I **LOVE** you 🧡",
+            line: `I love you too. 🖤`,
+            onSelected: () => {
+              isLove = true;
+              fetch(
+                `https://maker.ifttt.com/trigger/pnk_love/with/key/buN0S2VUtrVLjyoCLowl7X`
+              );
+            },
+          },
+        ];
+      },
+      items: [
+        {
+          name: ["Uwabaki", "slippers"],
+          desc: `You found your slippers.`,
+          onUse: () => {
+            const room = getRoom("kyoto_apt");
+            const exit = getExit("east", room.exits);
+            delete exit.block;
+
+            println(
+              `You wear your nice & clean house slippers "Uwabaki" instead of your dirty shoes`
+            );
+          },
+        },
+        {
+          name: "Tiger Zodiac Sign",
+          isTakeable: true,
+          desc: `You found your Zodiac sign. The Tiger`,
+        },
+      ],
+      exits: [
+        {
+          dir: "east",
+          id: "kitchen",
+          block: "K. yells at you! No walking in the house with dirty shoes!",
+        },
+      ],
+    },
+    {
+      name: "Kitchen",
+      id: "kitchen",
+      desc: `You're in the KITCHEN.
+
+      K. is cooking Dim Sum famous japanse dumplings`,
+      items: [
+        {
+          name: ["chop sticks", "fancy chop sticks"],
+          desc: `You found your fancy chop sticks.`,
+          isTakeable: true,
+          onTake: () => {
+            const dumplings = getItemInRoom("dumplings", "kitchen");
+            dumplings.isTakeable = true;
+            dumplings.onUse = () => {
+              println(`You eat the japanese dumpling. yum yum yum`);
+              const k = getCharacter("k");
+              k.topics.push({
+                option: "What's the deal with the **TIGER** sign? 🐅📖",
+                line: `This is your Zodiac sign the Tiger`,
+                removeOnRead: true,
+              });
+              k.topics.push({
+                option: "What is your **ZODIAC** sign?",
+                line: `I'm Snake 🐍`,
+                prereqs: ["tiger"],
+                removeOnRead: true,
+                onSelected: () => {
+                  k.topics.push({
+                    option: "How our **FUTURE** be like?",
+                    line: `Our relationship will grow only stornger & stroger with the year.
+                    We will continue to challenge each other & my each other stronger, better togther as whole.
+                    
+                    You're my protector & I'm yours
+                    Stronger togther, we're one. to eternity.
+                    
+                    I've prepared a small gift for you. It's my **ZODIAC** sign. the **SNAKE** to alway protect you and help you be strong.
+                    `,
+                    onSelected: () => {
+                      println(`**K.** pulls a beautiful silver double necklace with an infinity Ouroboros amulet connected with a kite connector.
+
+                      "Here, put this on your neck." K. says. use it to wear it.
+                      `);
+                      disk.inventory.push({
+                        name: [
+                          "necklace",
+                          "Infinity Ouroboros double necklace",
+                        ],
+                        desc: "A gift from K. a uniqe design that symbolize our relationship",
+                        onUse: () => {
+                          println(
+                            `You put the necklace sign on your neck. 🧡🖤🧡🖤`
+                          );
+
+                          println(`K. Says I think it's time to fly back to TLV
+                          Let's got out of here togther & fly`);
+                          const kitchen = getRoom("kitchen");
+                          const exit = getExit("south", kitchen.exits);
+                          delete exit.block;
+
+                          fetch(
+                            `https://maker.ifttt.com/trigger/pnk_fly/with/key/buN0S2VUtrVLjyoCLowl7X`
+                          );
+                        },
+                      });
+                    },
+                  });
+                },
+              });
+            };
+          },
+        },
+        {
+          name: ["dumplings", "dumpling", "japanese dumpling"],
+          desc: `You found a japanese dumpling. it's now cooking`,
+        },
+      ],
+      exits: [
+        {
+          dir: "south",
+          id: "japan",
+          block: `K.: "I've a suprise for you." You can't go out of here yet.",`,
+        },
+      ],
     },
     {
       name: "TLV Apartment",
       id: "home",
-      desc: `You're in your home.`,
+      img: `
+       /\\
+      //\\
+ ____//__\\\\____
+ \\.-//----\\\\-,/
+  \\v/      \\v/
+  /\\\\      //\\
+ //_\\\\____//_\\\\
+'----\\\\--//----\`
+      \\\\//
+       \\/  
+      `,
+      desc: `You're in your home.
+      
+      and They lived happly ever after. in TLV Israel ✡️
+
+      THE END
+      `,
+      onEnter: () => {
+        const k = getCharacter("k");
+        k.topics = [
+          {
+            option: "I Love you 🧡",
+            line: `I love you too. 🖤`,
+            onSelected: () => {
+              fetch(
+                `https://maker.ifttt.com/trigger/pnk_love/with/key/buN0S2VUtrVLjyoCLowl7X`
+              );
+            },
+          },
+        ];
+        const room = getRoom("home");
+        delete room.isFlyableFrom;
+      },
       isFlyableFrom: "japan",
     },
   ],

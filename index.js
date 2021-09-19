@@ -734,7 +734,7 @@ let autocomplete = () => {
   } else if (words.length === 2) {
     const optionMap = {
       talk: ['to', 'with', 'about'],
-      fly: ['to'],
+      fly: ['to'].concat(disk.rooms.filter((r) => r.isFlyableFrom).map(r => r.id)),
       take: itemNames,
       use: itemNames,
       go: (room.exits || []).map(exit => exit.dir),
