@@ -1,0 +1,10 @@
+[build]
+  # Original game (v0) is the default deployment
+  publish = "v0-original-text-engine"
+  command = "echo 'No build needed - static HTML'"
+
+# Redirects
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
