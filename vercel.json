@@ -1,0 +1,17 @@
+{
+  "builds": [
+    {
+      "src": "v1-modern/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "v1-modern/dist"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/v1-modern/dist/$1"
+    }
+  ]
+}

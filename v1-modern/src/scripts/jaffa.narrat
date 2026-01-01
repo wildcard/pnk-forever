@@ -1,0 +1,46 @@
+jaffa_apt_scene:
+  set_screen jaffa_apt
+  "You're in the Jaffa Apartment."
+  "Your flat is full of memories & items you've collected in your past travels."
+  "K is sleeping in your LIVING ROOM BED."
+
+  set data.slept_with_k false
+
+  choice:
+    "Use the bed":
+      jump use_bed
+    "Go north to Jaffa Street":
+      jump jaffa_street_scene
+
+use_bed:
+  "K. cuddles you & you sleep together until morning 💤"
+  "You wake up to the sound of Jaffa's streets. K. is still snoring 😪"
+  set data.slept_with_k true
+  jump jaffa_street_scene
+
+jaffa_street_scene:
+  set_screen jaffa_street
+  "You're on Jaffa Street."
+
+  choice:
+    "Look for kite equipment" if $data.slept_with_k:
+      "You found your Kite Board!"
+      ""
+      "Use this code in the future for a special discount: `PNK-n3zk7MAMBG-GIFT`"
+      run trigger_easter_egg pnk_kite
+      set data.has_kite true
+      jump jaffa_street_scene
+    "Fly to Japan" if (and $data.can_fly $data.agreed_to_travel):
+      jump fly_to_japan
+    "Go south to apartment":
+      jump jaffa_apt_scene
+
+fly_to_japan:
+  talk phoenix idle "Let's fly to Japan together! ✈️"
+  "You fly to japan!"
+  ""
+  "You landed in Kyoto, Japan."
+  "3 years have passed..."
+  ""
+  "You're now outside of your Kyoto apartment"
+  jump japan_scene

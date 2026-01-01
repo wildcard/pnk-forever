@@ -1,0 +1,80 @@
+beach_scene:
+  set_screen beach
+  "You are on the beach."
+  "The fascinating **DOG** is here"
+
+  set data.knows_name false
+  set data.talked_business false
+  set data.talked_artist false
+
+  choice:
+    "Look at the beach":
+      "You are on the sandy beach of TLV."
+      jump beach_scene
+    "Look at the bicycle":
+      "A bicycle. It's a Brompton, a folding bicycle."
+      jump beach_scene
+    "Take the shekel":
+      if (== $data.has_shekel false):
+        set data.has_shekel true
+        "You bend down and pick up the tiny, shiny coin."
+        ""
+        "*Now it's in your **inventory**, and you can use it at any time, anywhere. (Don't spend it all in one place!)*"
+        ""
+        "Type **INV** to see a list of items in your inventory."
+      jump beach_scene
+    "Talk to the dog":
+      jump talk_to_k
+    "Try to go south":
+      jump try_go_sunset
+
+talk_to_k:
+  talk k idle "\"Hi,\" he says, \"How can I help you?\""
+
+  choice:
+    "What's your NAME?":
+      "\"My name is **K.** It's actually 'Ehecatl' but everybody calls me **K.**\""
+      set data.knows_name true
+      "**K.** is here"
+      jump talk_to_k_named
+    "Your BICYCLE is cool, what is it?":
+      "\"It's a Brompton, it's a folding bicycle\""
+      jump talk_to_k
+    "Back":
+      jump beach_scene
+
+talk_to_k_named:
+  choice:
+    "I've a BUSINESS question, do you mind?" if $data.knows_name:
+      "\"Not at all, ask away\""
+      set data.talked_business true
+      jump talk_to_k_business
+    "Back":
+      jump beach_scene
+
+talk_to_k_business:
+  choice:
+    "I'm an ARTIST, I thought to start dog portrait business" if $data.talked_business:
+      "\"I'm not sure I'm up to it, but I'm sure you can help me out here. I know various dog association people & I've some business experience myself\""
+      "\"I'll be glad to help out\""
+      set data.talked_artist true
+      jump talk_to_k_continue
+    "Back":
+      jump beach_scene
+
+talk_to_k_continue:
+  choice:
+    "The sun is going down. Want to CONTINUE our conversation to the sunset?" if (and $data.talked_business $data.talked_artist):
+      "\"Sure, I've never met someone like you. I would love that\""
+      "\"Let's walk beside the sunset to Jaffa. It's **SOUTH** of here\""
+      set data.can_go_sunset true
+      jump beach_scene
+    "Back":
+      jump beach_scene
+
+try_go_sunset:
+  if $data.can_go_sunset:
+    jump sunset_scene
+  else:
+    "There's still much to do here"
+    jump beach_scene
