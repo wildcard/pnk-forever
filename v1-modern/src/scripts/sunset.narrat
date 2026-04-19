@@ -14,6 +14,7 @@ sunset_scene:
   set data.talked_travel false
   set data.talked_nomad false
   set data.talked_world false
+  set data.talked_china false
   set data.talked_japan false
   set data.can_fly false
 
@@ -40,13 +41,11 @@ sunset_conversation:
       "\"I want to be a digital nomad in the future\""
       set data.talked_travel true
       jump sunset_conversation
-    "What's a digital NOMAD?" if (and $data.talked_travel (== $data.talked_nomad false)):
+    "What's a digital NOMAD?" if (&& $data.talked_travel (== $data.talked_nomad false)):
       "\"A digital nomad is a person who lives all over the world traveling & working in a remote manner.\""
-      ""
-      "Read more about it: https://en.wikipedia.org/wiki/Digital_nomad"
       set data.talked_nomad true
       jump sunset_conversation
-    "Do you want to travel with me around the WORLD?" if (and $data.talked_travel $data.talked_nomad (== $data.talked_world false)):
+    "Do you want to travel with me around the WORLD?" if (&& $data.talked_travel (&& $data.talked_nomad (== $data.talked_world false))):
       "\"I would love to travel with you. Where do you think we should head first?\""
       set data.talked_world true
       jump sunset_world
@@ -100,6 +99,7 @@ sunset_world:
       jump sunset_world
     "CHINA 🇨🇳":
       "\"I'm looking for something more western civilization\""
+      set data.talked_china true
       jump sunset_world
     "HONG KONG 🇭🇰" if $data.talked_china:
       "\"Sounds good, but I'll pass\""
@@ -134,7 +134,4 @@ sunset_fly:
       jump sunset_conversation
 
 trigger_easter_egg event_name:
-  // Placeholder for easter egg API call
-  // In real implementation, this would call the backend API
-  log "Easter egg triggered: %{event_name}"
   return

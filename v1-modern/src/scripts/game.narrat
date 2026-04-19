@@ -44,13 +44,13 @@ slushy_choice:
       jump try_leave
 
 use_slushy:
-  if $data.slushy_gulps == 3:
+  if (== $data.slushy_gulps 3):
     "You cool down with a big gulp of slushy"
     set data.can_leave true
   "gulp"
   set data.slushy_gulps (- $data.slushy_gulps 1)
   if (> $data.slushy_gulps 0):
-    "You have %{$data.slushy_gulps} slushy 🥤 left"
+    "You have %{data.slushy_gulps} slushy 🥤 left"
     jump slushy_choice
   else:
     "That was the last drop"

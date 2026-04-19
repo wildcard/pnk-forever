@@ -1,7 +1,6 @@
 japan_scene:
   set_screen japan
   "You're in Kyoto, Japan 🏯"
-  ""
   "K. is with you 🖤"
 
   choice:
@@ -11,7 +10,6 @@ japan_scene:
 kyoto_apt_scene:
   set_screen kyoto_apt
   "You're in your cozy Japanese apartment"
-  ""
   "You smell a wonderful smell, something is cooking in the **KITCHEN**."
 
   set data.wearing_slippers false
@@ -34,7 +32,6 @@ kyoto_apt_scene:
 kitchen_scene:
   set_screen kitchen
   "You're in the KITCHEN."
-  ""
   "K. is cooking Dim Sum, famous Japanese dumplings"
 
   set data.has_chopsticks false
@@ -65,25 +62,23 @@ kitchen_conversation:
       "You found your fancy chopsticks."
       set data.has_chopsticks true
       jump kitchen_conversation
-    "Eat the dumplings" if (and $data.has_chopsticks (== $data.ate_dumplings false)):
+    "Eat the dumplings" if (&& $data.has_chopsticks (== $data.ate_dumplings false)):
       "You eat the Japanese dumpling. yum yum yum"
       set data.ate_dumplings true
       jump kitchen_conversation
-    "What's the deal with the TIGER sign? 🐅📖" if (and $data.ate_dumplings (== $data.talked_tiger false)):
+    "What's the deal with the TIGER sign? 🐅📖" if (&& $data.ate_dumplings (== $data.talked_tiger false)):
       "\"This is your Zodiac sign, the Tiger\""
       set data.talked_tiger true
       jump kitchen_conversation
-    "What is your ZODIAC sign?" if (and $data.talked_tiger (== $data.talked_zodiac false)):
+    "What is your ZODIAC sign?" if (&& $data.talked_tiger (== $data.talked_zodiac false)):
       "\"I'm Snake 🐍\""
       set data.talked_zodiac true
       jump kitchen_conversation
-    "How will our FUTURE be like?" if (and $data.talked_zodiac (== $data.talked_future false)):
+    "How will our FUTURE be like?" if (&& $data.talked_zodiac (== $data.talked_future false)):
       "\"Our relationship will grow only stronger & stronger with the years.\""
       "\"We will continue to challenge each other & make each other stronger, better together as a whole.\""
-      ""
       "\"You're my protector & I'm yours\""
       "\"Stronger together, we're one. To eternity.\""
-      ""
       "\"I've prepared a small gift for you. It's my **ZODIAC** sign, the **SNAKE**, to always protect you and help you be strong.\""
       set data.talked_future true
       jump give_necklace
@@ -94,14 +89,12 @@ kitchen_conversation:
 
 give_necklace:
   "**K.** pulls a beautiful silver double necklace with an infinity Ouroboros amulet connected with a kite connector."
-  ""
   "\"Here, put this on your neck.\" K. says. Use it to wear it."
   set data.has_necklace true
   jump kitchen_conversation
 
 use_necklace:
   "You put the necklace on your neck. 🧡🖤🧡🖤"
-  ""
   "K. says: \"I think it's time to fly back to TLV\""
   "\"Let's get out of here together & fly\""
   run trigger_easter_egg pnk_fly
@@ -114,11 +107,8 @@ fly_home:
 home_scene:
   set_screen home
   "You're in your home."
-  ""
   "And they lived happily ever after. In TLV Israel ✡️"
-  ""
   "THE END"
-  ""
   "🧡🖤 For Anastasia. Forever. 🧡🖤"
 
   choice:

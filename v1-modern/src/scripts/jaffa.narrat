@@ -26,18 +26,18 @@ jaffa_street_scene:
     "Look for kite equipment" if $data.slept_with_k:
       "You found your Kite Board!"
       ""
-      "Use this code in the future for a special discount: `PNK-n3zk7MAMBG-GIFT`"
+      "Use this code in the future for a special discount: PNK-n3zk7MAMBG-GIFT"
       run trigger_easter_egg pnk_kite
       set data.has_kite true
       jump jaffa_street_scene
-    "Fly to Japan" if (and $data.can_fly $data.agreed_to_travel):
+    "Fly to Japan" if (&& $data.can_fly $data.agreed_to_travel):
       jump fly_to_japan
     "Go south to apartment":
       jump jaffa_apt_scene
 
 fly_to_japan:
   talk phoenix idle "Let's fly to Japan together! ✈️"
-  "You fly to japan!"
+  "You fly to Japan!"
   ""
   "You landed in Kyoto, Japan."
   "3 years have passed..."
