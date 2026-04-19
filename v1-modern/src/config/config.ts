@@ -5,31 +5,31 @@ export default {
   layout: {
     backgrounds: {
       beach_rest: {
-        image: "beach_rest.jpg"
+        image: "img/beach_rest.jpg"
       },
       beach: {
-        image: "beach.jpg"
+        image: "img/beach.jpg"
       },
       beach_sunset: {
-        image: "sunset.jpg"
+        image: "img/sunset.jpg"
       },
       jaffa_apt: {
-        image: "apartment.jpg"
+        image: "img/apartment.jpg"
       },
       jaffa_street: {
-        image: "street.jpg"
+        image: "img/street.jpg"
       },
       japan: {
-        image: "kyoto.jpg"
+        image: "img/kyoto.jpg"
       },
       kyoto_apt: {
-        image: "kyoto_apt.jpg"
+        image: "img/kyoto_apt.jpg"
       },
       kitchen: {
-        image: "kitchen.jpg"
+        image: "img/kitchen.jpg"
       },
       home: {
-        image: "home.jpg"
+        image: "img/home.jpg"
       }
     }
   },
@@ -40,14 +40,14 @@ export default {
         name: "Phoenix",
         color: "#FF6B35",
         sprites: {
-          idle: "phoenix.png"
+          idle: "img/phoenix.png"
         }
       },
       k: {
         name: "K",
         color: "#1A1A1A",
         sprites: {
-          idle: "k.png"
+          idle: "img/k.png"
         }
       }
     }
