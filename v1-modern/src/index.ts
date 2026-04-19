@@ -5,7 +5,8 @@ window.addEventListener('load', () => {
   startApp({
     configPath: 'data/config.yaml',
     logging: false,
-    debug: true,
+    debug: false,
+    container: '#app',
     scripts,
   });
 });
