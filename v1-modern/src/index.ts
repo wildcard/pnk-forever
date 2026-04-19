@@ -1,4 +1,6 @@
 import { startApp } from 'narrat';
+import 'narrat/dist/style.css';
+import './game.css';
 import scripts from './config/scripts';
 
 window.addEventListener('load', () => {

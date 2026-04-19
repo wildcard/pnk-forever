@@ -1,0 +1,83 @@
+/* P&K Forever - Game theme */
+:root {
+  --pnk-orange: #FF6B35;
+  --pnk-black: #1A1A1A;
+  --pnk-cream: #FFF8F0;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #111;
+  font-family: 'Georgia', serif;
+}
+
+#app {
+  width: 100%;
+  height: 100%;
+}
+
+/* Scene backgrounds - gradient fallbacks while images load */
+.background-beach_rest  { background: linear-gradient(160deg, #87CEEB 0%, #F0E68C 60%, #DEB887 100%); }
+.background-beach       { background: linear-gradient(180deg, #4FC3F7 0%, #81D4FA 40%, #F5DEB3 70%, #C2B280 100%); }
+.background-beach_sunset{ background: linear-gradient(160deg, #FF6B35 0%, #FF8C42 30%, #FFB347 60%, #4A90D9 100%); }
+.background-jaffa_apt   { background: linear-gradient(135deg, #8B6914 0%, #A0784F 40%, #F5DEB3 100%); }
+.background-jaffa_street{ background: linear-gradient(160deg, #E8D5B0 0%, #C9A96E 50%, #8B7355 100%); }
+.background-japan       { background: linear-gradient(160deg, #FFB7C5 0%, #C5E8C5 40%, #87CEEB 100%); }
+.background-kyoto_apt   { background: linear-gradient(135deg, #F5F5DC 0%, #DEB887 50%, #8B7355 100%); }
+.background-kitchen     { background: linear-gradient(135deg, #FFF8DC 0%, #F4A460 50%, #8B6914 100%); }
+.background-home        { background: linear-gradient(160deg, #FFF0E6 0%, #FFD4B8 50%, #FF6B35 100%); }
+
+/* Dialogue box - romantic style */
+.nrt-dialog-box {
+  background: rgba(26, 26, 26, 0.92) !important;
+  border: 1px solid rgba(255, 107, 53, 0.4) !important;
+  border-radius: 8px !important;
+}
+
+.nrt-dialog-text {
+  color: #FFF8F0 !important;
+  font-family: 'Georgia', serif !important;
+  font-size: 1.05rem !important;
+  line-height: 1.7 !important;
+}
+
+.nrt-speaker-name {
+  color: var(--pnk-orange) !important;
+  font-weight: bold !important;
+}
+
+/* Choice buttons */
+.nrt-choice-button {
+  background: rgba(255, 107, 53, 0.1) !important;
+  border: 1px solid rgba(255, 107, 53, 0.5) !important;
+  color: #FFF8F0 !important;
+  border-radius: 6px !important;
+  transition: all 0.2s ease !important;
+}
+
+.nrt-choice-button:hover {
+  background: rgba(255, 107, 53, 0.3) !important;
+  border-color: var(--pnk-orange) !important;
+  transform: translateX(3px) !important;
+}
+
+/* Main menu */
+.nrt-main-menu {
+  background: linear-gradient(160deg, #1A1A1A 0%, #2D1810 50%, #1A1A1A 100%) !important;
+}
+
+.nrt-main-menu-title {
+  color: var(--pnk-orange) !important;
+  text-shadow: 0 0 20px rgba(255, 107, 53, 0.5) !important;
+}
+
+.nrt-start-button {
+  background: linear-gradient(135deg, var(--pnk-orange), #FF8C42) !important;
+  color: #1A1A1A !important;
+  font-weight: bold !important;
+  border-radius: 6px !important;
+}

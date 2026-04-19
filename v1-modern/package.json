@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "vite --host",
     "build": "vite build",
-    "preview": "vite preview --host"
+    "preview": "vite preview --host",
+    "generate:assets": "node scripts/generate-assets.mjs",
+    "generate:assets:force": "node scripts/generate-assets.mjs --force"
   },
   "dependencies": {
     "narrat": "^3.12.4",

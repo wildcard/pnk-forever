@@ -11,15 +11,15 @@ common:
       width: 150
       height: 225
   images:
-    beach_rest: img/beach_rest.jpg
-    beach: img/beach.jpg
-    beach_sunset: img/sunset.jpg
-    jaffa_apt: img/apartment.jpg
-    jaffa_street: img/street.jpg
-    japan: img/kyoto.jpg
-    kyoto_apt: img/kyoto_apt.jpg
-    kitchen: img/kitchen.jpg
-    home: img/home.jpg
+    beach_rest: img/beach_rest.png
+    beach: img/beach.png
+    beach_sunset: img/sunset.png
+    jaffa_apt: img/apartment.png
+    jaffa_street: img/street.png
+    japan: img/kyoto.png
+    kyoto_apt: img/kyoto_apt.png
+    kitchen: img/kitchen.png
+    home: img/home.png
   hudStats: {}
 
 dialoguePanel:
