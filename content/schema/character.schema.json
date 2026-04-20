@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pnk-forever/content/schema/character.schema.json",
+  "title": "Character",
+  "description": "A speaker in the narrative. Engine adapters map this to Character()/talk definitions.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "displayName"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*$",
+      "description": "Stable internal id. Lower snake_case."
+    },
+    "displayName": {
+      "type": "string",
+      "description": "Name shown in dialog. Empty string = narrator-style (no speaker label)."
+    },
+    "color": {
+      "type": "string",
+      "pattern": "^(#[0-9a-fA-F]{3,8}|[a-z]+)$",
+      "description": "CSS color for the character's dialog. Hex or CSS named color."
+    },
+    "sprites": {
+      "type": "object",
+      "description": "Map of pose id to sprite asset path (relative to content/assets/).",
+      "patternProperties": {
+        "^[a-z][a-z0-9_]*$": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "narratId": {
+      "type": "string",
+      "description": "Optional legacy id used by the narrat adapter if different from id."
+    },
+    "voice": {
+      "type": "object",
+      "description": "Reserved for future voice-acting / TTS configuration.",
+      "additionalProperties": true
+    },
+    "extensions": {
+      "type": "object",
+      "description": "Engine-specific escape hatch. Adapters may read their own key.",
+      "additionalProperties": true
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pnk-forever/content/schema/flag.schema.json",
+  "title": "Flag",
+  "description": "A piece of persistent state tracked during a playthrough.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "type", "default"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_\\.]*$",
+      "description": "Flag id. Dots allowed to mirror narrat's 'data.foo' convention."
+    },
+    "type": {
+      "type": "string",
+      "enum": ["bool", "int", "string"]
+    },
+    "default": {
+      "description": "Initial value. Type must match `type`."
+    },
+    "description": {
+      "type": "string"
+    }
+  }
+}

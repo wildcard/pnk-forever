@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pnk-forever/content/schema/item.schema.json",
+  "title": "Item",
+  "description": "An inventory-like object the player can acquire. Acquisition is tracked by a flag.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "name", "acquiredFlag"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*$"
+    },
+    "name": {
+      "type": "string",
+      "description": "Display name, shown if the item surfaces in UI."
+    },
+    "icon": {
+      "type": ["string", "null"],
+      "description": "Asset path for inventory icon, or null."
+    },
+    "acquiredFlag": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_\\.]*$",
+      "description": "Flag id (may include dots, e.g. 'data.has_shekel') that becomes true when acquired."
+    },
+    "description": {
+      "type": "string"
+    },
+    "extensions": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  }
+}

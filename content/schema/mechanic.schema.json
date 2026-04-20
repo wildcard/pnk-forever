@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pnk-forever/content/schema/mechanic.schema.json",
+  "title": "Mechanic",
+  "description": "A gameplay mechanic: easter egg, keyword trigger, flag guard, or choice cascade.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "kind"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*$"
+    },
+    "kind": {
+      "type": "string",
+      "enum": ["easter_egg", "keyword_trigger", "guard", "cascade"]
+    },
+    "trigger": {
+      "type": "object",
+      "description": "What fires this mechanic.",
+      "oneOf": [
+        {
+          "required": ["kind", "word"],
+          "properties": {
+            "kind": { "const": "keyword" },
+            "word": { "type": "string" },
+            "caseInsensitive": { "type": "boolean", "default": true }
+          },
+          "additionalProperties": false
+        },
+        {
+          "required": ["kind", "nodeId"],
+          "properties": {
+            "kind": { "const": "node_enter" },
+            "nodeId": { "type": "string" }
+          },
+          "additionalProperties": false
+        },
+        {
+          "required": ["kind", "flag"],
+          "properties": {
+            "kind": { "const": "flag" },
+            "flag": { "type": "string" },
+            "value": {}
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "effect": {
+      "type": "object",
+      "description": "What the mechanic does when fired.",
+      "oneOf": [
+        {
+          "required": ["kind", "triggerId"],
+          "properties": {
+            "kind": { "const": "run_trigger" },
+            "triggerId": { "type": "string" }
+          },
+          "additionalProperties": false
+        },
+        {
+          "required": ["kind", "flag", "value"],
+          "properties": {
+            "kind": { "const": "set_flag" },
+            "flag": { "type": "string" },
+            "value": {}
+          },
+          "additionalProperties": false
+        },
+        {
+          "required": ["kind", "text"],
+          "properties": {
+            "kind": { "const": "say" },
+            "text": { "type": "string" }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "oneShot": {
+      "type": "boolean",
+      "description": "If true, mechanic fires at most once per playthrough."
+    },
+    "description": {
+      "type": "string"
+    },
+    "extensions": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  }
+}

@@ -1,0 +1,163 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pnk-forever/content/schema/dialog.schema.json",
+  "title": "DialogNode",
+  "description": "A narrative node (label) with an ordered sequence of statements.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "statements"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*$",
+      "description": "Label id. Must be unique across all DialogNode files."
+    },
+    "scene": {
+      "type": ["string", "null"],
+      "description": "Default scene id when entering this node. Null = inherit from caller."
+    },
+    "sacred": {
+      "type": "boolean",
+      "default": false,
+      "description": "If true, this node is terminal, appears exactly once in a run, and must have no outgoing choices. Enforces the 'For Anastasia. Forever.' invariant."
+    },
+    "statements": {
+      "type": "array",
+      "description": "Ordered list of what happens in this node.",
+      "items": { "$ref": "#/$defs/statement" }
+    },
+    "extensions": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "sacred": { "const": true } },
+        "required": ["sacred"]
+      },
+      "then": {
+        "properties": {
+          "statements": {
+            "not": {
+              "contains": {
+                "properties": { "op": { "const": "choice" } },
+                "required": ["op"]
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "statement": {
+      "oneOf": [
+        { "$ref": "#/$defs/say" },
+        { "$ref": "#/$defs/setScene" },
+        { "$ref": "#/$defs/setFlag" },
+        { "$ref": "#/$defs/jump" },
+        { "$ref": "#/$defs/choice" },
+        { "$ref": "#/$defs/ifStmt" },
+        { "$ref": "#/$defs/runTrigger" }
+      ]
+    },
+    "say": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["op", "text"],
+      "properties": {
+        "op": { "const": "say" },
+        "speaker": {
+          "type": ["string", "null"],
+          "description": "Character id, or null for narrator."
+        },
+        "pose": { "type": ["string", "null"] },
+        "text": { "type": "string" }
+      }
+    },
+    "setScene": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["op", "scene"],
+      "properties": {
+        "op": { "const": "set_scene" },
+        "scene": { "type": "string" }
+      }
+    },
+    "setFlag": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["op", "flag", "value"],
+      "properties": {
+        "op": { "const": "set_flag" },
+        "flag": { "type": "string" },
+        "value": {}
+      }
+    },
+    "jump": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["op", "target"],
+      "properties": {
+        "op": { "const": "jump" },
+        "target": { "type": "string" }
+      }
+    },
+    "choice": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["op", "prompt", "options"],
+      "properties": {
+        "op": { "const": "choice" },
+        "prompt": { "type": "string" },
+        "options": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/choiceOption" }
+        }
+      }
+    },
+    "choiceOption": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["text", "statements"],
+      "properties": {
+        "text": { "type": "string" },
+        "guard": {
+          "type": ["string", "null"],
+          "description": "Expression (narrat-style) that must be truthy for this option to be shown. null = always shown."
+        },
+        "oneShot": {
+          "type": "boolean",
+          "description": "If true, option is hidden after being chosen once (enforced at IR level via a synthetic guard flag)."
+        },
+        "statements": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/statement" }
+        }
+      }
+    },
+    "ifStmt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["op", "condition", "then"],
+      "properties": {
+        "op": { "const": "if" },
+        "condition": { "type": "string" },
+        "then": { "type": "array", "items": { "$ref": "#/$defs/statement" } },
+        "else": { "type": "array", "items": { "$ref": "#/$defs/statement" } }
+      }
+    },
+    "runTrigger": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["op", "triggerId"],
+      "properties": {
+        "op": { "const": "run_trigger" },
+        "triggerId": { "type": "string" }
+      }
+    }
+  }
+}
