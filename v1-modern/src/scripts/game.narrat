@@ -1,10 +1,10 @@
 main:
   set_screen beach_rest
   "P. & K. — A Love Story in Two Volumes"
-  "Volume 2: The Modern Edition"
   ""
-  "Pick a chapter to begin. Each one stands on its own — no need to replay."
-  jump chapter_select
+  jump chapter_1_start
+
+# chapter_select kept for testing/QA — not in main player flow
 
 chapter_select:
   choice:
