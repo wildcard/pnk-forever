@@ -1,0 +1,10 @@
+{
+  "name": "pnk-forever",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Root workspace — content IR + engine adapters + ir-lint",
+  "scripts": {
+    "ir-lint": "cd tools/ir-lint && npm start --silent",
+    "ir-lint:install": "cd tools/ir-lint && npm install"
+  }
+}
