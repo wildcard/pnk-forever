@@ -17,10 +17,8 @@ if ! command -v npx &> /dev/null; then
 fi
 
 # Install Playwright if needed (uses system-wide cache)
-if ! npx -y playwright --version &> /dev/null; then
-  echo "Installing Playwright..."
-  npx -y playwright install chromium --with-deps
-fi
+echo "Ensuring Playwright is installed..."
+npx -y playwright install chromium 2>&1 | grep -v "Playwright" || true
 
 # Create test script
 cat > "$OUTPUT_DIR/test.mjs" << 'EOTEST'
@@ -178,14 +176,9 @@ const results = await runPlaytest();
 console.log(JSON.stringify(results, null, 2));
 EOTEST
 
-# Run Playwright test
+# Run the test script
 echo "Running automated playtest..."
 cd "$OUTPUT_DIR"
-PREVIEW_URL="$URL" OUTPUT_DIR="$OUTPUT_DIR" npx -y playwright test --browser chromium --headed=false || true
-
-# Run the test script
-echo ""
-echo "Analyzing game experience..."
 RESULTS=$(PREVIEW_URL="$URL" OUTPUT_DIR="$OUTPUT_DIR" node test.mjs 2>&1 || echo '{"critical":["Test script failed"],"warnings":[],"improvements":[],"positives":[],"ready_criteria":{}}')
 
 # Parse results and generate report
