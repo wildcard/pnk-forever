@@ -1,0 +1,5 @@
+{
+  "id": "data.talked_sweet",
+  "type": "bool",
+  "default": false
+}

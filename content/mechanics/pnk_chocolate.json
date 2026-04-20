@@ -1,0 +1,14 @@
+{
+  "id": "pnk_chocolate",
+  "kind": "easter_egg",
+  "trigger": {
+    "kind": "keyword",
+    "word": "CHOCOLATE",
+    "caseInsensitive": true
+  },
+  "effect": {
+    "kind": "run_trigger",
+    "triggerId": "pnk_chocolate"
+  },
+  "oneShot": true
+}

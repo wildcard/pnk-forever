@@ -1,0 +1,26 @@
+{
+  "id": "use_necklace_branch",
+  "scene": null,
+  "sacred": false,
+  "statements": [
+    {
+      "op": "if",
+      "condition": "(== $data.has_necklace false)",
+      "then": [
+        {
+          "op": "say",
+          "speaker": null,
+          "text": "K. hasn't given you the NECKLACE yet."
+        },
+        {
+          "op": "jump",
+          "target": "kitchen_conversation"
+        }
+      ]
+    },
+    {
+      "op": "jump",
+      "target": "use_necklace"
+    }
+  ]
+}

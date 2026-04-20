@@ -1,0 +1,5 @@
+{
+  "id": "data.has_kite",
+  "type": "bool",
+  "default": false
+}

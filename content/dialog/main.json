@@ -1,0 +1,25 @@
+{
+  "id": "main",
+  "scene": null,
+  "sacred": false,
+  "statements": [
+    {
+      "op": "set_scene",
+      "scene": "beach_rest"
+    },
+    {
+      "op": "say",
+      "speaker": null,
+      "text": "P. & K. — A Love Story in Two Volumes"
+    },
+    {
+      "op": "say",
+      "speaker": null,
+      "text": ""
+    },
+    {
+      "op": "jump",
+      "target": "chapter_1_start"
+    }
+  ]
+}

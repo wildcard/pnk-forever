@@ -1,0 +1,58 @@
+{
+  "id": "chapter_select",
+  "scene": null,
+  "sacred": false,
+  "statements": [
+    {
+      "op": "choice",
+      "prompt": "Which chapter?",
+      "options": [
+        {
+          "text": "Chapter 1 · Meet Cute (Tel Aviv Beach)",
+          "statements": [
+            {
+              "op": "jump",
+              "target": "chapter_1_start"
+            }
+          ]
+        },
+        {
+          "text": "Chapter 2 · The Sunset Walk",
+          "statements": [
+            {
+              "op": "jump",
+              "target": "chapter_2_start"
+            }
+          ]
+        },
+        {
+          "text": "Chapter 3 · Jaffa Nights",
+          "statements": [
+            {
+              "op": "jump",
+              "target": "chapter_3_start"
+            }
+          ]
+        },
+        {
+          "text": "Chapter 4 · Kyoto Kitchen",
+          "statements": [
+            {
+              "op": "jump",
+              "target": "chapter_4_start"
+            }
+          ]
+        },
+        {
+          "text": "Chapter 5 · Forever Home",
+          "statements": [
+            {
+              "op": "jump",
+              "target": "chapter_5_start"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

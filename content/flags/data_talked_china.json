@@ -1,0 +1,5 @@
+{
+  "id": "data.talked_china",
+  "type": "bool",
+  "default": false
+}

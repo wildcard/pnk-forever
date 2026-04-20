@@ -1,0 +1,5 @@
+{
+  "id": "data.has_chopsticks",
+  "type": "bool",
+  "default": false
+}

@@ -1,0 +1,50 @@
+{
+  "id": "japan_scene",
+  "scene": null,
+  "sacred": false,
+  "statements": [
+    {
+      "op": "set_scene",
+      "scene": "japan"
+    },
+    {
+      "op": "say",
+      "speaker": null,
+      "text": "KYOTO. Red lanterns glow along the street. The air smells like rain and cedar."
+    },
+    {
+      "op": "say",
+      "speaker": null,
+      "text": "K. is beside you, tail relaxed. Home."
+    },
+    {
+      "op": "choice",
+      "prompt": "Where to?",
+      "options": [
+        {
+          "text": "Go north to the apartment",
+          "statements": [
+            {
+              "op": "jump",
+              "target": "kyoto_apt_scene"
+            }
+          ]
+        },
+        {
+          "text": "Linger a moment longer",
+          "statements": [
+            {
+              "op": "say",
+              "speaker": null,
+              "text": "You stand still. Watch the lantern light catch the rain."
+            },
+            {
+              "op": "jump",
+              "target": "kyoto_apt_scene"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

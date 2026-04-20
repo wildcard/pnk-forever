@@ -1,0 +1,14 @@
+{
+  "id": "pnk_mango",
+  "kind": "easter_egg",
+  "trigger": {
+    "kind": "keyword",
+    "word": "MANGO",
+    "caseInsensitive": true
+  },
+  "effect": {
+    "kind": "run_trigger",
+    "triggerId": "pnk_mango"
+  },
+  "oneShot": true
+}

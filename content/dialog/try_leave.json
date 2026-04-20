@@ -1,0 +1,31 @@
+{
+  "id": "try_leave",
+  "scene": null,
+  "sacred": false,
+  "statements": [
+    {
+      "op": "if",
+      "condition": "$data.can_leave",
+      "then": [
+        {
+          "op": "jump",
+          "target": "go_to_beach"
+        }
+      ]
+    },
+    {
+      "op": "say",
+      "speaker": null,
+      "text": "The air outside shimmers. Not yet."
+    },
+    {
+      "op": "say",
+      "speaker": null,
+      "text": "Maybe something COLD would help."
+    },
+    {
+      "op": "jump",
+      "target": "slushy_choice"
+    }
+  ]
+}

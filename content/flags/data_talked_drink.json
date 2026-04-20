@@ -1,0 +1,5 @@
+{
+  "id": "data.talked_drink",
+  "type": "bool",
+  "default": false
+}

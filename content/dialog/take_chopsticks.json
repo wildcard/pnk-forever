@@ -1,0 +1,31 @@
+{
+  "id": "take_chopsticks",
+  "scene": null,
+  "sacred": false,
+  "statements": [
+    {
+      "op": "if",
+      "condition": "$data.has_chopsticks",
+      "then": [
+        {
+          "op": "jump",
+          "target": "eat_dumplings"
+        }
+      ]
+    },
+    {
+      "op": "say",
+      "speaker": null,
+      "text": "A pair of fancy lacquered chopsticks. You pick them up."
+    },
+    {
+      "op": "set_flag",
+      "flag": "data.has_chopsticks",
+      "value": true
+    },
+    {
+      "op": "jump",
+      "target": "kitchen_conversation"
+    }
+  ]
+}

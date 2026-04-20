@@ -1,0 +1,5 @@
+{
+  "id": "data.ate_dumplings",
+  "type": "bool",
+  "default": false
+}

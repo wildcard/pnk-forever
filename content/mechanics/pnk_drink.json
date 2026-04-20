@@ -1,0 +1,14 @@
+{
+  "id": "pnk_drink",
+  "kind": "easter_egg",
+  "trigger": {
+    "kind": "keyword",
+    "word": "TEA",
+    "caseInsensitive": true
+  },
+  "effect": {
+    "kind": "run_trigger",
+    "triggerId": "pnk_drink"
+  },
+  "oneShot": true
+}

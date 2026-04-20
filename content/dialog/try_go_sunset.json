@@ -1,0 +1,26 @@
+{
+  "id": "try_go_sunset",
+  "scene": null,
+  "sacred": false,
+  "statements": [
+    {
+      "op": "if",
+      "condition": "$data.can_go_sunset",
+      "then": [
+        {
+          "op": "jump",
+          "target": "sunset_scene"
+        }
+      ]
+    },
+    {
+      "op": "say",
+      "speaker": null,
+      "text": "Not yet. There's still something here."
+    },
+    {
+      "op": "jump",
+      "target": "beach_choice"
+    }
+  ]
+}

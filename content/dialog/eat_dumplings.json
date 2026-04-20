@@ -1,0 +1,41 @@
+{
+  "id": "eat_dumplings",
+  "scene": null,
+  "sacred": false,
+  "statements": [
+    {
+      "op": "if",
+      "condition": "(== $data.has_chopsticks false)",
+      "then": [
+        {
+          "op": "jump",
+          "target": "take_chopsticks"
+        }
+      ]
+    },
+    {
+      "op": "if",
+      "condition": "$data.ate_dumplings",
+      "then": [
+        {
+          "op": "jump",
+          "target": "talk_tiger"
+        }
+      ]
+    },
+    {
+      "op": "say",
+      "speaker": null,
+      "text": "One dumpling. Hot. Perfect. You close your eyes for a second."
+    },
+    {
+      "op": "set_flag",
+      "flag": "data.ate_dumplings",
+      "value": true
+    },
+    {
+      "op": "jump",
+      "target": "kitchen_conversation"
+    }
+  ]
+}

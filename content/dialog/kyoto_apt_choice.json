@@ -1,0 +1,40 @@
+{
+  "id": "kyoto_apt_choice",
+  "scene": null,
+  "sacred": false,
+  "statements": [
+    {
+      "op": "choice",
+      "prompt": "What do you want to do?",
+      "options": [
+        {
+          "text": "Use the slippers Uwabaki",
+          "statements": [
+            {
+              "op": "jump",
+              "target": "kyoto_wear_slippers"
+            }
+          ]
+        },
+        {
+          "text": "Take Tiger Zodiac Sign",
+          "statements": [
+            {
+              "op": "jump",
+              "target": "kyoto_take_tiger"
+            }
+          ]
+        },
+        {
+          "text": "Go east to the kitchen",
+          "statements": [
+            {
+              "op": "jump",
+              "target": "go_kitchen"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

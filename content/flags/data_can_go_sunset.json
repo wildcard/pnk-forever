@@ -1,0 +1,5 @@
+{
+  "id": "data.can_go_sunset",
+  "type": "bool",
+  "default": false
+}

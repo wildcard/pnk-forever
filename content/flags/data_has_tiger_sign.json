@@ -1,0 +1,5 @@
+{
+  "id": "data.has_tiger_sign",
+  "type": "bool",
+  "default": false
+}

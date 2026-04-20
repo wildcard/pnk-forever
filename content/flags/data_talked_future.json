@@ -1,0 +1,5 @@
+{
+  "id": "data.talked_future",
+  "type": "bool",
+  "default": false
+}

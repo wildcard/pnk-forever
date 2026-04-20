@@ -1,0 +1,50 @@
+{
+  "id": "jaffa_apt_scene",
+  "scene": null,
+  "sacred": false,
+  "statements": [
+    {
+      "op": "set_scene",
+      "scene": "jaffa_apt"
+    },
+    {
+      "op": "say",
+      "speaker": null,
+      "text": "Your Jaffa apartment. Souvenirs on every shelf — proof of places you've loved."
+    },
+    {
+      "op": "say",
+      "speaker": null,
+      "text": "K. is already half-asleep on the living-room bed, breathing slow."
+    },
+    {
+      "op": "set_flag",
+      "flag": "data.slept_with_k",
+      "value": false
+    },
+    {
+      "op": "choice",
+      "prompt": "What do you want to do?",
+      "options": [
+        {
+          "text": "Use the bed",
+          "statements": [
+            {
+              "op": "jump",
+              "target": "use_bed"
+            }
+          ]
+        },
+        {
+          "text": "Go north to Jaffa Street",
+          "statements": [
+            {
+              "op": "jump",
+              "target": "jaffa_street_scene"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

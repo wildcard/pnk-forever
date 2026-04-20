@@ -1,0 +1,5 @@
+{
+  "id": "data.talked_business",
+  "type": "bool",
+  "default": false
+}

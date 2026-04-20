@@ -1,0 +1,101 @@
+{
+  "id": "kitchen_conversation",
+  "scene": null,
+  "sacred": false,
+  "statements": [
+    {
+      "op": "if",
+      "condition": "$data.has_necklace",
+      "then": [
+        {
+          "op": "jump",
+          "target": "use_necklace"
+        }
+      ]
+    },
+    {
+      "op": "say",
+      "speaker": "k",
+      "pose": "idle",
+      "text": "What would you like to know?"
+    },
+    {
+      "op": "choice",
+      "prompt": "What do you want to talk about or do?",
+      "options": [
+        {
+          "text": "What're you MAKING?",
+          "statements": [
+            {
+              "op": "jump",
+              "target": "talk_making"
+            }
+          ]
+        },
+        {
+          "text": "I LOVE you",
+          "statements": [
+            {
+              "op": "jump",
+              "target": "talk_love"
+            }
+          ]
+        },
+        {
+          "text": "Take fancy chopsticks",
+          "statements": [
+            {
+              "op": "jump",
+              "target": "take_chopsticks"
+            }
+          ]
+        },
+        {
+          "text": "Eat the dumplings",
+          "statements": [
+            {
+              "op": "jump",
+              "target": "eat_dumplings"
+            }
+          ]
+        },
+        {
+          "text": "What's the deal with the TIGER sign?",
+          "statements": [
+            {
+              "op": "jump",
+              "target": "talk_tiger"
+            }
+          ]
+        },
+        {
+          "text": "What is your ZODIAC sign?",
+          "statements": [
+            {
+              "op": "jump",
+              "target": "talk_zodiac"
+            }
+          ]
+        },
+        {
+          "text": "How will our FUTURE be like?",
+          "statements": [
+            {
+              "op": "jump",
+              "target": "talk_future"
+            }
+          ]
+        },
+        {
+          "text": "Use the necklace",
+          "statements": [
+            {
+              "op": "jump",
+              "target": "use_necklace_branch"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

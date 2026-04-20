@@ -1,0 +1,46 @@
+{
+  "id": "use_bed",
+  "scene": null,
+  "sacred": false,
+  "statements": [
+    {
+      "op": "if",
+      "condition": "$data.slept_with_k",
+      "then": [
+        {
+          "op": "jump",
+          "target": "jaffa_street_scene"
+        }
+      ]
+    },
+    {
+      "op": "say",
+      "speaker": null,
+      "text": "You curl up next to him. He pulls you in without opening his eyes."
+    },
+    {
+      "op": "say",
+      "speaker": null,
+      "text": "You fall asleep to the soft hum of Jaffa at night."
+    },
+    {
+      "op": "say",
+      "speaker": null,
+      "text": ""
+    },
+    {
+      "op": "say",
+      "speaker": null,
+      "text": "Morning. Market noise. K. is still snoring — a warm, happy rumble."
+    },
+    {
+      "op": "set_flag",
+      "flag": "data.slept_with_k",
+      "value": true
+    },
+    {
+      "op": "jump",
+      "target": "jaffa_street_scene"
+    }
+  ]
+}

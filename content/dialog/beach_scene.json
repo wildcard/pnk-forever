@@ -1,0 +1,50 @@
+{
+  "id": "beach_scene",
+  "scene": null,
+  "sacred": false,
+  "statements": [
+    {
+      "op": "set_scene",
+      "scene": "beach"
+    },
+    {
+      "op": "say",
+      "speaker": null,
+      "text": "Sand, warm under your feet. The sea hisses in."
+    },
+    {
+      "op": "say",
+      "speaker": null,
+      "text": "The dog is here, his Brompton folded neatly beside him."
+    },
+    {
+      "op": "set_flag",
+      "flag": "data.knows_name",
+      "value": false
+    },
+    {
+      "op": "set_flag",
+      "flag": "data.talked_business",
+      "value": false
+    },
+    {
+      "op": "set_flag",
+      "flag": "data.talked_artist",
+      "value": false
+    },
+    {
+      "op": "set_flag",
+      "flag": "data.has_shekel",
+      "value": false
+    },
+    {
+      "op": "set_flag",
+      "flag": "data.can_go_sunset",
+      "value": false
+    },
+    {
+      "op": "jump",
+      "target": "beach_choice"
+    }
+  ]
+}

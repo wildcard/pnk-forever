@@ -1,0 +1,64 @@
+{
+  "id": "talk_to_k",
+  "scene": null,
+  "sacred": false,
+  "statements": [
+    {
+      "op": "say",
+      "speaker": "k",
+      "pose": "idle",
+      "text": "Hey. You looked like you had a question."
+    },
+    {
+      "op": "choice",
+      "prompt": "What will you ask the dog?",
+      "options": [
+        {
+          "text": "What's your NAME?",
+          "statements": [
+            {
+              "op": "say",
+              "speaker": "k",
+              "pose": "idle",
+              "text": "Ehecatl. Aztec wind god — but everyone just calls me K."
+            },
+            {
+              "op": "set_flag",
+              "flag": "data.knows_name",
+              "value": true
+            },
+            {
+              "op": "jump",
+              "target": "talk_to_k_named"
+            }
+          ]
+        },
+        {
+          "text": "Your BICYCLE is cool, what is it?",
+          "statements": [
+            {
+              "op": "say",
+              "speaker": "k",
+              "pose": "idle",
+              "text": "A BROMPTON. I can fold it up and take it anywhere."
+            },
+            {
+              "op": "jump",
+              "target": "talk_to_k"
+            }
+          ],
+          "oneShot": true
+        },
+        {
+          "text": "Back",
+          "statements": [
+            {
+              "op": "jump",
+              "target": "beach_choice"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "id": "beach_choice",
+  "scene": null,
+  "sacred": false,
+  "statements": [
+    {
+      "op": "choice",
+      "prompt": "What do you want to do on the beach?",
+      "options": [
+        {
+          "text": "Talk to the dog",
+          "statements": [
+            {
+              "op": "jump",
+              "target": "talk_to_k"
+            }
+          ]
+        },
+        {
+          "text": "Try to go south",
+          "statements": [
+            {
+              "op": "jump",
+              "target": "try_go_sunset"
+            }
+          ]
+        },
+        {
+          "text": "Take the shekel",
+          "statements": [
+            {
+              "op": "jump",
+              "target": "take_shekel"
+            }
+          ]
+        },
+        {
+          "text": "Look at the beach",
+          "statements": [
+            {
+              "op": "say",
+              "speaker": null,
+              "text": "Wide sand, turquoise water. Tel Aviv in gentle chaos behind you."
+            },
+            {
+              "op": "jump",
+              "target": "beach_choice"
+            }
+          ],
+          "oneShot": true
+        },
+        {
+          "text": "Look at the bicycle",
+          "statements": [
+            {
+              "op": "say",
+              "speaker": null,
+              "text": "A BROMPTON. Folds neat as a promise."
+            },
+            {
+              "op": "jump",
+              "target": "beach_choice"
+            }
+          ],
+          "oneShot": true
+        }
+      ]
+    }
+  ]
+}

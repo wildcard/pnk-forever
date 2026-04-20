@@ -1,0 +1,9 @@
+{
+  "id": "k",
+  "displayName": "K",
+  "color": "#1A1A1A",
+  "sprites": {
+    "idle": "k.png"
+  },
+  "narratId": "k"
+}

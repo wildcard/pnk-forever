@@ -1,0 +1,5 @@
+{
+  "id": "data.talked_nomad",
+  "type": "bool",
+  "default": false
+}

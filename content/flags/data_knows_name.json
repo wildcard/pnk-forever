@@ -1,0 +1,5 @@
+{
+  "id": "data.knows_name",
+  "type": "bool",
+  "default": false
+}

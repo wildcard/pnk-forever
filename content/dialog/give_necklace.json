@@ -1,0 +1,32 @@
+{
+  "id": "give_necklace",
+  "scene": null,
+  "sacred": false,
+  "statements": [
+    {
+      "op": "say",
+      "speaker": null,
+      "text": "K. opens a small wooden box."
+    },
+    {
+      "op": "say",
+      "speaker": null,
+      "text": "Inside — a silver double NECKLACE. An infinity ouroboros amulet, joined by a tiny kite charm."
+    },
+    {
+      "op": "say",
+      "speaker": "k",
+      "pose": "idle",
+      "text": "Here. Put it on."
+    },
+    {
+      "op": "set_flag",
+      "flag": "data.has_necklace",
+      "value": true
+    },
+    {
+      "op": "jump",
+      "target": "kitchen_conversation"
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "id": "kite_branch",
+  "scene": null,
+  "sacred": false,
+  "statements": [
+    {
+      "op": "if",
+      "condition": "$data.has_kite",
+      "then": [
+        {
+          "op": "jump",
+          "target": "fly_branch"
+        }
+      ]
+    },
+    {
+      "op": "if",
+      "condition": "(== $data.slept_with_k false)",
+      "then": [
+        {
+          "op": "jump",
+          "target": "use_bed"
+        }
+      ]
+    },
+    {
+      "op": "say",
+      "speaker": null,
+      "text": "A shop window. Your KITE board, finally."
+    },
+    {
+      "op": "say",
+      "speaker": null,
+      "text": ""
+    },
+    {
+      "op": "say",
+      "speaker": null,
+      "text": "Use this code in the future for a special discount: PNK-n3zk7MAMBG-GIFT"
+    },
+    {
+      "op": "run_trigger",
+      "triggerId": "pnk_kite"
+    },
+    {
+      "op": "set_flag",
+      "flag": "data.has_kite",
+      "value": true
+    },
+    {
+      "op": "jump",
+      "target": "jaffa_street_scene"
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "id": "talk_love",
+  "scene": null,
+  "sacred": false,
+  "statements": [
+    {
+      "op": "if",
+      "condition": "$data.talked_love",
+      "then": [
+        {
+          "op": "jump",
+          "target": "take_chopsticks"
+        }
+      ]
+    },
+    {
+      "op": "say",
+      "speaker": "k",
+      "pose": "idle",
+      "text": "I LOVE you too. Always."
+    },
+    {
+      "op": "set_flag",
+      "flag": "data.talked_love",
+      "value": true
+    },
+    {
+      "op": "run_trigger",
+      "triggerId": "pnk_love"
+    },
+    {
+      "op": "jump",
+      "target": "kitchen_conversation"
+    }
+  ]
+}

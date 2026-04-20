@@ -1,0 +1,26 @@
+{
+  "id": "chapter_5_start",
+  "scene": null,
+  "sacred": false,
+  "statements": [
+    {
+      "op": "say",
+      "speaker": null,
+      "text": "Chapter 5 — Forever Home"
+    },
+    {
+      "op": "say",
+      "speaker": null,
+      "text": "Back in Tel Aviv. The balcony. Two cups of tea."
+    },
+    {
+      "op": "say",
+      "speaker": null,
+      "text": ""
+    },
+    {
+      "op": "jump",
+      "target": "home_scene"
+    }
+  ]
+}

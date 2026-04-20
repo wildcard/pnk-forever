@@ -1,0 +1,5 @@
+{
+  "id": "data.talked_mango",
+  "type": "bool",
+  "default": false
+}

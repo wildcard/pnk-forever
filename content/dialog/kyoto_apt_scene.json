@@ -1,0 +1,35 @@
+{
+  "id": "kyoto_apt_scene",
+  "scene": null,
+  "sacred": false,
+  "statements": [
+    {
+      "op": "set_scene",
+      "scene": "kyoto_apt"
+    },
+    {
+      "op": "say",
+      "speaker": null,
+      "text": "Your Kyoto apartment. Tatami, soft light, the slide of shoji doors."
+    },
+    {
+      "op": "say",
+      "speaker": null,
+      "text": "Something is cooking in the KITCHEN. Warm, savory steam."
+    },
+    {
+      "op": "set_flag",
+      "flag": "data.wearing_slippers",
+      "value": false
+    },
+    {
+      "op": "set_flag",
+      "flag": "data.has_tiger_sign",
+      "value": false
+    },
+    {
+      "op": "jump",
+      "target": "kyoto_apt_choice"
+    }
+  ]
+}

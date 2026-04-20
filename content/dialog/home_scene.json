@@ -1,0 +1,41 @@
+{
+  "id": "home_scene",
+  "scene": null,
+  "sacred": true,
+  "statements": [
+    {
+      "op": "set_scene",
+      "scene": "home"
+    },
+    {
+      "op": "say",
+      "speaker": null,
+      "text": "Home. Tel Aviv light through the window. Two cups of tea."
+    },
+    {
+      "op": "say",
+      "speaker": null,
+      "text": "And they lived, and loved, and kept going — forever."
+    },
+    {
+      "op": "say",
+      "speaker": null,
+      "text": ""
+    },
+    {
+      "op": "say",
+      "speaker": null,
+      "text": "THE END"
+    },
+    {
+      "op": "say",
+      "speaker": null,
+      "text": ""
+    },
+    {
+      "op": "say",
+      "speaker": null,
+      "text": "For Anastasia. Forever."
+    }
+  ]
+}

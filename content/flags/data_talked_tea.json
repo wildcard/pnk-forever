@@ -1,0 +1,5 @@
+{
+  "id": "data.talked_tea",
+  "type": "bool",
+  "default": false
+}

@@ -1,0 +1,5 @@
+{
+  "id": "data.talked_artist",
+  "type": "bool",
+  "default": false
+}

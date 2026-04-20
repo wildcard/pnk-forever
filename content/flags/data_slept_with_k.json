@@ -1,0 +1,5 @@
+{
+  "id": "data.slept_with_k",
+  "type": "bool",
+  "default": false
+}

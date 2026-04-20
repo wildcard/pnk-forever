@@ -1,0 +1,6 @@
+{
+  "id": "necklace",
+  "name": "Necklace",
+  "acquiredFlag": "data.has_necklace",
+  "icon": null
+}

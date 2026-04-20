@@ -1,0 +1,159 @@
+{
+  "id": "sunset_world",
+  "scene": null,
+  "sacred": false,
+  "statements": [
+    {
+      "op": "choice",
+      "prompt": "Where should we travel?",
+      "options": [
+        {
+          "text": "JAPAN",
+          "statements": [
+            {
+              "op": "say",
+              "speaker": "phoenix",
+              "pose": "idle",
+              "text": "JAPAN. The food, the quiet streets, the lanterns."
+            },
+            {
+              "op": "say",
+              "speaker": "phoenix",
+              "pose": "idle",
+              "text": "My ancestors are from there. It's been calling me."
+            },
+            {
+              "op": "set_flag",
+              "flag": "data.talked_japan",
+              "value": true
+            },
+            {
+              "op": "set_flag",
+              "flag": "data.agreed_to_travel",
+              "value": true
+            },
+            {
+              "op": "jump",
+              "target": "sunset_fly"
+            }
+          ]
+        },
+        {
+          "text": "GERMANY",
+          "statements": [
+            {
+              "op": "say",
+              "speaker": "k",
+              "pose": "idle",
+              "text": "Berlin? Ich bin ein Berliner."
+            },
+            {
+              "op": "say",
+              "speaker": "phoenix",
+              "pose": "idle",
+              "text": "Hmm. On second thought — not Germany."
+            },
+            {
+              "op": "jump",
+              "target": "sunset_world"
+            }
+          ],
+          "oneShot": true
+        },
+        {
+          "text": "CHINA",
+          "statements": [
+            {
+              "op": "say",
+              "speaker": "phoenix",
+              "pose": "idle",
+              "text": "Too big. I want somewhere we can actually live."
+            },
+            {
+              "op": "set_flag",
+              "flag": "data.talked_china",
+              "value": true
+            },
+            {
+              "op": "jump",
+              "target": "sunset_world_china"
+            }
+          ]
+        },
+        {
+          "text": "INDIA",
+          "statements": [
+            {
+              "op": "say",
+              "speaker": "k",
+              "pose": "idle",
+              "text": "The food is incredible. The rest — maybe another life."
+            },
+            {
+              "op": "jump",
+              "target": "sunset_world"
+            }
+          ],
+          "oneShot": true
+        },
+        {
+          "text": "FRANCE",
+          "statements": [
+            {
+              "op": "say",
+              "speaker": "phoenix",
+              "pose": "idle",
+              "text": "Pass. You know why."
+            },
+            {
+              "op": "jump",
+              "target": "sunset_world"
+            }
+          ],
+          "oneShot": true
+        },
+        {
+          "text": "ITALY",
+          "statements": [
+            {
+              "op": "say",
+              "speaker": "k",
+              "pose": "idle",
+              "text": "I love Italy. But not to live in. Not yet."
+            },
+            {
+              "op": "jump",
+              "target": "sunset_world"
+            }
+          ],
+          "oneShot": true
+        },
+        {
+          "text": "USA",
+          "statements": [
+            {
+              "op": "say",
+              "speaker": "phoenix",
+              "pose": "idle",
+              "text": "USA? Maybe. But not right now."
+            },
+            {
+              "op": "jump",
+              "target": "sunset_world"
+            }
+          ],
+          "oneShot": true
+        },
+        {
+          "text": "Back",
+          "statements": [
+            {
+              "op": "jump",
+              "target": "sunset_conversation"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "id": "intro_scene",
+  "scene": null,
+  "sacred": false,
+  "statements": [
+    {
+      "op": "say",
+      "speaker": null,
+      "text": "The tales of P."
+    },
+    {
+      "op": "say",
+      "speaker": null,
+      "text": "P. — short for Phoenix — is a bird-cat, depending on who you ask."
+    },
+    {
+      "op": "say",
+      "speaker": null,
+      "text": "Some days a feathered thing. Some days a purring one. Always curious."
+    },
+    {
+      "op": "say",
+      "speaker": null,
+      "text": ""
+    },
+    {
+      "op": "say",
+      "speaker": null,
+      "text": "She lives for salty air, warm sand, and small adventures."
+    },
+    {
+      "op": "say",
+      "speaker": null,
+      "text": "Today she's at her favorite beach café in Tel Aviv, watching the sea."
+    },
+    {
+      "op": "say",
+      "speaker": null,
+      "text": ""
+    },
+    {
+      "op": "say",
+      "speaker": "phoenix",
+      "pose": "idle",
+      "text": "Type LOOK to have a look around."
+    },
+    {
+      "op": "choice",
+      "prompt": "What will you do?",
+      "options": [
+        {
+          "text": "Look around",
+          "statements": [
+            {
+              "op": "jump",
+              "target": "beach_rest_look"
+            }
+          ]
+        },
+        {
+          "text": "Continue",
+          "statements": [
+            {
+              "op": "jump",
+              "target": "beach_rest_look"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "id": "shekel",
+  "name": "Shekel",
+  "acquiredFlag": "data.has_shekel",
+  "icon": null
+}

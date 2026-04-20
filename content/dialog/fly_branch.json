@@ -1,0 +1,41 @@
+{
+  "id": "fly_branch",
+  "scene": null,
+  "sacred": false,
+  "statements": [
+    {
+      "op": "if",
+      "condition": "(== $data.can_fly false)",
+      "then": [
+        {
+          "op": "say",
+          "speaker": null,
+          "text": "K. hasn't shown you how yet."
+        },
+        {
+          "op": "jump",
+          "target": "jaffa_street_scene"
+        }
+      ]
+    },
+    {
+      "op": "if",
+      "condition": "(== $data.agreed_to_travel false)",
+      "then": [
+        {
+          "op": "say",
+          "speaker": null,
+          "text": "You haven't chosen where to go yet."
+        },
+        {
+          "op": "jump",
+          "target": "jaffa_street_scene"
+        }
+      ]
+    },
+    {
+      "op": "jump",
+      "target": "fly_to_japan"
+    }
+  ]
+}

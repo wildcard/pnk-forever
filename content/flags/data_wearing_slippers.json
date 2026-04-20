@@ -1,0 +1,5 @@
+{
+  "id": "data.wearing_slippers",
+  "type": "bool",
+  "default": false
+}

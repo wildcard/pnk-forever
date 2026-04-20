@@ -1,0 +1,5 @@
+{
+  "id": "data.has_shekel",
+  "type": "bool",
+  "default": false
+}

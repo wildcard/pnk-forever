@@ -1,0 +1,49 @@
+{
+  "id": "jaffa_street_scene",
+  "scene": null,
+  "sacred": false,
+  "statements": [
+    {
+      "op": "set_scene",
+      "scene": "jaffa_street"
+    },
+    {
+      "op": "say",
+      "speaker": null,
+      "text": "Jaffa Street. Stone walls, bougainvillea, and the smell of fresh bread."
+    },
+    {
+      "op": "choice",
+      "prompt": "Where to next?",
+      "options": [
+        {
+          "text": "Look for kite equipment",
+          "statements": [
+            {
+              "op": "jump",
+              "target": "kite_branch"
+            }
+          ]
+        },
+        {
+          "text": "Fly to Japan",
+          "statements": [
+            {
+              "op": "jump",
+              "target": "fly_branch"
+            }
+          ]
+        },
+        {
+          "text": "Go south to apartment",
+          "statements": [
+            {
+              "op": "jump",
+              "target": "jaffa_apt_scene"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,96 @@
+{
+  "id": "beach_rest_look",
+  "scene": null,
+  "sacred": false,
+  "statements": [
+    {
+      "op": "say",
+      "speaker": null,
+      "text": "The midday sun is relentless. P. sips a slushy acai, waiting for the wind to settle."
+    },
+    {
+      "op": "say",
+      "speaker": null,
+      "text": "She's been turning an idea over in her head — what comes next?"
+    },
+    {
+      "op": "say",
+      "speaker": null,
+      "text": ""
+    },
+    {
+      "op": "say",
+      "speaker": null,
+      "text": "Then she sees him. A dog on a BROMPTON folding bicycle. Shiba face, peacock feathers."
+    },
+    {
+      "op": "say",
+      "speaker": null,
+      "text": "She's never seen anything like it. Her tail flicks once. Curious."
+    },
+    {
+      "op": "say",
+      "speaker": null,
+      "text": "She decides to say hello."
+    },
+    {
+      "op": "set_flag",
+      "flag": "data.has_slushy",
+      "value": false
+    },
+    {
+      "op": "set_flag",
+      "flag": "data.slushy_gulps",
+      "value": 3
+    },
+    {
+      "op": "set_flag",
+      "flag": "data.can_leave",
+      "value": false
+    },
+    {
+      "op": "choice",
+      "prompt": "There's a slushy on the table. What do you do?",
+      "options": [
+        {
+          "text": "Take the slushy",
+          "statements": [
+            {
+              "op": "set_flag",
+              "flag": "data.has_slushy",
+              "value": true
+            },
+            {
+              "op": "say",
+              "speaker": null,
+              "text": "Cold condensation drips down your feathers. You take it."
+            },
+            {
+              "op": "jump",
+              "target": "slushy_choice"
+            }
+          ]
+        },
+        {
+          "text": "Leave it",
+          "statements": [
+            {
+              "op": "say",
+              "speaker": null,
+              "text": "The heat wins. You grab the slushy anyway."
+            },
+            {
+              "op": "set_flag",
+              "flag": "data.has_slushy",
+              "value": true
+            },
+            {
+              "op": "jump",
+              "target": "slushy_choice"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+{
+  "id": "data.talked_zodiac",
+  "type": "bool",
+  "default": false
+}

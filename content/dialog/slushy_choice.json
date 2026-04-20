@@ -1,0 +1,31 @@
+{
+  "id": "slushy_choice",
+  "scene": null,
+  "sacred": false,
+  "statements": [
+    {
+      "op": "choice",
+      "prompt": "The slushy is in your hand. What now?",
+      "options": [
+        {
+          "text": "Use the slushy",
+          "statements": [
+            {
+              "op": "jump",
+              "target": "use_slushy"
+            }
+          ]
+        },
+        {
+          "text": "Try to leave",
+          "statements": [
+            {
+              "op": "jump",
+              "target": "try_leave"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

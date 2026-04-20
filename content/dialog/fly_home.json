@@ -1,0 +1,21 @@
+{
+  "id": "fly_home",
+  "scene": null,
+  "sacred": false,
+  "statements": [
+    {
+      "op": "say",
+      "speaker": null,
+      "text": "You step onto the balcony. He spreads his tail. You lift off."
+    },
+    {
+      "op": "say",
+      "speaker": null,
+      "text": "The world curves beneath you — Kyoto, then cloud, then sea."
+    },
+    {
+      "op": "jump",
+      "target": "home_scene"
+    }
+  ]
+}

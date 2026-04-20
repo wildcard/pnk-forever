@@ -1,0 +1,26 @@
+{
+  "id": "chapter_1_start",
+  "scene": null,
+  "sacred": false,
+  "statements": [
+    {
+      "op": "say",
+      "speaker": null,
+      "text": "Chapter 1 — Meet Cute"
+    },
+    {
+      "op": "say",
+      "speaker": null,
+      "text": "Tel Aviv. A hot beach café. A slushy melting in your hand."
+    },
+    {
+      "op": "say",
+      "speaker": null,
+      "text": ""
+    },
+    {
+      "op": "jump",
+      "target": "intro_scene"
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "id": "kyoto_take_tiger",
+  "scene": null,
+  "sacred": false,
+  "statements": [
+    {
+      "op": "if",
+      "condition": "$data.has_tiger_sign",
+      "then": [
+        {
+          "op": "jump",
+          "target": "go_kitchen"
+        }
+      ]
+    },
+    {
+      "op": "say",
+      "speaker": null,
+      "text": "A small carved wooden TIGER. Your ZODIAC. You pocket it with a smile."
+    },
+    {
+      "op": "set_flag",
+      "flag": "data.has_tiger_sign",
+      "value": true
+    },
+    {
+      "op": "jump",
+      "target": "kyoto_apt_choice"
+    }
+  ]
+}

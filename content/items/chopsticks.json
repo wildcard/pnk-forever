@@ -1,0 +1,6 @@
+{
+  "id": "chopsticks",
+  "name": "Chopsticks",
+  "acquiredFlag": "data.has_chopsticks",
+  "icon": null
+}

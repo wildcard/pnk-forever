@@ -1,0 +1,37 @@
+{
+  "id": "sunset_world_china",
+  "scene": null,
+  "sacred": false,
+  "statements": [
+    {
+      "op": "choice",
+      "prompt": "Where in China?",
+      "options": [
+        {
+          "text": "HONG KONG",
+          "statements": [
+            {
+              "op": "say",
+              "speaker": "phoenix",
+              "pose": "idle",
+              "text": "Beautiful. But not for us, not now."
+            },
+            {
+              "op": "jump",
+              "target": "sunset_world"
+            }
+          ]
+        },
+        {
+          "text": "Back",
+          "statements": [
+            {
+              "op": "jump",
+              "target": "sunset_world"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

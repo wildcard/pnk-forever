@@ -1,0 +1,6 @@
+{
+  "id": "kite",
+  "name": "Kite",
+  "acquiredFlag": "data.has_kite",
+  "icon": null
+}

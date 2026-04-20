@@ -1,0 +1,62 @@
+{
+  "id": "use_slushy",
+  "scene": null,
+  "sacred": false,
+  "statements": [
+    {
+      "op": "if",
+      "condition": "(== $data.slushy_gulps 3)",
+      "then": [
+        {
+          "op": "say",
+          "speaker": null,
+          "text": "A long, icy pull. The world slows. You can breathe again."
+        },
+        {
+          "op": "set_flag",
+          "flag": "data.can_leave",
+          "value": true
+        }
+      ]
+    },
+    {
+      "op": "say",
+      "speaker": null,
+      "text": "gulp"
+    },
+    {
+      "op": "set_flag",
+      "flag": "data.slushy_gulps",
+      "value": "(- $data.slushy_gulps 1)"
+    },
+    {
+      "op": "if",
+      "condition": "(> $data.slushy_gulps 0)",
+      "then": [
+        {
+          "op": "say",
+          "speaker": null,
+          "text": "A little slushy left, clinging to the cup."
+        },
+        {
+          "op": "jump",
+          "target": "slushy_choice"
+        }
+      ]
+    },
+    {
+      "op": "say",
+      "speaker": null,
+      "text": "The last drop. Purple-pink on your beak."
+    },
+    {
+      "op": "say",
+      "speaker": null,
+      "text": "You set the empty cup down."
+    },
+    {
+      "op": "jump",
+      "target": "go_to_beach"
+    }
+  ]
+}

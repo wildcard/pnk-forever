@@ -1,0 +1,14 @@
+{
+  "id": "pnk_love",
+  "kind": "easter_egg",
+  "trigger": {
+    "kind": "keyword",
+    "word": "LOVE",
+    "caseInsensitive": true
+  },
+  "effect": {
+    "kind": "run_trigger",
+    "triggerId": "pnk_love"
+  },
+  "oneShot": true
+}

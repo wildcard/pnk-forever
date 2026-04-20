@@ -1,0 +1,5 @@
+{
+  "id": "data.can_fly",
+  "type": "bool",
+  "default": false
+}

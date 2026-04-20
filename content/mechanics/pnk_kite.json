@@ -1,0 +1,14 @@
+{
+  "id": "pnk_kite",
+  "kind": "easter_egg",
+  "trigger": {
+    "kind": "keyword",
+    "word": "KITE",
+    "caseInsensitive": true
+  },
+  "effect": {
+    "kind": "run_trigger",
+    "triggerId": "pnk_kite"
+  },
+  "oneShot": true
+}

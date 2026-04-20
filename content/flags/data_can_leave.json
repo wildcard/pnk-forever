@@ -1,0 +1,5 @@
+{
+  "id": "data.can_leave",
+  "type": "bool",
+  "default": false
+}

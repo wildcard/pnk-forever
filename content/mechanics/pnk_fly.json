@@ -1,0 +1,14 @@
+{
+  "id": "pnk_fly",
+  "kind": "easter_egg",
+  "trigger": {
+    "kind": "keyword",
+    "word": "FLY",
+    "caseInsensitive": true
+  },
+  "effect": {
+    "kind": "run_trigger",
+    "triggerId": "pnk_fly"
+  },
+  "oneShot": true
+}

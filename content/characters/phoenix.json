@@ -1,0 +1,9 @@
+{
+  "id": "phoenix",
+  "displayName": "Phoenix",
+  "color": "#FF6B35",
+  "sprites": {
+    "idle": "phoenix.png"
+  },
+  "narratId": "phoenix"
+}

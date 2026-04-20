@@ -1,0 +1,58 @@
+{
+  "id": "sunset_fly",
+  "scene": null,
+  "sacred": false,
+  "statements": [
+    {
+      "op": "choice",
+      "prompt": "How should we get to Japan?",
+      "options": [
+        {
+          "text": "How can we FLY to Japan?",
+          "statements": [
+            {
+              "op": "say",
+              "speaker": "phoenix",
+              "pose": "idle",
+              "text": "A plane? That's the obvious way."
+            },
+            {
+              "op": "say",
+              "speaker": "k",
+              "pose": "idle",
+              "text": "Or — I can take us there myself. I can FLY."
+            },
+            {
+              "op": "say",
+              "speaker": null,
+              "text": ""
+            },
+            {
+              "op": "say",
+              "speaker": null,
+              "text": "Use FLY in a place to unlock K.'s secret."
+            },
+            {
+              "op": "set_flag",
+              "flag": "data.can_fly",
+              "value": true
+            },
+            {
+              "op": "jump",
+              "target": "sunset_conversation"
+            }
+          ]
+        },
+        {
+          "text": "Back",
+          "statements": [
+            {
+              "op": "jump",
+              "target": "sunset_conversation"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

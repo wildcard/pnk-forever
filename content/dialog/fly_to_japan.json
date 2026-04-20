@@ -1,0 +1,52 @@
+{
+  "id": "fly_to_japan",
+  "scene": null,
+  "sacred": false,
+  "statements": [
+    {
+      "op": "say",
+      "speaker": "phoenix",
+      "pose": "idle",
+      "text": "Let's FLY. Together."
+    },
+    {
+      "op": "say",
+      "speaker": null,
+      "text": "K. spreads his peacock tail. You lift off from the Jaffa rooftop."
+    },
+    {
+      "op": "say",
+      "speaker": null,
+      "text": ""
+    },
+    {
+      "op": "say",
+      "speaker": null,
+      "text": "Clouds. Ocean. Clouds again. The light shifts from gold to pearl."
+    },
+    {
+      "op": "say",
+      "speaker": null,
+      "text": ""
+    },
+    {
+      "op": "say",
+      "speaker": null,
+      "text": "Three years pass in a single breath."
+    },
+    {
+      "op": "say",
+      "speaker": null,
+      "text": ""
+    },
+    {
+      "op": "say",
+      "speaker": null,
+      "text": "You land softly outside your Kyoto apartment."
+    },
+    {
+      "op": "jump",
+      "target": "japan_scene"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "id": "go_kitchen",
+  "scene": null,
+  "sacred": false,
+  "statements": [
+    {
+      "op": "if",
+      "condition": "(== $data.wearing_slippers false)",
+      "then": [
+        {
+          "op": "say",
+          "speaker": "k",
+          "pose": "idle",
+          "text": "Hey! No shoes in the house. You know better."
+        },
+        {
+          "op": "jump",
+          "target": "kyoto_apt_choice"
+        }
+      ]
+    },
+    {
+      "op": "jump",
+      "target": "kitchen_scene"
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+{
+  "id": "data.agreed_to_travel",
+  "type": "bool",
+  "default": false
+}

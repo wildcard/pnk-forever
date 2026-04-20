@@ -1,0 +1,11 @@
+{
+  "id": "go_to_beach",
+  "scene": null,
+  "sacred": false,
+  "statements": [
+    {
+      "op": "jump",
+      "target": "beach_scene"
+    }
+  ]
+}

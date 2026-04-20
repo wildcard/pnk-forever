@@ -1,0 +1,5 @@
+{
+  "id": "data.slushy_gulps",
+  "type": "int",
+  "default": 3
+}

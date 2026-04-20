@@ -1,0 +1,98 @@
+{
+  "id": "sunset_conversation",
+  "scene": null,
+  "sacred": false,
+  "statements": [
+    {
+      "op": "if",
+      "condition": "$data.can_fly",
+      "then": [
+        {
+          "op": "say",
+          "speaker": "k",
+          "pose": "idle",
+          "text": "We've walked and talked. Let's head to JAFFA."
+        },
+        {
+          "op": "jump",
+          "target": "jaffa_apt_scene"
+        }
+      ]
+    },
+    {
+      "op": "say",
+      "speaker": "k",
+      "pose": "idle",
+      "text": "What would you like to talk about?"
+    },
+    {
+      "op": "choice",
+      "prompt": "Pick a topic to discuss",
+      "options": [
+        {
+          "text": "What's your favorite type of FOOD?",
+          "statements": [
+            {
+              "op": "jump",
+              "target": "sunset_food_branch"
+            }
+          ]
+        },
+        {
+          "text": "What's your favorite hot beverage to DRINK?",
+          "statements": [
+            {
+              "op": "jump",
+              "target": "sunset_drink_branch"
+            }
+          ]
+        },
+        {
+          "text": "Do you have a SWEET you can't resist?",
+          "statements": [
+            {
+              "op": "jump",
+              "target": "sunset_sweet_branch"
+            }
+          ]
+        },
+        {
+          "text": "Do you want to TRAVEL the world?",
+          "statements": [
+            {
+              "op": "jump",
+              "target": "sunset_travel_branch"
+            }
+          ]
+        },
+        {
+          "text": "What's a digital NOMAD?",
+          "statements": [
+            {
+              "op": "jump",
+              "target": "sunset_nomad_branch"
+            }
+          ]
+        },
+        {
+          "text": "Do you want to travel with me around the WORLD?",
+          "statements": [
+            {
+              "op": "jump",
+              "target": "sunset_world_branch"
+            }
+          ]
+        },
+        {
+          "text": "Go to Jaffa",
+          "statements": [
+            {
+              "op": "jump",
+              "target": "jaffa_apt_scene"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

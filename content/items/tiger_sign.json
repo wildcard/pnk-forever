@@ -1,0 +1,6 @@
+{
+  "id": "tiger_sign",
+  "name": "Tiger Sign",
+  "acquiredFlag": "data.has_tiger_sign",
+  "icon": null
+}

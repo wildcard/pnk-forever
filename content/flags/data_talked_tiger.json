@@ -1,0 +1,5 @@
+{
+  "id": "data.talked_tiger",
+  "type": "bool",
+  "default": false
+}

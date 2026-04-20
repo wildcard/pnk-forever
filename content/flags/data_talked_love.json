@@ -1,0 +1,5 @@
+{
+  "id": "data.talked_love",
+  "type": "bool",
+  "default": false
+}

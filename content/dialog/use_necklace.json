@@ -1,0 +1,32 @@
+{
+  "id": "use_necklace",
+  "scene": null,
+  "sacred": false,
+  "statements": [
+    {
+      "op": "say",
+      "speaker": null,
+      "text": "The silver rests cool on your chest. A perfect weight."
+    },
+    {
+      "op": "say",
+      "speaker": "k",
+      "pose": "idle",
+      "text": "It's time. Let's FLY home. To TLV."
+    },
+    {
+      "op": "say",
+      "speaker": "k",
+      "pose": "idle",
+      "text": "Together."
+    },
+    {
+      "op": "run_trigger",
+      "triggerId": "pnk_fly"
+    },
+    {
+      "op": "jump",
+      "target": "fly_home"
+    }
+  ]
+}

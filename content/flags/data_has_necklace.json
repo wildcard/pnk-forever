@@ -1,0 +1,5 @@
+{
+  "id": "data.has_necklace",
+  "type": "bool",
+  "default": false
+}
