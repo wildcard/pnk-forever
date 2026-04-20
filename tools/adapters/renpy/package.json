@@ -1,0 +1,16 @@
+{
+  "name": "@pnk/adapter-renpy",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Ren'Py emitter: IR → v2-renpy/ .rpy project.",
+  "scripts": {
+    "emit": "tsx src/emit.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.5.0"
+  }
+}

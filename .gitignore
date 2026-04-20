@@ -108,3 +108,7 @@ RESUME.md
 tools/renpy-sdk/renpy-*/
 # Ren'Py web build output
 dist/v2-renpy/
+
+# Local-only ralph-loop scratch + tsc incremental cache
+.claude/ralph-loop.local.md
+.claude/tsc-cache/
