@@ -6,8 +6,9 @@ japan_scene:
     "Where to?"
     "Go north to the apartment":
       jump kyoto_apt_scene
-    "Stay here":
-      jump japan_scene
+    "Linger a moment longer":
+      "You stand still. Watch the lantern light catch the rain."
+      jump kyoto_apt_scene
 
 kyoto_apt_scene:
   set_screen kyoto_apt
@@ -23,15 +24,25 @@ kyoto_apt_choice:
   choice:
     "What do you want to do?"
     "Use the slippers Uwabaki":
-      "You slip into your uwabaki — soft, clean, house-only SLIPPERS."
-      set data.wearing_slippers true
-      jump kyoto_apt_choice
+      jump kyoto_wear_slippers
     "Take Tiger Zodiac Sign":
-      "A small carved wooden TIGER. Your ZODIAC. You pocket it with a smile."
-      set data.has_tiger_sign true
-      jump kyoto_apt_choice
+      jump kyoto_take_tiger
     "Go east to the kitchen":
       jump go_kitchen
+
+kyoto_wear_slippers:
+  if $data.wearing_slippers:
+    jump kyoto_take_tiger
+  "You slip into your uwabaki — soft, clean, house-only SLIPPERS."
+  set data.wearing_slippers true
+  jump kyoto_apt_choice
+
+kyoto_take_tiger:
+  if $data.has_tiger_sign:
+    jump go_kitchen
+  "A small carved wooden TIGER. Your ZODIAC. You pocket it with a smile."
+  set data.has_tiger_sign true
+  jump kyoto_apt_choice
 
 go_kitchen:
   if (== $data.wearing_slippers false):
@@ -174,12 +185,3 @@ home_scene:
   "THE END"
   ""
   "For Anastasia. Forever."
-
-  choice:
-    "The end. What now?"
-    "I Love you":
-      talk k idle "I love you too. Always."
-      run trigger_easter_egg pnk_love
-      jump home_scene
-    "Play again":
-      jump main
