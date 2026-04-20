@@ -2,17 +2,51 @@
 # Automated playtest routine: tests the game and suggests improvements until ready to ship.
 set -euo pipefail
 
-URL="${PREVIEW_URL:-https://pnk-forever-git-claude-anniversary-game-vp0vp-kadosh-dev.vercel.app}"
+MODE="${MODE:-local}"
+URL="${PREVIEW_URL:-}"
 OUTPUT_DIR="$(mktemp -d)"
 REPORT="$OUTPUT_DIR/playtest-report.md"
+LOCAL_PORT="${LOCAL_PORT:-8765}"
+SERVER_PID=""
 
-echo "=== Playtest starting at $(date -u +%Y-%m-%dT%H:%M:%SZ) ==="
-echo "Testing: $URL"
+cleanup() {
+  if [[ -n "$SERVER_PID" ]]; then
+    kill "$SERVER_PID" 2>/dev/null || true
+  fi
+}
+trap cleanup EXIT
+
+REPO_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
+if [[ -z "$URL" ]]; then
+  echo "=== Playtest starting at $(date -u +%Y-%m-%dT%H:%M:%SZ) ==="
+  echo "Mode: LOCAL (serving from $REPO_ROOT/v1-modern/dist)"
+
+  if [[ ! -d "$REPO_ROOT/v1-modern/dist" ]]; then
+    echo "Building game first..."
+    cd "$REPO_ROOT/v1-modern" && npm run build && cd "$REPO_ROOT"
+  fi
+
+  # Start fresh server (kill anything on the port first)
+  lsof -ti:$LOCAL_PORT 2>/dev/null | xargs -r kill 2>/dev/null || true
+  sleep 1
+
+  echo "Starting static server on port $LOCAL_PORT..."
+  cd "$REPO_ROOT/v1-modern/dist"
+  python3 -m http.server "$LOCAL_PORT" > /dev/null 2>&1 &
+  SERVER_PID=$!
+  cd "$REPO_ROOT"
+  sleep 2
+  URL="http://localhost:$LOCAL_PORT"
+  echo "Testing: $URL"
+else
+  echo "=== Playtest starting at $(date -u +%Y-%m-%dT%H:%M:%SZ) ==="
+  echo "Mode: REMOTE"
+  echo "Testing: $URL"
+fi
 echo ""
 
-# Check if we have Node
 if ! command -v node &> /dev/null; then
-  echo "ERROR: node not found. Install Node.js first."
+  echo "ERROR: node not found."
   exit 1
 fi
 
@@ -26,7 +60,7 @@ npx playwright install chromium 2>&1 | grep -v "Playwright" || true
 cat > test.mjs << 'EOTEST'
 import { chromium } from 'playwright';
 
-const URL = process.env.PREVIEW_URL || 'https://pnk-forever-git-claude-anniversary-game-vp0vp-kadosh-dev.vercel.app';
+const URL = process.env.PREVIEW_URL || 'http://localhost:8765';
 const OUTPUT_DIR = process.cwd();
 
 async function runPlaytest() {
@@ -37,131 +71,212 @@ async function runPlaytest() {
   });
   const page = await context.newPage();
 
+  // Capture console errors
+  const consoleErrors = [];
+  page.on('pageerror', err => consoleErrors.push(err.message));
+  page.on('console', msg => {
+    if (msg.type() === 'error') consoleErrors.push(msg.text());
+  });
+
   const findings = {
     critical: [],
     warnings: [],
     improvements: [],
     positives: [],
+    dialog_history: [],
     ready_criteria: {
+      splash_works: false,
+      menu_works: false,
+      narrative_progresses: false,
+      choices_appear: false,
+      choices_work: false,
       visuals_present: false,
-      narrat_playable: false,
+      character_sprites: false,
       v0_accessible: false,
-      engaging_narrative: false,
-      clear_choices: false,
-      easter_eggs_work: false,
+      easter_eggs_present: false,
+      no_console_errors: false,
     }
   };
 
   try {
-    // Load the game
-    console.error('Loading game...');
+    // === Phase 1: Load ===
+    console.error('Phase 1: Loading game...');
     await page.goto(URL, { waitUntil: 'networkidle', timeout: 30000 });
-    await page.screenshot({ path: `${OUTPUT_DIR}/01-load.png` });
+    await page.waitForTimeout(3000);
+    await page.screenshot({ path: `${OUTPUT_DIR}/01-splash.png` });
 
-    // Check for Narrat UI elements
-    const narratContainer = await page.$('.narrat-app');
-    if (!narratContainer) {
-      findings.critical.push('Narrat container not found - game may not be initializing');
+    // === Phase 2: Splash screen ===
+    const pressStart = await page.getByRole('button', { name: /press to start/i });
+    if (await pressStart.count() > 0) {
+      await pressStart.click();
+      await page.waitForTimeout(2000);
+      findings.ready_criteria.splash_works = true;
+      findings.positives.push('Splash screen → Press to start works');
     } else {
-      findings.positives.push('Narrat engine loaded successfully');
+      findings.warnings.push('No splash screen found (may have auto-progressed)');
     }
+    await page.screenshot({ path: `${OUTPUT_DIR}/02-menu.png` });
 
-    // Check for backgrounds
-    const backgrounds = await page.$$eval('.scene-background, .background, [class*="background"]', els =>
-      els.map(el => ({
-        visible: el.offsetWidth > 0 && el.offsetHeight > 0,
-        src: el.style.backgroundImage || el.getAttribute('src') || '',
-      }))
-    ).catch(() => []);
-
-    if (backgrounds.length === 0) {
-      findings.warnings.push('No background elements found');
+    // === Phase 3: Title menu ===
+    const newGame = await page.getByRole('button', { name: /new game/i });
+    if (await newGame.count() > 0) {
+      await newGame.click();
+      await page.waitForTimeout(2500);
+      findings.ready_criteria.menu_works = true;
+      findings.positives.push('Title menu → New Game works');
     } else {
-      const hasRealImages = backgrounds.some(bg => bg.visible && bg.src && bg.src.includes('.png'));
-      if (hasRealImages) {
-        findings.ready_criteria.visuals_present = true;
-        findings.positives.push(`Visual backgrounds detected (${backgrounds.length} elements)`);
-      } else {
-        findings.warnings.push('Only CSS gradient backgrounds - real images missing or not loaded');
+      findings.critical.push('Title menu "New Game" button not found');
+    }
+    await page.screenshot({ path: `${OUTPUT_DIR}/03-game-start.png` });
+
+    // === Phase 4: Narrative progression ===
+    console.error('Phase 4: Progressing through narrative...');
+    const uniqueTexts = new Set();
+    let choicesFound = false;
+    let progressSteps = 0;
+
+    for (let i = 0; i < 50; i++) {
+      const state = await page.evaluate(() => {
+        const newBox = document.querySelector('.dialog-box-new');
+        const hasChoices = newBox?.classList.contains('has-choices') ?? false;
+        const textEl = newBox?.querySelector('.text-command');
+        const text = (textEl?.textContent || newBox?.textContent || '').trim();
+
+        // Get choice texts
+        const choiceEls = newBox?.querySelectorAll('.dialog-choice, .choice-text') || [];
+        const choices = Array.from(choiceEls).map(el => el.textContent.trim());
+
+        return { hasChoices, text: text.substring(0, 150), choices };
+      });
+
+      if (state.text && state.text.length > 5) {
+        uniqueTexts.add(state.text.substring(0, 80));
       }
-    }
 
-    // Wait for dialog to appear
-    const dialogFound = await page.waitForSelector('.dialog-panel, .narrat-dialog, [class*="dialog"]', { timeout: 5000 }).then(() => true).catch(() => false);
-    if (!dialogFound) {
-      findings.critical.push('Dialog panel never appeared - game may be stuck');
-    }
-    await page.screenshot({ path: `${OUTPUT_DIR}/02-dialog.png` });
+      if (state.hasChoices && state.choices.length > 0) {
+        choicesFound = true;
+        findings.ready_criteria.choices_appear = true;
+        findings.positives.push(`Choice point reached (step ${i}): ${state.choices.length} options`);
+        await page.screenshot({ path: `${OUTPUT_DIR}/04-choices-${i}.png` });
 
-    // Check for character sprites
-    const sprites = await page.$$('.character-sprite, .sprite, [class*="character"]');
-    if (sprites.length > 0) {
-      findings.positives.push(`Character sprites present (${sprites.length} found)`);
-    } else {
-      findings.improvements.push('Character sprites missing - add show commands for Phoenix/K');
-    }
+        // Try clicking first choice
+        const clicked = await page.evaluate(() => {
+          const choice = document.querySelector('.dialog-box-new .dialog-choice, .dialog-box-new .choice-text');
+          if (choice) {
+            choice.click();
+            return true;
+          }
+          return false;
+        });
 
-    // Read initial dialog text
-    const dialogText = await page.$eval('.dialog-panel, .narrat-dialog, [class*="dialog"]', el => el.textContent).catch(() => '');
-    if (dialogText.length > 50) {
-      findings.ready_criteria.engaging_narrative = true;
-      findings.positives.push('Narrative text displays properly');
-    } else {
-      findings.warnings.push('Dialog text seems truncated or missing');
-    }
+        if (clicked) {
+          await page.waitForTimeout(1500);
+          const newState = await page.evaluate(() => {
+            const newBox = document.querySelector('.dialog-box-new');
+            return (newBox?.textContent || '').substring(0, 150);
+          });
+          if (newState !== state.text) {
+            findings.ready_criteria.choices_work = true;
+            findings.positives.push('Choice selection advances the game');
+          } else {
+            findings.warnings.push('Clicked choice but game did not progress');
+          }
+        }
 
-    // Check for choices
-    const choices = await page.$$('.choice-button, .narrat-choice-button, button.choice, button[class*="choice"]');
-    if (choices.length > 0) {
-      findings.ready_criteria.clear_choices = true;
-      findings.positives.push(`Interactive choices available (${choices.length} buttons)`);
-
-      // Click first choice and see if game progresses
-      await choices[0].click();
-      await page.waitForTimeout(1000);
-      await page.screenshot({ path: `${OUTPUT_DIR}/03-after-choice.png` });
-
-      const newText = await page.$eval('.dialog-panel, .narrat-dialog, [class*="dialog"]', el => el.textContent).catch(() => '');
-      if (newText !== dialogText && newText.length > 0) {
-        findings.ready_criteria.narrat_playable = true;
-        findings.positives.push('Game progression works - choice triggered new dialog');
-      } else {
-        findings.warnings.push('Choice clicked but dialog did not change');
+        progressSteps = i;
+        break;
       }
-    } else {
-      findings.critical.push('No choice buttons found - player cannot progress');
+
+      // Click Continue (interact-button is a div, not button)
+      const advanced = await page.evaluate(() => {
+        const btn = document.querySelector('.interact-button');
+        if (btn) { btn.click(); return true; }
+        return false;
+      });
+
+      if (!advanced) {
+        console.error(`  Stuck at step ${i} - no interact-button and no choices`);
+        break;
+      }
+      await page.waitForTimeout(500);
     }
 
-    // Check console for errors
-    const errors = [];
-    page.on('console', msg => {
-      if (msg.type() === 'error') {
-        errors.push(msg.text());
-      }
+    if (uniqueTexts.size >= 3) {
+      findings.ready_criteria.narrative_progresses = true;
+      findings.positives.push(`Narrative shows ${uniqueTexts.size} unique dialog lines`);
+      findings.dialog_history = [...uniqueTexts].slice(0, 10);
+    } else if (uniqueTexts.size > 0) {
+      findings.warnings.push(`Only ${uniqueTexts.size} unique dialog lines - game may be stuck`);
+    } else {
+      findings.critical.push('No narrative text displayed - game may not have started');
+    }
+
+    if (!choicesFound) {
+      findings.warnings.push('No player choices appeared in first 50 dialog advances');
+    }
+
+    // === Phase 5: Visuals check ===
+    console.error('Phase 5: Checking visuals...');
+    const visualsCheck = await page.evaluate(() => {
+      const bg = document.querySelector('.viewport-layer-background');
+      const bgImage = bg ? getComputedStyle(bg).backgroundImage : '';
+      const hasRealBg = bgImage && bgImage !== 'none' && !bgImage.includes('gradient');
+
+      // Check all images on the page
+      const imgs = Array.from(document.querySelectorAll('img'));
+      const loadedImgs = imgs.filter(img => img.complete && img.naturalWidth > 50).length;
+      const brokenImgs = imgs.filter(img => !img.complete || img.naturalWidth === 0).length;
+
+      return { bgImage, hasRealBg, totalImgs: imgs.length, loadedImgs, brokenImgs };
     });
-    await page.waitForTimeout(1000);
-    if (errors.length > 0) {
-      findings.warnings.push(`${errors.length} console errors detected: ${errors.slice(0, 3).join('; ')}`);
+
+    if (visualsCheck.hasRealBg) {
+      findings.ready_criteria.visuals_present = true;
+      findings.positives.push(`Background image loaded: ${visualsCheck.bgImage.substring(0, 60)}...`);
+    } else {
+      findings.critical.push('No background image loaded - only solid color/gradient');
     }
 
-    // Try to access v0 version (check if it exists)
-    const v0Response = await fetch(`${URL.replace(/\/$/, '')}/v0-original-text-engine/index.html`).then(r => r.ok).catch(() => false);
+    if (visualsCheck.brokenImgs > 0) {
+      findings.warnings.push(`${visualsCheck.brokenImgs} broken images detected (button icons or sprites)`);
+    }
+
+    // Character sprites
+    const sprites = await page.$$('.character-sprite, .sprite, [class*="character-portrait"]');
+    if (sprites.length > 0) {
+      findings.ready_criteria.character_sprites = true;
+      findings.positives.push(`Character sprites visible (${sprites.length})`);
+    } else {
+      findings.improvements.push('No character sprites displayed - Narrat show commands missing');
+    }
+
+    // === Phase 6: v0 accessibility ===
+    const v0Response = await fetch(`${URL.replace(/\/$/, '')}/v0-original-text-engine/index.html`)
+      .then(r => r.ok).catch(() => false);
     if (v0Response) {
       findings.ready_criteria.v0_accessible = true;
-      findings.positives.push('Original v0 text adventure remains accessible');
+      findings.positives.push('v0 original text adventure accessible at /v0-original-text-engine/');
     } else {
-      findings.improvements.push('v0 text adventure not accessible at expected path');
+      findings.improvements.push('v0 text adventure not deployed alongside v1 (add to build output)');
     }
 
-    // Easter egg check (look for tea/mango/chocolate/kite/love/fly keywords in page)
-    const pageText = await page.content();
-    const easterEggKeywords = ['mango', 'tea', 'chocolate', 'kite', 'love', 'fly'];
-    const foundKeywords = easterEggKeywords.filter(kw => pageText.toLowerCase().includes(kw));
-    if (foundKeywords.length >= 3) {
-      findings.ready_criteria.easter_eggs_work = true;
-      findings.positives.push(`Easter egg keywords present: ${foundKeywords.join(', ')}`);
+    // === Phase 7: Easter egg keywords ===
+    const pageContent = await page.content();
+    const eggs = ['mango', 'tea', 'chocolate', 'kite', 'love', 'fly'];
+    const foundEggs = eggs.filter(e => pageContent.toLowerCase().includes(e));
+    if (foundEggs.length >= 3) {
+      findings.ready_criteria.easter_eggs_present = true;
+      findings.positives.push(`Easter egg keywords present: ${foundEggs.join(', ')}`);
     } else {
-      findings.improvements.push('Easter egg triggers may not be wired (need IFTTT webhook implementation)');
+      findings.improvements.push(`Only ${foundEggs.length}/6 easter egg keywords found - may need more scenes played`);
+    }
+
+    // === Phase 8: Console errors ===
+    if (consoleErrors.length === 0) {
+      findings.ready_criteria.no_console_errors = true;
+      findings.positives.push('No console errors detected');
+    } else {
+      findings.warnings.push(`${consoleErrors.length} console errors: ${consoleErrors.slice(0, 2).join(' | ')}`);
     }
 
   } catch (error) {
@@ -173,12 +288,10 @@ async function runPlaytest() {
   return findings;
 }
 
-// Run and output JSON
 const results = await runPlaytest();
 console.log(JSON.stringify(results, null, 2));
 EOTEST
 
-# Run test script (stderr separated so JSON output is clean)
 echo "Running automated playtest..."
 RESULTS=$(PREVIEW_URL="$URL" node test.mjs 2>/tmp/playtest-stderr.log)
 STDERR_OUTPUT=$(cat /tmp/playtest-stderr.log 2>/dev/null || echo "")
@@ -189,14 +302,13 @@ if [[ -n "$STDERR_OUTPUT" ]]; then
   echo ""
 fi
 
-# Check if results are valid JSON
 if ! echo "$RESULTS" | jq empty 2>/dev/null; then
-  echo "ERROR: Test script failed to produce valid JSON. Raw output:"
+  echo "ERROR: Test script failed to produce valid JSON:"
   echo "$RESULTS"
   exit 2
 fi
 
-# Parse results and generate report
+# Generate report
 cat > "$REPORT" << EOREPORT
 # Playtest Report
 
@@ -207,14 +319,19 @@ cat > "$REPORT" << EOREPORT
 
 EOREPORT
 
-# Extract ready criteria
 echo "$RESULTS" | jq -r '
   "### Checklist\n" +
   (.ready_criteria | to_entries | map(
-    "- [" + (if .value then "x" else " " end) + "] " + (.key | gsub("_"; " ") | ascii_upcase)
+    "- [" + (if .value then "x" else " " end) + "] " + (.key | gsub("_"; " "))
   ) | join("\n"))
 ' >> "$REPORT"
 
+TOTAL_CRITERIA=$(echo "$RESULTS" | jq '.ready_criteria | length')
+PASSED_CRITERIA=$(echo "$RESULTS" | jq '[.ready_criteria[] | select(. == true)] | length')
+PCT=$((PASSED_CRITERIA * 100 / TOTAL_CRITERIA))
+
+echo "" >> "$REPORT"
+echo "**Score: $PASSED_CRITERIA/$TOTAL_CRITERIA ($PCT%)**" >> "$REPORT"
 echo "" >> "$REPORT"
 echo "## Findings" >> "$REPORT"
 echo "" >> "$REPORT"
@@ -248,55 +365,52 @@ if [[ "$POSITIVE_COUNT" -gt 0 ]]; then
   echo "" >> "$REPORT"
 fi
 
-# Determine if ready to ship
+# Dialog sample
+DIALOG_COUNT=$(echo "$RESULTS" | jq '.dialog_history | length')
+if [[ "$DIALOG_COUNT" -gt 0 ]]; then
+  echo "### 📖 Dialog Sample" >> "$REPORT"
+  echo '```' >> "$REPORT"
+  echo "$RESULTS" | jq -r '.dialog_history[] | "> " + .' >> "$REPORT"
+  echo '```' >> "$REPORT"
+  echo "" >> "$REPORT"
+fi
+
+# Status
 READY=$(echo "$RESULTS" | jq -r '
   .ready_criteria |
-  ((.visuals_present and .narrat_playable and .engaging_narrative and .clear_choices) | tostring)
+  ((.splash_works and .menu_works and .narrative_progresses and .choices_appear and .choices_work and .visuals_present) | tostring)
 ')
 
 echo "## Status" >> "$REPORT"
 echo "" >> "$REPORT"
 if [[ "$READY" == "true" && "$CRITICAL_COUNT" -eq 0 ]]; then
-  echo "**🎉 READY TO SHIP** - Game meets core quality criteria!" >> "$REPORT"
+  echo "**🎉 READY TO SHIP** - Core quality criteria met!" >> "$REPORT"
 else
-  echo "**🚧 NOT READY** - Address critical issues and improve quality before shipping." >> "$REPORT"
-  echo "" >> "$REPORT"
-  echo "**Next steps:**" >> "$REPORT"
-  if [[ "$CRITICAL_COUNT" -gt 0 ]]; then
-    echo "1. Fix all critical issues listed above" >> "$REPORT"
-  fi
-  if [[ "$READY" != "true" ]]; then
-    echo "2. Complete missing ready criteria (see checklist)" >> "$REPORT"
-  fi
-  if [[ "$IMPROVEMENT_COUNT" -gt 0 ]]; then
-    echo "3. Implement suggested improvements" >> "$REPORT"
-  fi
+  echo "**🚧 NOT READY** ($PASSED_CRITERIA/$TOTAL_CRITERIA criteria, $CRITICAL_COUNT critical issues)" >> "$REPORT"
 fi
 
-# Add screenshots section
 echo "" >> "$REPORT"
 echo "## Screenshots" >> "$REPORT"
 echo "" >> "$REPORT"
 echo "Captured at: \`$OUTPUT_DIR\`" >> "$REPORT"
 ls -1 "$OUTPUT_DIR"/*.png 2>/dev/null | while read -r img; do
   echo "- $(basename "$img")" >> "$REPORT"
-done || echo "No screenshots captured" >> "$REPORT"
+done
 
-# Output report
 echo ""
 echo "=========================================="
 cat "$REPORT"
 echo "=========================================="
 echo ""
-echo "Full report saved to: $REPORT"
-echo "Screenshots saved to: $OUTPUT_DIR"
-echo ""
+echo "Report: $REPORT"
+echo "Screenshots: $OUTPUT_DIR"
 
-# Return exit code based on readiness
 if [[ "$READY" == "true" && "$CRITICAL_COUNT" -eq 0 ]]; then
+  echo ""
   echo "✅ Game is ready to ship!"
   exit 0
 else
-  echo "🚧 Game needs more work. Re-run this script after making improvements."
+  echo ""
+  echo "🚧 Game needs more work."
   exit 1
 fi
