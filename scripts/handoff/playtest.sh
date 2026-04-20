@@ -31,7 +31,10 @@ const OUTPUT_DIR = process.cwd();
 
 async function runPlaytest() {
   const browser = await chromium.launch({ headless: true });
-  const context = await browser.newContext({ viewport: { width: 1280, height: 720 } });
+  const context = await browser.newContext({
+    viewport: { width: 1280, height: 720 },
+    ignoreHTTPSErrors: true,
+  });
   const page = await context.newPage();
 
   const findings = {
@@ -175,13 +178,20 @@ const results = await runPlaytest();
 console.log(JSON.stringify(results, null, 2));
 EOTEST
 
-# Run test script
+# Run test script (stderr separated so JSON output is clean)
 echo "Running automated playtest..."
-RESULTS=$(PREVIEW_URL="$URL" node test.mjs 2>&1)
+RESULTS=$(PREVIEW_URL="$URL" node test.mjs 2>/tmp/playtest-stderr.log)
+STDERR_OUTPUT=$(cat /tmp/playtest-stderr.log 2>/dev/null || echo "")
+
+if [[ -n "$STDERR_OUTPUT" ]]; then
+  echo "Test progress:"
+  echo "$STDERR_OUTPUT" | head -20
+  echo ""
+fi
 
 # Check if results are valid JSON
 if ! echo "$RESULTS" | jq empty 2>/dev/null; then
-  echo "ERROR: Test script failed to produce valid JSON:"
+  echo "ERROR: Test script failed to produce valid JSON. Raw output:"
   echo "$RESULTS"
   exit 2
 fi
