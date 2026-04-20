@@ -1,5 +1,5 @@
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/4f0e996c-d0d0-419c-b7e2-8b1e4ff805ac/deploy-status)](https://app.netlify.com/sites/p-n-k-forever/deploys)
+[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?logo=vercel&logoColor=white)](https://pnk-forever.vercel.app/v0-original-text-engine/)
 
 ```
    ████████ ███████ ██   ██ ████████               
