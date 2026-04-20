@@ -102,3 +102,9 @@ dist
 
 # TernJS port file
 .tern-port
+RESUME.md
+
+# Ren'Py SDK (fetched by tools/renpy-sdk/fetch.sh)
+tools/renpy-sdk/renpy-*/
+# Ren'Py web build output
+dist/v2-renpy/

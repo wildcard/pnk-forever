@@ -1,11 +1,21 @@
 # Narrat — No Autoplay Loops
 
-**APPLIES TO:** every `.narrat` file under `v1-modern/src/scripts/`.
-**ENFORCED BY:** the `game-tester` sub-agent (ship gate).
+**APPLIES TO:** every `ChoiceOption` in `content/dialog/*.json` (the IR) AND
+the derived `.narrat` files under `v1-modern/src/scripts/`.
+**ENFORCED BY:**
+- **IR level** (primary, as of v2 milestone): `tools/ir-lint` rejects any
+  `ChoiceOption` that jumps back to its parent `DialogNode.id` without a
+  guard, a `oneShot: true`, or a `set_flag` in its body. `npm run ir-lint`
+  exits 2 on violation.
+- **Runtime level** (ship gate): the `game-tester` sub-agent, Playwright
+  rotating-choice strategy with 6-visit cap.
+
 **CODIFIED AFTER:** the `kyoto_apt_choice` slippers-loop regression — see
 `japan.narrat` commit history.
 
-Read this file before editing any `.narrat` `choice:` block.
+Since the IR is the source of truth (`HANDOVER.md` §1.5), edit JSON, not
+narrat. Hand-edits to `.narrat` files are overwritten by the next emitter
+run. The rule applies identically to both surfaces.
 
 ---
 

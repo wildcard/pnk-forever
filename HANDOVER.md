@@ -17,6 +17,30 @@ You are the lead coder continuing development of **PNK Forever**, an anniversary
 - **Tone**: warm, witty, intimate. Easter-egg keywords in ALL-CAPS feel like inside jokes.
 - **Sacred easter-egg keywords that must keep appearing**: MANGO, TEA, CHOCOLATE, KITE, LOVE, FLY, TIGER, SNAKE, ZODIAC, FUTURE, NECKLACE, BROMPTON, JAFFA, JAPAN, and the discount code `PNK-n3zk7MAMBG-GIFT`.
 
+### 1.5. IR-first workflow (v2 onwards)
+
+**The content of the game no longer lives in `.narrat` files.** As of the v2
+milestone, a typed JSON IR under `content/` is the source of truth for
+**every** engine incarnation (v0 text, v1 narrat, v2 Ren'Py/WASM, future).
+
+- **Writers** edit `content/**/*.json` via the
+  [`content-architect`](.claude/agents/content-architect.md) sub-agent.
+  Never hand-edit `v1-modern/src/scripts/*.narrat` — it's regenerated.
+- **Schema lives** at [`content/schema/`](content/schema/) (JSON Schema
+  draft 2020-12). [Schema README](content/schema/README.md) has worked
+  examples.
+- **Validation**: `npm run ir-lint` at repo root. Enforces schemas +
+  graph invariants (reachability, sacred-line-once, no-autoplay-loops).
+- **Engine adapters** live under `tools/adapters/<engine>/`. Each has a
+  parallel sub-agent that compiles IR → engine output:
+  - [`narrat-adapter`](.claude/agents/narrat-adapter.md) → `v1-modern/`
+  - [`renpy-adapter`](.claude/agents/renpy-adapter.md) → `v2-renpy/`
+  - [`engine-migrator`](.claude/agents/engine-migrator.md) — meta
+    orchestrator; dispatches all adapters in parallel.
+- **Plan**: [`docs/plans/ir-renpy-milestone.md`](docs/plans/ir-renpy-milestone.md).
+
+Anyone who opens a `.narrat` file and starts typing is doing it wrong.
+
 ### 2. Repo layout
 
 ```
