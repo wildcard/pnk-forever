@@ -1,5 +1,99 @@
 main:
   set_screen beach_rest
+  "P. & K. — A Love Story in Two Volumes"
+  "Volume 2: The Modern Edition"
+  ""
+  "Pick a chapter to begin. Each one stands on its own — no need to replay."
+  jump chapter_select
+
+chapter_select:
+  choice:
+    "Which chapter?"
+    "Chapter 1 · Meet Cute (Tel Aviv Beach)":
+      jump chapter_1_start
+    "Chapter 2 · The Sunset Walk":
+      jump chapter_2_start
+    "Chapter 3 · Jaffa Nights":
+      jump chapter_3_start
+    "Chapter 4 · Kyoto Kitchen":
+      jump chapter_4_start
+    "Chapter 5 · Forever Home":
+      jump chapter_5_start
+
+chapter_1_start:
+  "Chapter 1 — Meet Cute"
+  "Tel Aviv. A hot beach café. A slushy melting in your hand."
+  ""
+  jump intro_scene
+
+chapter_2_start:
+  "Chapter 2 — The Sunset Walk"
+  "You and K. are leaving the beach, heading south toward Jaffa."
+  ""
+  set data.knows_name true
+  set data.talked_business true
+  set data.talked_artist true
+  set data.can_go_sunset true
+  set data.has_shekel true
+  jump sunset_scene
+
+chapter_3_start:
+  "Chapter 3 — Jaffa Nights"
+  "Your Jaffa apartment. K. is beside you. Tomorrow you leave for Japan."
+  ""
+  set data.knows_name true
+  set data.talked_business true
+  set data.talked_artist true
+  set data.can_go_sunset true
+  set data.has_shekel true
+  set data.talked_food true
+  set data.talked_mango true
+  set data.talked_drink true
+  set data.talked_tea true
+  set data.talked_sweet true
+  set data.talked_chocolate true
+  set data.talked_travel true
+  set data.talked_nomad true
+  set data.talked_world true
+  set data.talked_japan true
+  set data.talked_china false
+  set data.agreed_to_travel true
+  set data.can_fly true
+  jump jaffa_apt_scene
+
+chapter_4_start:
+  "Chapter 4 — Kyoto Kitchen"
+  "Three years later. Kyoto. Lanterns, rain, cedar."
+  ""
+  set data.knows_name true
+  set data.talked_business true
+  set data.talked_artist true
+  set data.can_go_sunset true
+  set data.has_shekel true
+  set data.talked_food true
+  set data.talked_mango true
+  set data.talked_drink true
+  set data.talked_tea true
+  set data.talked_sweet true
+  set data.talked_chocolate true
+  set data.talked_travel true
+  set data.talked_nomad true
+  set data.talked_world true
+  set data.talked_japan true
+  set data.talked_china false
+  set data.agreed_to_travel true
+  set data.can_fly true
+  set data.slept_with_k true
+  set data.has_kite true
+  jump japan_scene
+
+chapter_5_start:
+  "Chapter 5 — Forever Home"
+  "Back in Tel Aviv. The balcony. Two cups of tea."
+  ""
+  jump home_scene
+
+intro_scene:
   "The tales of P."
   "P. — short for Phoenix — is a bird-cat, depending on who you ask."
   "Some days a feathered thing. Some days a purring one. Always curious."

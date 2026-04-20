@@ -85,7 +85,7 @@ talk_to_k_continue:
       talk k idle "I've never met anyone like you. Yes."
       talk k idle "Let's walk south, along the SUNSET, toward JAFFA."
       set data.can_go_sunset true
-      jump beach_choice
+      jump sunset_scene
     "Back":
       jump beach_choice
 
