@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host",
-    "build": "vite build",
+    "build": "vite build && npm run copy:v0",
+    "copy:v0": "cp -r ../v0-original-text-engine dist/v0-original-text-engine && echo 'Copied v0 to dist/v0-original-text-engine'",
     "preview": "vite preview --host",
     "generate:assets": "node scripts/generate-assets.mjs",
     "generate:assets:force": "node scripts/generate-assets.mjs --force"

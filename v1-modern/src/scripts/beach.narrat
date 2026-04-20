@@ -28,15 +28,15 @@ beach_scene:
       jump try_go_sunset
 
 talk_to_k:
-  talk k idle "\"Hi,\" he says, \"How can I help you?\""
+  talk k idle "'Hi,' he says, 'How can I help you?'"
 
   choice:
     "What's your NAME?":
-      "\"My name is **K.** It's actually 'Ehecatl' but everybody calls me **K.**\""
+      "'My name is **K.** It's actually 'Ehecatl' but everybody calls me **K.**'"
       set data.knows_name true
       jump talk_to_k_named
     "Your BICYCLE is cool, what is it?":
-      "\"It's a Brompton, it's a folding bicycle\""
+      "'It's a Brompton, it's a folding bicycle'"
       jump talk_to_k
     "Back":
       jump beach_scene
@@ -44,7 +44,7 @@ talk_to_k:
 talk_to_k_named:
   choice:
     "I've a BUSINESS question, do you mind?" if $data.knows_name:
-      "\"Not at all, ask away\""
+      "'Not at all, ask away'"
       set data.talked_business true
       jump talk_to_k_business
     "Back":
@@ -53,8 +53,8 @@ talk_to_k_named:
 talk_to_k_business:
   choice:
     "I'm an ARTIST, I thought to start dog portrait business" if $data.talked_business:
-      "\"I'm not sure I'm up to it, but I'm sure you can help me out here. I know various dog association people & I've some business experience myself\""
-      "\"I'll be glad to help out\""
+      "'I'm not sure I'm up to it, but I'm sure you can help me out here. I know various dog association people & I've some business experience myself'"
+      "'I'll be glad to help out'"
       set data.talked_artist true
       jump talk_to_k_continue
     "Back":
@@ -63,8 +63,8 @@ talk_to_k_business:
 talk_to_k_continue:
   choice:
     "The sun is going down. Want to CONTINUE our conversation to the sunset?" if (&& $data.talked_business $data.talked_artist):
-      "\"Sure, I've never met someone like you. I would love that\""
-      "\"Let's walk beside the sunset to Jaffa. It's **SOUTH** of here\""
+      "'Sure, I've never met someone like you. I would love that'"
+      "'Let's walk beside the sunset to Jaffa. It's **SOUTH** of here'"
       set data.can_go_sunset true
       jump beach_scene
     "Back":

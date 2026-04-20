@@ -16,7 +16,7 @@ kyoto_apt_scene:
 
   choice:
     "Use the slippers (Uwabaki)":
-      "You wear your nice & clean house slippers \"Uwabaki\" instead of your dirty shoes"
+      "You wear your nice & clean house slippers 'Uwabaki' instead of your dirty shoes"
       set data.wearing_slippers true
       jump kyoto_apt_scene
     "Take Tiger Zodiac Sign":
@@ -50,11 +50,11 @@ kitchen_conversation:
 
   choice:
     "What're you MAKING? 🍜" if (== $data.talked_making false):
-      "\"I'm making dim sum.\""
+      "'I'm making dim sum.'"
       set data.talked_making true
       jump kitchen_conversation
     "I LOVE you 🧡" if (== $data.talked_love false):
-      "\"I love you too. 🖤\""
+      "'I love you too. 🖤'"
       set data.talked_love true
       run trigger_easter_egg pnk_love
       jump kitchen_conversation
@@ -67,19 +67,19 @@ kitchen_conversation:
       set data.ate_dumplings true
       jump kitchen_conversation
     "What's the deal with the TIGER sign? 🐅📖" if (&& $data.ate_dumplings (== $data.talked_tiger false)):
-      "\"This is your Zodiac sign, the Tiger\""
+      "'This is your Zodiac sign, the Tiger'"
       set data.talked_tiger true
       jump kitchen_conversation
     "What is your ZODIAC sign?" if (&& $data.talked_tiger (== $data.talked_zodiac false)):
-      "\"I'm Snake 🐍\""
+      "'I'm Snake 🐍'"
       set data.talked_zodiac true
       jump kitchen_conversation
     "How will our FUTURE be like?" if (&& $data.talked_zodiac (== $data.talked_future false)):
-      "\"Our relationship will grow only stronger & stronger with the years.\""
-      "\"We will continue to challenge each other & make each other stronger, better together as a whole.\""
-      "\"You're my protector & I'm yours\""
-      "\"Stronger together, we're one. To eternity.\""
-      "\"I've prepared a small gift for you. It's my **ZODIAC** sign, the **SNAKE**, to always protect you and help you be strong.\""
+      "'Our relationship will grow only stronger & stronger with the years.'"
+      "'We will continue to challenge each other & make each other stronger, better together as a whole.'"
+      "'You're my protector & I'm yours'"
+      "'Stronger together, we're one. To eternity.'"
+      "'I've prepared a small gift for you. It's my **ZODIAC** sign, the **SNAKE**, to always protect you and help you be strong.'"
       set data.talked_future true
       jump give_necklace
     "Use the necklace" if $data.has_necklace:
@@ -89,14 +89,14 @@ kitchen_conversation:
 
 give_necklace:
   "**K.** pulls a beautiful silver double necklace with an infinity Ouroboros amulet connected with a kite connector."
-  "\"Here, put this on your neck.\" K. says. Use it to wear it."
+  "'Here, put this on your neck.' K. says. Use it to wear it."
   set data.has_necklace true
   jump kitchen_conversation
 
 use_necklace:
   "You put the necklace on your neck. 🧡🖤🧡🖤"
-  "K. says: \"I think it's time to fly back to TLV\""
-  "\"Let's get out of here together & fly\""
+  "K. says: 'I think it's time to fly back to TLV'"
+  "'Let's get out of here together & fly'"
   run trigger_easter_egg pnk_fly
   jump fly_home
 
@@ -113,7 +113,7 @@ home_scene:
 
   choice:
     "I Love you 🧡":
-      "\"I love you too. 🖤\""
+      "'I love you too. 🖤'"
       run trigger_easter_egg pnk_love
       jump home_scene
     "Play again":

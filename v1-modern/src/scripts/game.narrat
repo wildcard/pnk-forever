@@ -4,7 +4,7 @@ main:
   "P. it's short for Phoenix, but everyone calls her P."
   "P. is a very nice, friendly, and helpful bird or a cat. depends on how you look at it. or her mood."
   ""
-  "She's a curious little \"birdcat\". she is always on the look for new adventures & challenges."
+  "She's a curious little 'birdcat'. she is always on the look for new adventures & challenges."
   "We meet Phoenix in another ordinary day of adventures at the TLV beach. Phoenix likes the salty air at the beach & the humans catching sun."
   "P. likes to stretch her feathers & glide above the open waters of the sea."
   ""
@@ -20,8 +20,8 @@ beach_rest_look:
   "P. is taking a rest at her favorite beach restaurant, gulping her Slushy 🥤 (acai 🫐 duhh) waiting for the winds to calm so she could enjoy the warm winds of this particular summer day 🌞"
   "P. was contemplating about her business. P. is very talented & has many skills and she was thinking what will be her next endeavor."
   ""
-  "Suddenly she spotted a dog on a bicycle, not just any dog 🤷‍♀️ a \"peacockdog\" 🐕🦚 & the little that she knew is that this doggo is a \"shiba\" 🐾 and that both of them will be her next adventure."
-  "She never seen a dog like that, this dog was wearing some colorful feathers - \"intriguing!\" She thought to herself"
+  "Suddenly she spotted a dog on a bicycle, not just any dog 🤷‍♀️ a 'peacockdog' 🐕🦚 & the little that she knew is that this doggo is a 'shiba' 🐾 and that both of them will be her next adventure."
+  "She never seen a dog like that, this dog was wearing some colorful feathers - 'intriguing!' She thought to herself"
   "Fascinated by this dog, she decided to approach him 💬"
 
   set data.has_slushy false

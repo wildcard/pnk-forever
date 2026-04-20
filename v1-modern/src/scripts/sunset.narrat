@@ -3,7 +3,7 @@ sunset_scene:
   "You're walking toward Jaffa, the beach is cleared of most people. It's more peace & quiet now."
   ""
   "It's a good time as any to talk with K."
-  talk phoenix idle "\"You know I'm living near here in Jaffa. We can go to my place.\""
+  talk phoenix idle "'You know I'm living near here in Jaffa. We can go to my place.'"
 
   set data.talked_food false
   set data.talked_mango false
@@ -25,28 +25,28 @@ sunset_conversation:
 
   choice:
     "What's your favorite type of FOOD?" if (== $data.talked_food false):
-      "\"Easy. Fruits & Vegetables 🍓🥦 What's yours?\""
+      "'Easy. Fruits & Vegetables 🍓🥦 What's yours?'"
       set data.talked_food true
       jump sunset_food
     "What's your favorite hot beverage to DRINK?" if (== $data.talked_drink false):
-      "\"Coffee 🍵 & yours?\""
+      "'Coffee 🍵 & yours?'"
       set data.talked_drink true
       jump sunset_drink
     "Do you have a SWEET you can't resist?" if (== $data.talked_sweet false):
-      "\"I like many sweets, I love Ice cream 🍨. You?\""
+      "'I like many sweets, I love Ice cream 🍨. You?'"
       set data.talked_sweet true
       jump sunset_sweet
     "Do you want to TRAVEL the world?" if (== $data.talked_travel false):
-      "\"I love to travel, I've traveled a lot.\""
-      "\"I want to be a digital nomad in the future\""
+      "'I love to travel, I've traveled a lot.'"
+      "'I want to be a digital nomad in the future'"
       set data.talked_travel true
       jump sunset_conversation
     "What's a digital NOMAD?" if (&& $data.talked_travel (== $data.talked_nomad false)):
-      "\"A digital nomad is a person who lives all over the world traveling & working in a remote manner.\""
+      "'A digital nomad is a person who lives all over the world traveling & working in a remote manner.'"
       set data.talked_nomad true
       jump sunset_conversation
     "Do you want to travel with me around the WORLD?" if (&& $data.talked_travel (&& $data.talked_nomad (== $data.talked_world false))):
-      "\"I would love to travel with you. Where do you think we should head first?\""
+      "'I would love to travel with you. Where do you think we should head first?'"
       set data.talked_world true
       jump sunset_world
     "Go to Jaffa":
@@ -55,7 +55,7 @@ sunset_conversation:
 sunset_food:
   choice:
     "MANGO! 🥭" if $data.talked_food:
-      "\"I like them so much, I eat them all the time\""
+      "'I like them so much, I eat them all the time'"
       set data.talked_mango true
       run trigger_easter_egg pnk_mango
       jump sunset_conversation
@@ -65,7 +65,7 @@ sunset_food:
 sunset_drink:
   choice:
     "TEA 🫖" if $data.talked_drink:
-      "\"YES! I love to take my tea with herbs: Mint & Lemon verbena. no suger please\""
+      "'YES! I love to take my tea with herbs: Mint & Lemon verbena. no suger please'"
       set data.talked_tea true
       run trigger_easter_egg pnk_drink
       jump sunset_conversation
@@ -75,7 +75,7 @@ sunset_drink:
 sunset_sweet:
   choice:
     "CHOCOLATE 🍫" if $data.talked_sweet:
-      "\"I like many chocolates, I love them all. But mainly dark chocolate\""
+      "'I like many chocolates, I love them all. But mainly dark chocolate'"
       ""
       "**TIP** look for a drawer, its number is four"
       set data.talked_chocolate true
@@ -87,36 +87,36 @@ sunset_sweet:
 sunset_world:
   choice:
     "JAPAN 🇯🇵":
-      "\"I love asian culture. The food, the people & their style\""
-      "\"My ancestors are from Japan\""
+      "'I love asian culture. The food, the people & their style'"
+      "'My ancestors are from Japan'"
       set data.talked_japan true
       set data.agreed_to_travel true
       jump sunset_fly
     "GERMANY 🇩🇪":
-      "\"I love Berlin. Ich bin berliner 🐻\""
-      talk phoenix idle "\"On second thought I hate german people.\""
-      talk phoenix idle "\"Did I tell you about my german teacher 😖\""
+      "'I love Berlin. Ich bin berliner 🐻'"
+      talk phoenix idle "'On second thought I hate german people.'"
+      talk phoenix idle "'Did I tell you about my german teacher 😖'"
       jump sunset_world
     "CHINA 🇨🇳":
-      "\"I'm looking for something more western civilization\""
+      "'I'm looking for something more western civilization'"
       set data.talked_china true
       jump sunset_world
     "HONG KONG 🇭🇰" if $data.talked_china:
-      "\"Sounds good, but I'll pass\""
+      "'Sounds good, but I'll pass'"
       jump sunset_world
     "INDIA 🇮🇳":
-      "\"Indians are sticky, love their food though 🙈\""
+      "'Indians are sticky, love their food though 🙈'"
       jump sunset_world
     "FRANCE 🇫🇷":
-      "\"I hate French people\""
+      "'I hate French people'"
       jump sunset_world
     "ITALY 🇮🇹":
-      "\"I love italy, I love their food 🍝\""
-      "\"but I don't see myself living there. at least for now\""
+      "'I love italy, I love their food 🍝'"
+      "'but I don't see myself living there. at least for now'"
       jump sunset_world
     "USA 🇺🇸":
-      "\"YES! let's go right now! USA USA I love america\""
-      talk phoenix idle "\"In second thought, I don't think it is the right move for us right now\""
+      "'YES! let's go right now! USA USA I love america'"
+      talk phoenix idle "'In second thought, I don't think it is the right move for us right now'"
       jump sunset_world
     "Back":
       jump sunset_conversation
@@ -124,8 +124,8 @@ sunset_world:
 sunset_fly:
   choice:
     "How can we FLY to Japan ✈️?" if $data.talked_japan:
-      "\"Maybe we should take a plane?\""
-      talk phoenix idle "\"I know! I can take us there. I can fly ✈️\""
+      "'Maybe we should take a plane?'"
+      talk phoenix idle "'I know! I can take us there. I can fly ✈️'"
       ""
       "Use **FLY** to [a place] to use your skill to fly, it's your secret trick"
       set data.can_fly true
@@ -134,4 +134,4 @@ sunset_fly:
       jump sunset_conversation
 
 trigger_easter_egg event_name:
-  return
+  return true
