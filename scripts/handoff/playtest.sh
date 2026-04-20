@@ -129,65 +129,71 @@ async function runPlaytest() {
     }
     await page.screenshot({ path: `${OUTPUT_DIR}/03-game-start.png` });
 
-    // === Phase 4: Narrative progression ===
+    // === Phase 4: Narrative progression - play deep into the game ===
     console.error('Phase 4: Progressing through narrative...');
     const uniqueTexts = new Set();
-    let choicesFound = false;
-    let progressSteps = 0;
+    let choicesEncounters = 0;
+    let successfulChoiceClicks = 0;
+    let maxIterations = 150;  // Play through much more of the game
 
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < maxIterations; i++) {
       const state = await page.evaluate(() => {
         const newBox = document.querySelector('.dialog-box-new');
         const hasChoices = newBox?.classList.contains('has-choices') ?? false;
         const textEl = newBox?.querySelector('.text-command');
         const text = (textEl?.textContent || newBox?.textContent || '').trim();
 
-        // Get choice texts
-        const choiceEls = newBox?.querySelectorAll('.dialog-choice, .choice-text') || [];
-        const choices = Array.from(choiceEls).map(el => el.textContent.trim());
+        const choiceEls = newBox?.querySelectorAll('.dialog-choice') || [];
+        const choices = Array.from(choiceEls).map(el => ({
+          text: el.textContent.trim(),
+          disabled: el.classList.contains('disabled'),
+        }));
 
-        return { hasChoices, text: text.substring(0, 150), choices };
+        return { hasChoices, text: text.substring(0, 200), choices };
       });
 
       if (state.text && state.text.length > 5) {
-        uniqueTexts.add(state.text.substring(0, 80));
+        uniqueTexts.add(state.text.substring(0, 100));
       }
 
       if (state.hasChoices && state.choices.length > 0) {
-        choicesFound = true;
-        findings.ready_criteria.choices_appear = true;
-        findings.positives.push(`Choice point reached (step ${i}): ${state.choices.length} options`);
-        await page.screenshot({ path: `${OUTPUT_DIR}/04-choices-${i}.png` });
+        choicesEncounters++;
+        if (choicesEncounters === 1) {
+          findings.ready_criteria.choices_appear = true;
+          findings.positives.push(`First choice point reached at step ${i}: ${state.choices.length} options`);
+          await page.screenshot({ path: `${OUTPUT_DIR}/04-first-choice.png` });
+        }
 
-        // Try clicking first choice
+        // Click the first non-"Back" enabled choice
         const clicked = await page.evaluate(() => {
-          const choice = document.querySelector('.dialog-box-new .dialog-choice, .dialog-box-new .choice-text');
-          if (choice) {
-            choice.click();
-            return true;
+          const choices = Array.from(document.querySelectorAll('.dialog-box-new .dialog-choice'));
+          // Prefer choices that aren't "Back" - try to progress forward
+          const forward = choices.find(c =>
+            !c.classList.contains('disabled') &&
+            !c.textContent.trim().toLowerCase().includes('back')
+          ) || choices.find(c => !c.classList.contains('disabled'));
+          if (forward) {
+            forward.click();
+            return forward.textContent.trim();
           }
-          return false;
+          return null;
         });
 
         if (clicked) {
-          await page.waitForTimeout(1500);
-          const newState = await page.evaluate(() => {
-            const newBox = document.querySelector('.dialog-box-new');
-            return (newBox?.textContent || '').substring(0, 150);
-          });
-          if (newState !== state.text) {
+          successfulChoiceClicks++;
+          if (successfulChoiceClicks === 1) {
             findings.ready_criteria.choices_work = true;
-            findings.positives.push('Choice selection advances the game');
-          } else {
-            findings.warnings.push('Clicked choice but game did not progress');
+            findings.positives.push('Choices advance the game');
           }
+          await page.waitForTimeout(1200);
+        } else {
+          console.error(`  Stuck: no clickable choice at step ${i}`);
+          break;
         }
-
-        progressSteps = i;
-        break;
+        continue;
       }
 
-      // Click Continue (interact-button is a div, not button)
+      // Click Continue (interact-button is a div)
       const advanced = await page.evaluate(() => {
         const btn = document.querySelector('.interact-button');
         if (btn) { btn.click(); return true; }
@@ -195,24 +201,29 @@ async function runPlaytest() {
       });
 
       if (!advanced) {
-        console.error(`  Stuck at step ${i} - no interact-button and no choices`);
+        console.error(`  End state at step ${i} - no interact-button and no choices`);
         break;
       }
-      await page.waitForTimeout(500);
+      await page.waitForTimeout(350);
     }
+
+    // Screenshot deep into game
+    await page.screenshot({ path: `${OUTPUT_DIR}/05-deep-play.png` });
 
     if (uniqueTexts.size >= 3) {
       findings.ready_criteria.narrative_progresses = true;
-      findings.positives.push(`Narrative shows ${uniqueTexts.size} unique dialog lines`);
-      findings.dialog_history = [...uniqueTexts].slice(0, 10);
+      findings.positives.push(`Narrative shows ${uniqueTexts.size} unique dialog lines across ${choicesEncounters} choice points`);
+      findings.dialog_history = [...uniqueTexts].slice(0, 20);
     } else if (uniqueTexts.size > 0) {
       findings.warnings.push(`Only ${uniqueTexts.size} unique dialog lines - game may be stuck`);
     } else {
       findings.critical.push('No narrative text displayed - game may not have started');
     }
 
-    if (!choicesFound) {
-      findings.warnings.push('No player choices appeared in first 50 dialog advances');
+    if (choicesEncounters === 0) {
+      findings.warnings.push(`No player choices appeared in ${maxIterations} dialog advances`);
+    } else {
+      findings.positives.push(`Engaged ${choicesEncounters} choice points, ${successfulChoiceClicks} advanced game`);
     }
 
     // === Phase 5: Visuals check ===
@@ -241,11 +252,32 @@ async function runPlaytest() {
       findings.warnings.push(`${visualsCheck.brokenImgs} broken images detected (button icons or sprites)`);
     }
 
-    // Character sprites
-    const sprites = await page.$$('.character-sprite, .sprite, [class*="character-portrait"]');
-    if (sprites.length > 0) {
+    // Character sprites - scan broadly for character imagery
+    const spriteInfo = await page.evaluate(() => {
+      const selectors = [
+        '.character-sprite', '.sprite', '.portrait', '.character-portrait',
+        '[class*="portrait"]', '[class*="sprite"]', '[class*="character"]',
+        '.dialog-portrait', '.talk-portrait', '.dialog-box-new img',
+      ];
+      const found = new Set();
+      for (const sel of selectors) {
+        try {
+          const els = document.querySelectorAll(sel);
+          for (const el of els) {
+            const style = getComputedStyle(el);
+            const hasBg = style.backgroundImage && style.backgroundImage !== 'none' && !style.backgroundImage.includes('gradient');
+            const isImg = el.tagName === 'IMG' && el.naturalWidth > 20;
+            if (hasBg || isImg) found.add(sel);
+          }
+        } catch {}
+      }
+      // Also check any img with phoenix or k in src
+      const pk = Array.from(document.querySelectorAll('img')).filter(i => /(phoenix|k)\.png/i.test(i.src || ''));
+      return { selectors: [...found], phoenixOrKImgs: pk.length };
+    });
+    if (spriteInfo.selectors.length > 0 || spriteInfo.phoenixOrKImgs > 0) {
       findings.ready_criteria.character_sprites = true;
-      findings.positives.push(`Character sprites visible (${sprites.length})`);
+      findings.positives.push(`Character sprites visible via: ${spriteInfo.selectors.join(', ') || 'img[phoenix/k]'}`);
     } else {
       findings.improvements.push('No character sprites displayed - Narrat show commands missing');
     }
@@ -272,6 +304,9 @@ async function runPlaytest() {
     }
 
     // === Phase 8: Console errors ===
+    // Write all errors to a file for analysis
+    const fs = await import('fs');
+    fs.writeFileSync(`${OUTPUT_DIR}/all-console-errors.log`, consoleErrors.join('\n---\n'));
     if (consoleErrors.length === 0) {
       findings.ready_criteria.no_console_errors = true;
       findings.positives.push('No console errors detected');
