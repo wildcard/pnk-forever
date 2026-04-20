@@ -13,6 +13,8 @@ jaffa_apt_scene:
       jump jaffa_street_scene
 
 use_bed:
+  if $data.slept_with_k:
+    jump jaffa_street_scene
   "You curl up next to him. He pulls you in without opening his eyes."
   "You fall asleep to the soft hum of Jaffa at night."
   ""
@@ -34,9 +36,10 @@ jaffa_street_scene:
       jump jaffa_apt_scene
 
 kite_branch:
+  if $data.has_kite:
+    jump fly_branch
   if (== $data.slept_with_k false):
-    "You're too tired. Maybe rest first."
-    jump jaffa_street_scene
+    jump use_bed
   "A shop window. Your KITE board, finally."
   ""
   "Use this code in the future for a special discount: PNK-n3zk7MAMBG-GIFT"

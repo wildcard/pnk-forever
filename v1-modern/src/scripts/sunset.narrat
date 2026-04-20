@@ -22,6 +22,9 @@ sunset_scene:
   jump sunset_conversation
 
 sunset_conversation:
+  if $data.can_fly:
+    talk k idle "We've walked and talked. Let's head to JAFFA."
+    jump jaffa_apt_scene
   talk k idle "What would you like to talk about?"
 
   choice:
@@ -43,32 +46,28 @@ sunset_conversation:
 
 sunset_food_branch:
   if $data.talked_food:
-    "Already covered that one."
-    jump sunset_conversation
+    jump sunset_drink_branch
   talk k idle "Easy. Fruit and vegetables. Nothing beats them. You?"
   set data.talked_food true
   jump sunset_food
 
 sunset_drink_branch:
   if $data.talked_drink:
-    "Already talked about drinks."
-    jump sunset_conversation
+    jump sunset_sweet_branch
   talk k idle "Coffee, always. And you?"
   set data.talked_drink true
   jump sunset_drink
 
 sunset_sweet_branch:
   if $data.talked_sweet:
-    "Already talked about sweets."
-    jump sunset_conversation
+    jump sunset_travel_branch
   talk k idle "Ice cream. I'd eat it in winter. What about you?"
   set data.talked_sweet true
   jump sunset_sweet
 
 sunset_travel_branch:
   if $data.talked_travel:
-    "Already talked about travel."
-    jump sunset_conversation
+    jump sunset_nomad_branch
   talk k idle "I love to travel. I've been everywhere I could."
   talk k idle "My dream is to live as a digital nomad."
   set data.talked_travel true
@@ -76,18 +75,16 @@ sunset_travel_branch:
 
 sunset_nomad_branch:
   if (== $data.talked_travel false):
-    "Let's talk about travel first."
-    jump sunset_conversation
+    jump sunset_travel_branch
   if $data.talked_nomad:
-    jump sunset_conversation
+    jump sunset_world_branch
   talk k idle "A nomad works from anywhere. A new view every season."
   set data.talked_nomad true
   jump sunset_conversation
 
 sunset_world_branch:
   if (== $data.talked_nomad false):
-    "Ask about nomad life first."
-    jump sunset_conversation
+    jump sunset_nomad_branch
   if $data.talked_world:
     jump sunset_conversation
   talk k idle "I'd love that. Where should we go first?"

@@ -56,6 +56,8 @@ kitchen_scene:
   jump kitchen_conversation
 
 kitchen_conversation:
+  if $data.has_necklace:
+    jump use_necklace
   talk k idle "What would you like to know?"
 
   choice:
@@ -76,19 +78,17 @@ kitchen_conversation:
       jump talk_future
     "Use the necklace":
       jump use_necklace_branch
-    "Back":
-      jump japan_scene
 
 talk_making:
   if $data.talked_making:
-    jump kitchen_conversation
+    jump talk_love
   talk k idle "DIM SUM. Your favorite. Almost ready."
   set data.talked_making true
   jump kitchen_conversation
 
 talk_love:
   if $data.talked_love:
-    jump kitchen_conversation
+    jump take_chopsticks
   talk k idle "I LOVE you too. Always."
   set data.talked_love true
   run trigger_easter_egg pnk_love
@@ -96,47 +96,43 @@ talk_love:
 
 take_chopsticks:
   if $data.has_chopsticks:
-    jump kitchen_conversation
+    jump eat_dumplings
   "A pair of fancy lacquered chopsticks. You pick them up."
   set data.has_chopsticks true
   jump kitchen_conversation
 
 eat_dumplings:
   if (== $data.has_chopsticks false):
-    "You'll need chopsticks first."
-    jump kitchen_conversation
+    jump take_chopsticks
   if $data.ate_dumplings:
-    jump kitchen_conversation
+    jump talk_tiger
   "One dumpling. Hot. Perfect. You close your eyes for a second."
   set data.ate_dumplings true
   jump kitchen_conversation
 
 talk_tiger:
   if (== $data.ate_dumplings false):
-    "Eat first. Then we talk."
-    jump kitchen_conversation
+    jump eat_dumplings
   if $data.talked_tiger:
-    jump kitchen_conversation
+    jump talk_zodiac
   talk k idle "The TIGER. That's your ZODIAC. Fierce when it matters."
   set data.talked_tiger true
   jump kitchen_conversation
 
 talk_zodiac:
   if (== $data.talked_tiger false):
-    "Ask about the TIGER first."
-    jump kitchen_conversation
+    jump talk_tiger
   if $data.talked_zodiac:
-    jump kitchen_conversation
+    jump talk_future
   talk k idle "Me? I'm SNAKE. Quiet. Watchful. Patient."
   set data.talked_zodiac true
   jump kitchen_conversation
 
 talk_future:
   if (== $data.talked_zodiac false):
-    "Ask about the ZODIAC first."
-    jump kitchen_conversation
+    jump talk_zodiac
   if $data.talked_future:
-    jump kitchen_conversation
+    jump give_necklace
   talk k idle "Our FUTURE? Only stronger. Year after year."
   talk k idle "We'll challenge each other. Make each other better."
   talk k idle "You protect me. I protect you."
