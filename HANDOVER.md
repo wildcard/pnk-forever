@@ -150,6 +150,25 @@ Build only ships when **every** criterion is green (game-tester enforces):
 
 ### 11. Open work (in priority order)
 
+0. **Tester escape hatch — shipped.** Append `?tester=1` to any deploy URL
+   (e.g. `https://pnk-forever.vercel.app/?tester=1` or
+   `http://localhost:8765/?tester=1`) to:
+   - skip the linear prologue and land directly on `chapter_select`
+     (all 5 chapters pickable),
+   - show narrat's built-in **Debug Menu** (jump-to-label, skip, data
+     inspector),
+   - render a visible orange **"TESTER MODE · ?tester=1"** ribbon in the
+     top-right so the tester never confuses test-mode with the real player
+     flow.
+
+   A regular URL has zero change: `tester_route` runs as a no-op, the VM
+   advances through the narrator lines and jumps to `chapter_1_start`. The
+   plugin lives in `v1-modern/src/plugins/tester-plugin.ts`; it is invoked
+   from `game.narrat:main` as the bare keyword `tester_route` (NOT
+   `run tester_route` — narrat's built-in `run` calls scripted labels, not
+   custom plugin commands). See the file's header comment for the
+   lifecycle rationale (why a `CommandPlugin` beats `startMenuButtons`).
+
 1. **Volume-select UI** (partially scoped, not shipped). The user wants a volume picker BEFORE chapter-select. Implementation plan:
    - Register a narrat plugin in `v1-modern/src/index.ts` that adds a `CommandPlugin` with keyword `open_url` (one string arg) — runner sets `window.location.href`.
    - Add `volume_select:` label in `game.narrat` between `main:` and `chapter_select:`:
