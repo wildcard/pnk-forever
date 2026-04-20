@@ -77,7 +77,7 @@ pnk-forever/
 
 The original game created with GitHub Copilot on the first anniversary. It tells the story of Day 1 - how Phoenix and K met, their first conversations, and a flash-forward to an imagined future in Japan.
 
-**[Read about v0 →](v0-original-text-engine/README.md)**
+**[Play v0 →](https://pnk-forever.vercel.app/v0-original-text-engine/)** · [source](v0-original-text-engine/)
 
 ### v1: Modern Reimagining (In Planning)
 
