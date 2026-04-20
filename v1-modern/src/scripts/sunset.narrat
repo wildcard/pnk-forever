@@ -1,9 +1,10 @@
 sunset_scene:
   set_screen beach_sunset
-  "You're walking toward Jaffa, the beach is cleared of most people. It's more peace and quiet now."
+  "You walk south. The crowds thin. The sky turns coral."
+  "A gull wheels once and is gone. Peaceful."
   ""
-  "It's a good time as any to talk with K."
-  talk phoenix idle "You know I'm living near here in Jaffa. We can go to my place."
+  "A good moment to really talk."
+  talk k idle "I live nearby. In JAFFA. We could go to my place."
 
   set data.talked_food false
   set data.talked_mango false
@@ -42,54 +43,54 @@ sunset_conversation:
 
 sunset_food_branch:
   if $data.talked_food:
-    "Already talked about food"
+    "Already covered that one."
     jump sunset_conversation
-  "Easy. Fruits and Vegetables. What's yours?"
+  talk k idle "Easy. Fruit and vegetables. Nothing beats them. You?"
   set data.talked_food true
   jump sunset_food
 
 sunset_drink_branch:
   if $data.talked_drink:
-    "Already talked about drinks"
+    "Already talked about drinks."
     jump sunset_conversation
-  "Coffee and yours?"
+  talk k idle "Coffee, always. And you?"
   set data.talked_drink true
   jump sunset_drink
 
 sunset_sweet_branch:
   if $data.talked_sweet:
-    "Already talked about sweets"
+    "Already talked about sweets."
     jump sunset_conversation
-  "I like many sweets, I love Ice cream. You?"
+  talk k idle "Ice cream. I'd eat it in winter. What about you?"
   set data.talked_sweet true
   jump sunset_sweet
 
 sunset_travel_branch:
   if $data.talked_travel:
-    "Already talked about traveling"
+    "Already talked about travel."
     jump sunset_conversation
-  "I love to travel, I've traveled a lot."
-  "I want to be a digital nomad in the future"
+  talk k idle "I love to travel. I've been everywhere I could."
+  talk k idle "My dream is to live as a digital nomad."
   set data.talked_travel true
   jump sunset_conversation
 
 sunset_nomad_branch:
   if (== $data.talked_travel false):
-    "Let's talk about travel first"
+    "Let's talk about travel first."
     jump sunset_conversation
   if $data.talked_nomad:
     jump sunset_conversation
-  "A digital nomad is a person who lives all over the world traveling and working in a remote manner."
+  talk k idle "A nomad works from anywhere. A new view every season."
   set data.talked_nomad true
   jump sunset_conversation
 
 sunset_world_branch:
   if (== $data.talked_nomad false):
-    "Let's talk about nomading first"
+    "Ask about nomad life first."
     jump sunset_conversation
   if $data.talked_world:
     jump sunset_conversation
-  "I would love to travel with you. Where do you think we should head first?"
+  talk k idle "I'd love that. Where should we go first?"
   set data.talked_world true
   jump sunset_world
 
@@ -97,7 +98,8 @@ sunset_food:
   choice:
     "What's your favorite food?"
     "MANGO!":
-      "I like them so much, I eat them all the time"
+      talk phoenix idle "Mango. I'd eat it every day if I could."
+      talk k idle "Noted. I'll find you the best ones."
       set data.talked_mango true
       run trigger_easter_egg pnk_mango
       jump sunset_conversation
@@ -108,7 +110,8 @@ sunset_drink:
   choice:
     "What's your favorite drink?"
     "TEA":
-      "YES! I love to take my tea with herbs: Mint and Lemon verbena. no sugar please"
+      talk phoenix idle "TEA. With mint and lemon verbena. No sugar."
+      talk k idle "Same. We should've met sooner."
       set data.talked_tea true
       run trigger_easter_egg pnk_drink
       jump sunset_conversation
@@ -119,9 +122,10 @@ sunset_sweet:
   choice:
     "What's your favorite sweet?"
     "CHOCOLATE":
-      "I like many chocolates, I love them all. But mainly dark chocolate"
+      talk phoenix idle "Dark CHOCOLATE. The kind you break with a snap."
+      talk k idle "The bitter ones. Yes."
       ""
-      "TIP: look for a drawer, its number is four"
+      "TIP: look for a drawer. Its number is four."
       set data.talked_chocolate true
       run trigger_easter_egg pnk_chocolate
       jump sunset_conversation
@@ -132,33 +136,30 @@ sunset_world:
   choice:
     "Where should we travel?"
     "JAPAN":
-      "I love asian culture. The food, the people and their style"
-      "My ancestors are from Japan"
+      talk phoenix idle "JAPAN. The food, the quiet streets, the lanterns."
+      talk phoenix idle "My ancestors are from there. It's been calling me."
       set data.talked_japan true
       set data.agreed_to_travel true
       jump sunset_fly
     "GERMANY":
-      "I love Berlin. Ich bin berliner"
-      talk phoenix idle "On second thought I hate german people."
-      talk phoenix idle "Did I tell you about my german teacher"
+      talk k idle "Berlin? Ich bin ein Berliner."
+      talk phoenix idle "Hmm. On second thought — not Germany."
       jump sunset_world
     "CHINA":
-      "I'm looking for something more western civilization"
+      talk phoenix idle "Too big. I want somewhere we can actually live."
       set data.talked_china true
       jump sunset_world_china
     "INDIA":
-      "Indians are sticky, love their food though"
+      talk k idle "The food is incredible. The rest — maybe another life."
       jump sunset_world
     "FRANCE":
-      "I hate French people"
+      talk phoenix idle "Pass. You know why."
       jump sunset_world
     "ITALY":
-      "I love italy, I love their food"
-      "but I don't see myself living there. at least for now"
+      talk k idle "I love Italy. But not to live in. Not yet."
       jump sunset_world
     "USA":
-      "YES! let's go right now! USA USA I love america"
-      talk phoenix idle "In second thought, I don't think it is the right move for us right now"
+      talk phoenix idle "USA? Maybe. But not right now."
       jump sunset_world
     "Back":
       jump sunset_conversation
@@ -167,7 +168,7 @@ sunset_world_china:
   choice:
     "Where in China?"
     "HONG KONG":
-      "Sounds good, but I'll pass"
+      talk phoenix idle "Beautiful. But not for us, not now."
       jump sunset_world
     "Back":
       jump sunset_world
@@ -176,10 +177,10 @@ sunset_fly:
   choice:
     "How should we get to Japan?"
     "How can we FLY to Japan?":
-      "Maybe we should take a plane?"
-      talk phoenix idle "I know! I can take us there. I can fly"
+      talk phoenix idle "A plane? That's the obvious way."
+      talk k idle "Or — I can take us there myself. I can FLY."
       ""
-      "Use FLY to a place to use your skill to fly, it's your secret trick"
+      "Use FLY in a place to unlock K.'s secret."
       set data.can_fly true
       jump sunset_conversation
     "Back":

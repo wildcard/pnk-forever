@@ -1,7 +1,7 @@
 beach_scene:
   set_screen beach
-  "You are on the beach."
-  "The fascinating DOG is here"
+  "Sand, warm under your feet. The sea hisses in."
+  "The dog is here, his Brompton folded neatly beside him."
 
   set data.knows_name false
   set data.talked_business false
@@ -15,10 +15,10 @@ beach_choice:
   choice:
     "What do you want to do on the beach?"
     "Look at the beach":
-      "You are on the sandy beach of TLV."
+      "Wide sand, turquoise water. Tel Aviv in gentle chaos behind you."
       jump beach_choice
     "Look at the bicycle":
-      "A bicycle. It's a Brompton, a folding bicycle."
+      "A BROMPTON. Folds neat as a promise."
       jump beach_choice
     "Take the shekel":
       jump take_shekel
@@ -30,22 +30,22 @@ beach_choice:
 take_shekel:
   if (== $data.has_shekel false):
     set data.has_shekel true
-    "You bend down and pick up the tiny, shiny coin."
+    "A tiny shiny coin in the sand. You pick it up."
     ""
-    "Now it's in your inventory, and you can use it at any time, anywhere."
+    "Pocketed. For luck."
   jump beach_choice
 
 talk_to_k:
-  talk k idle "Hi, he says, How can I help you?"
+  talk k idle "Hey. You looked like you had a question."
 
   choice:
     "What will you ask the dog?"
     "What's your NAME?":
-      "My name is K. It's actually Ehecatl but everybody calls me K."
+      talk k idle "Ehecatl. Aztec wind god — but everyone just calls me K."
       set data.knows_name true
       jump talk_to_k_named
     "Your BICYCLE is cool, what is it?":
-      "It's a Brompton, it's a folding bicycle"
+      talk k idle "A BROMPTON. I can fold it up and take it anywhere."
       jump talk_to_k
     "Back":
       jump beach_choice
@@ -56,7 +56,7 @@ talk_to_k_named:
   choice:
     "Now that you know his name, what next?"
     "I've a BUSINESS question, do you mind?":
-      "Not at all, ask away"
+      talk k idle "Not at all. Ask away."
       set data.talked_business true
       jump talk_to_k_business
     "Back":
@@ -67,10 +67,10 @@ talk_to_k_business:
     jump talk_to_k_named
   choice:
     "What's your business idea?"
-    "I'm an ARTIST, I thought to start dog portrait business":
-      "I'm not sure I'm up to it, but I'm sure you can help me out here."
-      "I know various dog association people and I've some business experience myself"
-      "I'll be glad to help out"
+    "I'm an ARTIST, I thought to start a dog portrait business":
+      talk k idle "A dog portrait painter? I love that."
+      talk k idle "I know people in the dog world. I've run a shop before."
+      talk k idle "Let me help you."
       set data.talked_artist true
       jump talk_to_k_continue
     "Back":
@@ -82,8 +82,8 @@ talk_to_k_continue:
   choice:
     "The sun is setting. What now?"
     "The sun is going down. Want to CONTINUE to the sunset?":
-      "Sure, I've never met someone like you. I would love that"
-      "Let's walk beside the sunset to Jaffa. It's SOUTH of here"
+      talk k idle "I've never met anyone like you. Yes."
+      talk k idle "Let's walk south, along the SUNSET, toward JAFFA."
       set data.can_go_sunset true
       jump beach_choice
     "Back":
@@ -92,5 +92,5 @@ talk_to_k_continue:
 try_go_sunset:
   if $data.can_go_sunset:
     jump sunset_scene
-  "There's still much to do here"
+  "Not yet. There's still something here."
   jump beach_choice

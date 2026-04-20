@@ -1,13 +1,11 @@
 main:
   set_screen beach_rest
-  "Welcome to the tales of P. Who?"
-  "P. it's short for Phoenix, but everyone calls her P."
-  "P. is a very nice, friendly, and helpful bird or a cat. depends on how you look at it. or her mood."
+  "The tales of P."
+  "P. — short for Phoenix — is a bird-cat, depending on who you ask."
+  "Some days a feathered thing. Some days a purring one. Always curious."
   ""
-  "She's a curious little birdcat. she is always on the look for new adventures and challenges."
-  "We meet Phoenix in another ordinary day of adventures at the TLV beach."
-  "Phoenix likes the salty air at the beach and the humans catching sun."
-  "P. likes to stretch her feathers and glide above the open waters of the sea."
+  "She lives for salty air, warm sand, and small adventures."
+  "Today she's at her favorite beach café in Tel Aviv, watching the sea."
   ""
   talk phoenix idle "Type LOOK to have a look around."
 
@@ -19,12 +17,12 @@ main:
       jump beach_rest_look
 
 beach_rest_look:
-  "P. is taking a rest at her favorite beach restaurant, gulping her Slushy acai waiting for the winds to calm."
-  "P. was contemplating about her business. P. is very talented and has many skills and she was thinking what will be her next endeavor."
+  "The midday sun is relentless. P. sips a slushy acai, waiting for the wind to settle."
+  "She's been turning an idea over in her head — what comes next?"
   ""
-  "Suddenly she spotted a dog on a bicycle, not just any dog - a peacockdog shiba mix that will be her next adventure."
-  "She never seen a dog like that, this dog was wearing some colorful feathers - intriguing! She thought to herself"
-  "Fascinated by this dog, she decided to approach him"
+  "Then she sees him. A dog on a BROMPTON folding bicycle. Shiba face, peacock feathers."
+  "She's never seen anything like it. Her tail flicks once. Curious."
+  "She decides to say hello."
 
   set data.has_slushy false
   set data.slushy_gulps 3
@@ -34,10 +32,10 @@ beach_rest_look:
     "There's a slushy on the table. What do you do?"
     "Take the slushy":
       set data.has_slushy true
-      "You take the slushy"
+      "Cold condensation drips down your feathers. You take it."
       jump slushy_choice
     "Leave it":
-      "It's too hot! You give in and take the slushy anyway."
+      "The heat wins. You grab the slushy anyway."
       set data.has_slushy true
       jump slushy_choice
 
@@ -51,22 +49,22 @@ slushy_choice:
 
 use_slushy:
   if (== $data.slushy_gulps 3):
-    "You cool down with a big gulp of slushy"
+    "A long, icy pull. The world slows. You can breathe again."
     set data.can_leave true
   "gulp"
   set data.slushy_gulps (- $data.slushy_gulps 1)
   if (> $data.slushy_gulps 0):
-    "You have some slushy left"
+    "A little slushy left, clinging to the cup."
     jump slushy_choice
-  "That was the last drop"
-  "You dropped the empty slushy"
+  "The last drop. Purple-pink on your beak."
+  "You set the empty cup down."
   jump go_to_beach
 
 try_leave:
   if $data.can_leave:
     jump go_to_beach
-  "It's too hot outside!"
-  "Maybe something COLD can help"
+  "The air outside shimmers. Not yet."
+  "Maybe something COLD would help."
   jump slushy_choice
 
 go_to_beach:

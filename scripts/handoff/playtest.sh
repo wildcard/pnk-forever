@@ -137,6 +137,8 @@ async function runPlaytest() {
     let choicesEncounters = 0;
     let successfulChoiceClicks = 0;
     let maxIterations = 250;  // Play deep into the game
+    let spriteSeen = false;
+    const spriteNamesSeen = new Set();
 
     for (let i = 0; i < maxIterations; i++) {
       const state = await page.evaluate(() => {
@@ -160,6 +162,23 @@ async function runPlaytest() {
         uniqueTexts.add(state.text.substring(0, 100));
       }
 
+      // Track sprite sightings while iterating (sprites fade between lines)
+      const spriteCheck = await page.evaluate(() => {
+        const pics = document.querySelectorAll('.dialog-picture img, .dialog-picture');
+        const names = [];
+        for (const el of pics) {
+          const src = el.tagName === 'IMG' ? el.src : '';
+          if (/phoenix\.png/i.test(src)) names.push('phoenix');
+          if (/\/k\.png/i.test(src)) names.push('k');
+          // Also check class on dialog-picture container
+          if (el.classList?.contains('phoenix')) names.push('phoenix');
+          if (el.classList?.contains('k')) names.push('k');
+        }
+        return [...new Set(names)];
+      });
+      for (const n of spriteCheck) spriteNamesSeen.add(n);
+      if (spriteCheck.length > 0) spriteSeen = true;
+
       if (state.hasChoices && state.choices.length > 0) {
         choicesEncounters++;
         if (choicesEncounters === 1) {
@@ -175,6 +194,29 @@ async function runPlaytest() {
         // Exploration strategy: prefer options we haven't clicked yet in THIS choice set
         const visits = seenChoiceSets.get(choiceKey);
         const options = state.choices.filter(c => !c.disabled);
+        const MAX_VISITS_PER_CHOICE_SET = 8;
+
+        // Hard cap: if we've been here way too many times, bail out (pick back or stop)
+        if (visits > MAX_VISITS_PER_CHOICE_SET) {
+          const backIdx = options.findIndex(c => c.text.toLowerCase().includes('back'));
+          if (backIdx >= 0) {
+            // Try back once to escape
+            const backKey = choiceKey + '||' + options[backIdx].text;
+            if ((takenChoices.get?.(backKey) || 0) < 2) {
+              await page.evaluate((target) => {
+                const choices = Array.from(document.querySelectorAll('.dialog-choices .dialog-choice'));
+                const pick = choices.find(c => (c.querySelector('.choice-text')?.textContent || '').trim() === target);
+                if (pick) pick.click();
+              }, options[backIdx].text);
+              takenChoices.add(choiceKey + '||' + options[backIdx].text);
+              await page.waitForTimeout(1000);
+              continue;
+            }
+          }
+          console.error(`  Bailing: choice set visited ${visits} times, exceeded cap`);
+          break;
+        }
+
         let pickIdx = 0;
         const untried = options.findIndex(c =>
           !takenChoices.has(choiceKey + '||' + c.text) &&
@@ -286,6 +328,7 @@ async function runPlaytest() {
     // Character sprites - scan broadly for character imagery
     const spriteInfo = await page.evaluate(() => {
       const selectors = [
+        '.dialog-picture', '.dialog-picture img',
         '.character-sprite', '.sprite', '.portrait', '.character-portrait',
         '[class*="portrait"]', '[class*="sprite"]', '[class*="character"]',
         '.dialog-portrait', '.talk-portrait', '.dialog-box-new img',
@@ -306,9 +349,10 @@ async function runPlaytest() {
       const pk = Array.from(document.querySelectorAll('img')).filter(i => /(phoenix|k)\.png/i.test(i.src || ''));
       return { selectors: [...found], phoenixOrKImgs: pk.length };
     });
-    if (spriteInfo.selectors.length > 0 || spriteInfo.phoenixOrKImgs > 0) {
+    if (spriteSeen || spriteInfo.selectors.length > 0 || spriteInfo.phoenixOrKImgs > 0) {
       findings.ready_criteria.character_sprites = true;
-      findings.positives.push(`Character sprites visible via: ${spriteInfo.selectors.join(', ') || 'img[phoenix/k]'}`);
+      const who = [...spriteNamesSeen].join(', ') || spriteInfo.selectors.join(', ') || 'img[phoenix/k]';
+      findings.positives.push(`Character sprites seen: ${who}`);
     } else {
       findings.improvements.push('No character sprites displayed - Narrat show commands missing');
     }
