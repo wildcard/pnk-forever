@@ -148,6 +148,54 @@ Build only ships when **every** criterion is green (game-tester enforces):
 11. Zero `console.error` entries during the full run.
 12. At least 3 distinct background images and both sprites load.
 
+### 10b. Escape-hatch URL flags
+
+Query-string flags control non-player modes. They're never on by default.
+
+| Flag | Effect |
+|---|---|
+| `?ai=1` | Jumps `main:` to `ai_demo_start:` so the AI NPC demo runs; shows blue ribbon; enables narrat debug panel + logging. Scripts can use `ai_say <speaker> <pose> "<prompt>"` — outputs a live line from a free OpenRouter model. Implemented by `v1-modern/src/plugins/ai-npc-plugin.ts`. |
+
+A future `?tester=1` flag (for chapter-select QA) would compose with this
+via the same `CommandPlugin` pattern — not yet implemented on this branch.
+
+**AI NPC setup (once per fresh environment):**
+
+1. Put the OpenRouter API key in `v1-modern/.env.local`:
+   ```
+   VITE_OPENROUTER_KEY=sk-or-v1-...
+   ```
+   This file is gitignored (see root `.gitignore` — covers `.env.local` and variants).
+2. **Enable "training of prompts" on the OpenRouter account** at
+   <https://openrouter.ai/settings/privacy>. Without it, every free model
+   returns HTTP 404 `No endpoints available matching your guardrail
+   restrictions`. The plugin's canned fallbacks still render so the game
+   never breaks, but live AI lines only work with the toggle on.
+3. Model chain (from `ai-npc-plugin.ts`):
+   - Primary: `z-ai/glm-4.5-air:free` (works even without the privacy toggle)
+   - Fallback 1: `openai/gpt-oss-20b:free` (needs the toggle)
+   - Fallback 2: `google/gemma-4-26b-a4b-it:free` (needs the toggle)
+4. Tester override: set `localStorage.openrouter_key` in devtools to point a
+   local build at a different key without editing `.env.local`.
+
+**AI NPC is never a shipping dependency.** Mainline players (no `?ai=1`)
+never trigger an HTTP call, never see a ribbon. The feature is opt-in for
+experimentation only.
+
+### 10c. /keep-alive — the living-gift routine
+
+`.claude/commands/keep-alive.md` is a slash command that picks one
+productive improvement (bugs → story → art → ui → ai) and drives it
+end-to-end through the existing sub-agents. Run it whenever you want to
+keep the game fresh without a specific task in mind.
+
+- With no argument: picks the highest-priority portfolio item that has a
+  concrete actionable target today.
+- With an argument (`bugs`, `art`, `ui`, `story`, `ai`): restricts the
+  pick to that category.
+- Stop conditions and sub-agent delegation rules are documented inside
+  the command file.
+
 ### 11. Open work (in priority order)
 
 1. **Volume-select UI** (partially scoped, not shipped). The user wants a volume picker BEFORE chapter-select. Implementation plan:

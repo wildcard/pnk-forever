@@ -1,10 +1,9 @@
 main:
   set_screen beach_rest
+  ai_demo_route
   "P. & K. — A Love Story in Two Volumes"
   ""
   jump chapter_1_start
-
-# chapter_select kept for testing/QA — not in main player flow
 
 chapter_select:
   choice:
