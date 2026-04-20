@@ -10,22 +10,24 @@ echo "=== Playtest starting at $(date -u +%Y-%m-%dT%H:%M:%SZ) ==="
 echo "Testing: $URL"
 echo ""
 
-# Check if we have Node and can install Playwright
-if ! command -v npx &> /dev/null; then
-  echo "ERROR: npx not found. Install Node.js first."
+# Check if we have Node
+if ! command -v node &> /dev/null; then
+  echo "ERROR: node not found. Install Node.js first."
   exit 1
 fi
 
-# Install Playwright if needed (uses system-wide cache)
-echo "Ensuring Playwright is installed..."
-npx -y playwright install chromium 2>&1 | grep -v "Playwright" || true
+# Set up temp project with Playwright
+cd "$OUTPUT_DIR"
+echo '{"type":"module"}' > package.json
+npm install --silent --no-save playwright@latest 2>&1 | grep -v "added\|up to date" || true
+npx playwright install chromium 2>&1 | grep -v "Playwright" || true
 
 # Create test script
-cat > "$OUTPUT_DIR/test.mjs" << 'EOTEST'
+cat > test.mjs << 'EOTEST'
 import { chromium } from 'playwright';
 
 const URL = process.env.PREVIEW_URL || 'https://pnk-forever-git-claude-anniversary-game-vp0vp-kadosh-dev.vercel.app';
-const OUTPUT_DIR = process.env.OUTPUT_DIR;
+const OUTPUT_DIR = process.cwd();
 
 async function runPlaytest() {
   const browser = await chromium.launch({ headless: true });
@@ -49,7 +51,7 @@ async function runPlaytest() {
 
   try {
     // Load the game
-    console.log('Loading game...');
+    console.error('Loading game...');
     await page.goto(URL, { waitUntil: 'networkidle', timeout: 30000 });
     await page.screenshot({ path: `${OUTPUT_DIR}/01-load.png` });
 
@@ -62,30 +64,34 @@ async function runPlaytest() {
     }
 
     // Check for backgrounds
-    const backgrounds = await page.$$eval('.scene-background, .background', els =>
+    const backgrounds = await page.$$eval('.scene-background, .background, [class*="background"]', els =>
       els.map(el => ({
         visible: el.offsetWidth > 0 && el.offsetHeight > 0,
-        src: el.style.backgroundImage || el.getAttribute('src'),
+        src: el.style.backgroundImage || el.getAttribute('src') || '',
       }))
-    );
+    ).catch(() => []);
 
     if (backgrounds.length === 0) {
-      findings.critical.push('No background elements found');
-    } else if (backgrounds.some(bg => bg.visible && bg.src && !bg.src.includes('gradient'))) {
-      findings.ready_criteria.visuals_present = true;
-      findings.positives.push(`Visual backgrounds detected (${backgrounds.length} elements)`);
+      findings.warnings.push('No background elements found');
     } else {
-      findings.warnings.push('Only CSS gradient backgrounds - real images missing');
+      const hasRealImages = backgrounds.some(bg => bg.visible && bg.src && bg.src.includes('.png'));
+      if (hasRealImages) {
+        findings.ready_criteria.visuals_present = true;
+        findings.positives.push(`Visual backgrounds detected (${backgrounds.length} elements)`);
+      } else {
+        findings.warnings.push('Only CSS gradient backgrounds - real images missing or not loaded');
+      }
     }
 
     // Wait for dialog to appear
-    await page.waitForSelector('.dialog-panel, .narrat-dialog', { timeout: 5000 }).catch(() => {
+    const dialogFound = await page.waitForSelector('.dialog-panel, .narrat-dialog, [class*="dialog"]', { timeout: 5000 }).then(() => true).catch(() => false);
+    if (!dialogFound) {
       findings.critical.push('Dialog panel never appeared - game may be stuck');
-    });
+    }
     await page.screenshot({ path: `${OUTPUT_DIR}/02-dialog.png` });
 
     // Check for character sprites
-    const sprites = await page.$$('.character-sprite, .sprite');
+    const sprites = await page.$$('.character-sprite, .sprite, [class*="character"]');
     if (sprites.length > 0) {
       findings.positives.push(`Character sprites present (${sprites.length} found)`);
     } else {
@@ -93,7 +99,7 @@ async function runPlaytest() {
     }
 
     // Read initial dialog text
-    const dialogText = await page.$eval('.dialog-panel, .narrat-dialog', el => el.textContent).catch(() => '');
+    const dialogText = await page.$eval('.dialog-panel, .narrat-dialog, [class*="dialog"]', el => el.textContent).catch(() => '');
     if (dialogText.length > 50) {
       findings.ready_criteria.engaging_narrative = true;
       findings.positives.push('Narrative text displays properly');
@@ -102,7 +108,7 @@ async function runPlaytest() {
     }
 
     // Check for choices
-    const choices = await page.$$('.choice-button, .narrat-choice-button, button.choice');
+    const choices = await page.$$('.choice-button, .narrat-choice-button, button.choice, button[class*="choice"]');
     if (choices.length > 0) {
       findings.ready_criteria.clear_choices = true;
       findings.positives.push(`Interactive choices available (${choices.length} buttons)`);
@@ -112,8 +118,8 @@ async function runPlaytest() {
       await page.waitForTimeout(1000);
       await page.screenshot({ path: `${OUTPUT_DIR}/03-after-choice.png` });
 
-      const newText = await page.$eval('.dialog-panel, .narrat-dialog', el => el.textContent).catch(() => '');
-      if (newText !== dialogText) {
+      const newText = await page.$eval('.dialog-panel, .narrat-dialog, [class*="dialog"]', el => el.textContent).catch(() => '');
+      if (newText !== dialogText && newText.length > 0) {
         findings.ready_criteria.narrat_playable = true;
         findings.positives.push('Game progression works - choice triggered new dialog');
       } else {
@@ -121,12 +127,6 @@ async function runPlaytest() {
       }
     } else {
       findings.critical.push('No choice buttons found - player cannot progress');
-    }
-
-    // Test slushy interaction (should be on beach_rest scene)
-    const slushyChoice = await page.$('button:has-text("drink"), button:has-text("sip"), button:has-text("slushy")');
-    if (slushyChoice) {
-      findings.positives.push('Found slushy interaction - puzzle mechanics present');
     }
 
     // Check console for errors
@@ -142,19 +142,18 @@ async function runPlaytest() {
     }
 
     // Try to access v0 version (check if it exists)
-    const v0Response = await page.goto(`${URL.replace('/v1-modern', '')}/v0-original-text-engine/index.html`, { waitUntil: 'domcontentloaded', timeout: 5000 }).catch(() => null);
-    if (v0Response && v0Response.ok()) {
+    const v0Response = await fetch(`${URL.replace(/\/$/, '')}/v0-original-text-engine/index.html`).then(r => r.ok).catch(() => false);
+    if (v0Response) {
       findings.ready_criteria.v0_accessible = true;
       findings.positives.push('Original v0 text adventure remains accessible');
-      await page.screenshot({ path: `${OUTPUT_DIR}/04-v0-check.png` });
     } else {
       findings.improvements.push('v0 text adventure not accessible at expected path');
     }
 
-    // Easter egg check (look for tea/mango/chocolate/kite/love/fly keywords)
-    const scriptContent = await page.content();
+    // Easter egg check (look for tea/mango/chocolate/kite/love/fly keywords in page)
+    const pageText = await page.content();
     const easterEggKeywords = ['mango', 'tea', 'chocolate', 'kite', 'love', 'fly'];
-    const foundKeywords = easterEggKeywords.filter(kw => scriptContent.toLowerCase().includes(kw));
+    const foundKeywords = easterEggKeywords.filter(kw => pageText.toLowerCase().includes(kw));
     if (foundKeywords.length >= 3) {
       findings.ready_criteria.easter_eggs_work = true;
       findings.positives.push(`Easter egg keywords present: ${foundKeywords.join(', ')}`);
@@ -176,13 +175,19 @@ const results = await runPlaytest();
 console.log(JSON.stringify(results, null, 2));
 EOTEST
 
-# Run the test script
+# Run test script
 echo "Running automated playtest..."
-cd "$OUTPUT_DIR"
-RESULTS=$(PREVIEW_URL="$URL" OUTPUT_DIR="$OUTPUT_DIR" node test.mjs 2>&1 || echo '{"critical":["Test script failed"],"warnings":[],"improvements":[],"positives":[],"ready_criteria":{}}')
+RESULTS=$(PREVIEW_URL="$URL" node test.mjs 2>&1)
+
+# Check if results are valid JSON
+if ! echo "$RESULTS" | jq empty 2>/dev/null; then
+  echo "ERROR: Test script failed to produce valid JSON:"
+  echo "$RESULTS"
+  exit 2
+fi
 
 # Parse results and generate report
-cat > "$REPORT" << 'EOREPORT'
+cat > "$REPORT" << EOREPORT
 # Playtest Report
 
 **Tested at:** $(date -u +%Y-%m-%dT%H:%M:%SZ)
@@ -192,79 +197,70 @@ cat > "$REPORT" << 'EOREPORT'
 
 EOREPORT
 
-# Extract ready criteria (requires jq)
-if command -v jq &> /dev/null; then
-  echo "$RESULTS" | jq -r '
-    "### Checklist\n" +
-    (.ready_criteria | to_entries | map(
-      "- [" + (if .value then "x" else " " end) + "] " + (.key | gsub("_"; " ") | ascii_upcase)
-    ) | join("\n"))
-  ' >> "$REPORT"
+# Extract ready criteria
+echo "$RESULTS" | jq -r '
+  "### Checklist\n" +
+  (.ready_criteria | to_entries | map(
+    "- [" + (if .value then "x" else " " end) + "] " + (.key | gsub("_"; " ") | ascii_upcase)
+  ) | join("\n"))
+' >> "$REPORT"
 
+echo "" >> "$REPORT"
+echo "## Findings" >> "$REPORT"
+echo "" >> "$REPORT"
+
+CRITICAL_COUNT=$(echo "$RESULTS" | jq '.critical | length')
+WARNING_COUNT=$(echo "$RESULTS" | jq '.warnings | length')
+IMPROVEMENT_COUNT=$(echo "$RESULTS" | jq '.improvements | length')
+POSITIVE_COUNT=$(echo "$RESULTS" | jq '.positives | length')
+
+if [[ "$CRITICAL_COUNT" -gt 0 ]]; then
+  echo "### 🔴 Critical Issues ($CRITICAL_COUNT)" >> "$REPORT"
+  echo "$RESULTS" | jq -r '.critical[] | "- " + .' >> "$REPORT"
   echo "" >> "$REPORT"
-  echo "## Findings" >> "$REPORT"
+fi
+
+if [[ "$WARNING_COUNT" -gt 0 ]]; then
+  echo "### ⚠️  Warnings ($WARNING_COUNT)" >> "$REPORT"
+  echo "$RESULTS" | jq -r '.warnings[] | "- " + .' >> "$REPORT"
   echo "" >> "$REPORT"
+fi
 
-  CRITICAL_COUNT=$(echo "$RESULTS" | jq '.critical | length')
-  WARNING_COUNT=$(echo "$RESULTS" | jq '.warnings | length')
-  IMPROVEMENT_COUNT=$(echo "$RESULTS" | jq '.improvements | length')
-  POSITIVE_COUNT=$(echo "$RESULTS" | jq '.positives | length')
-
-  if [[ "$CRITICAL_COUNT" -gt 0 ]]; then
-    echo "### 🔴 Critical Issues ($CRITICAL_COUNT)" >> "$REPORT"
-    echo "$RESULTS" | jq -r '.critical[] | "- " + .' >> "$REPORT"
-    echo "" >> "$REPORT"
-  fi
-
-  if [[ "$WARNING_COUNT" -gt 0 ]]; then
-    echo "### ⚠️  Warnings ($WARNING_COUNT)" >> "$REPORT"
-    echo "$RESULTS" | jq -r '.warnings[] | "- " + .' >> "$REPORT"
-    echo "" >> "$REPORT"
-  fi
-
-  if [[ "$IMPROVEMENT_COUNT" -gt 0 ]]; then
-    echo "### 💡 Suggested Improvements ($IMPROVEMENT_COUNT)" >> "$REPORT"
-    echo "$RESULTS" | jq -r '.improvements[] | "- " + .' >> "$REPORT"
-    echo "" >> "$REPORT"
-  fi
-
-  if [[ "$POSITIVE_COUNT" -gt 0 ]]; then
-    echo "### ✅ Working Well ($POSITIVE_COUNT)" >> "$REPORT"
-    echo "$RESULTS" | jq -r '.positives[] | "- " + .' >> "$REPORT"
-    echo "" >> "$REPORT"
-  fi
-
-  # Determine if ready to ship
-  READY=$(echo "$RESULTS" | jq -r '
-    .ready_criteria |
-    ((.visuals_present and .narrat_playable and .engaging_narrative and .clear_choices) | tostring)
-  ')
-
-  echo "## Status" >> "$REPORT"
+if [[ "$IMPROVEMENT_COUNT" -gt 0 ]]; then
+  echo "### 💡 Suggested Improvements ($IMPROVEMENT_COUNT)" >> "$REPORT"
+  echo "$RESULTS" | jq -r '.improvements[] | "- " + .' >> "$REPORT"
   echo "" >> "$REPORT"
-  if [[ "$READY" == "true" && "$CRITICAL_COUNT" -eq 0 ]]; then
-    echo "**🎉 READY TO SHIP** - Game meets core quality criteria!" >> "$REPORT"
-  else
-    echo "**🚧 NOT READY** - Address critical issues and improve quality before shipping." >> "$REPORT"
-    echo "" >> "$REPORT"
-    echo "**Next steps:**" >> "$REPORT"
-    if [[ "$CRITICAL_COUNT" -gt 0 ]]; then
-      echo "1. Fix all critical issues listed above" >> "$REPORT"
-    fi
-    if [[ "$READY" != "true" ]]; then
-      echo "2. Complete missing ready criteria (see checklist)" >> "$REPORT"
-    fi
-    if [[ "$IMPROVEMENT_COUNT" -gt 0 ]]; then
-      echo "3. Implement suggested improvements" >> "$REPORT"
-    fi
-  fi
+fi
 
+if [[ "$POSITIVE_COUNT" -gt 0 ]]; then
+  echo "### ✅ Working Well ($POSITIVE_COUNT)" >> "$REPORT"
+  echo "$RESULTS" | jq -r '.positives[] | "- " + .' >> "$REPORT"
+  echo "" >> "$REPORT"
+fi
+
+# Determine if ready to ship
+READY=$(echo "$RESULTS" | jq -r '
+  .ready_criteria |
+  ((.visuals_present and .narrat_playable and .engaging_narrative and .clear_choices) | tostring)
+')
+
+echo "## Status" >> "$REPORT"
+echo "" >> "$REPORT"
+if [[ "$READY" == "true" && "$CRITICAL_COUNT" -eq 0 ]]; then
+  echo "**🎉 READY TO SHIP** - Game meets core quality criteria!" >> "$REPORT"
 else
-  echo "⚠️  jq not installed - showing raw results" >> "$REPORT"
+  echo "**🚧 NOT READY** - Address critical issues and improve quality before shipping." >> "$REPORT"
   echo "" >> "$REPORT"
-  echo '```json' >> "$REPORT"
-  echo "$RESULTS" >> "$REPORT"
-  echo '```' >> "$REPORT"
+  echo "**Next steps:**" >> "$REPORT"
+  if [[ "$CRITICAL_COUNT" -gt 0 ]]; then
+    echo "1. Fix all critical issues listed above" >> "$REPORT"
+  fi
+  if [[ "$READY" != "true" ]]; then
+    echo "2. Complete missing ready criteria (see checklist)" >> "$REPORT"
+  fi
+  if [[ "$IMPROVEMENT_COUNT" -gt 0 ]]; then
+    echo "3. Implement suggested improvements" >> "$REPORT"
+  fi
 fi
 
 # Add screenshots section
@@ -274,7 +270,7 @@ echo "" >> "$REPORT"
 echo "Captured at: \`$OUTPUT_DIR\`" >> "$REPORT"
 ls -1 "$OUTPUT_DIR"/*.png 2>/dev/null | while read -r img; do
   echo "- $(basename "$img")" >> "$REPORT"
-done
+done || echo "No screenshots captured" >> "$REPORT"
 
 # Output report
 echo ""
