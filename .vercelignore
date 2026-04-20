@@ -1,0 +1,11 @@
+node_modules
+.git
+.github
+v0-original-text-engine
+docs
+*.md
+!v1-modern/README.md
+spec
+tests
+.DS_Store
+*.log

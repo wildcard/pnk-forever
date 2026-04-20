@@ -1,0 +1,96 @@
+beach_scene:
+  set_screen beach
+  "Sand, warm under your feet. The sea hisses in."
+  "The dog is here, his Brompton folded neatly beside him."
+
+  set data.knows_name false
+  set data.talked_business false
+  set data.talked_artist false
+  set data.has_shekel false
+  set data.can_go_sunset false
+
+  jump beach_choice
+
+beach_choice:
+  choice:
+    "What do you want to do on the beach?"
+    "Talk to the dog":
+      jump talk_to_k
+    "Try to go south":
+      jump try_go_sunset
+    "Take the shekel":
+      jump take_shekel
+    "Look at the beach":
+      "Wide sand, turquoise water. Tel Aviv in gentle chaos behind you."
+      jump beach_choice
+    "Look at the bicycle":
+      "A BROMPTON. Folds neat as a promise."
+      jump beach_choice
+
+take_shekel:
+  if (== $data.has_shekel false):
+    set data.has_shekel true
+    "A tiny shiny coin in the sand. You pick it up."
+    ""
+    "Pocketed. For luck."
+  jump beach_choice
+
+talk_to_k:
+  talk k idle "Hey. You looked like you had a question."
+
+  choice:
+    "What will you ask the dog?"
+    "What's your NAME?":
+      talk k idle "Ehecatl. Aztec wind god — but everyone just calls me K."
+      set data.knows_name true
+      jump talk_to_k_named
+    "Your BICYCLE is cool, what is it?":
+      talk k idle "A BROMPTON. I can fold it up and take it anywhere."
+      jump talk_to_k
+    "Back":
+      jump beach_choice
+
+talk_to_k_named:
+  if (== $data.knows_name false):
+    jump talk_to_k
+  choice:
+    "Now that you know his name, what next?"
+    "I've a BUSINESS question, do you mind?":
+      talk k idle "Not at all. Ask away."
+      set data.talked_business true
+      jump talk_to_k_business
+    "Back":
+      jump beach_choice
+
+talk_to_k_business:
+  if (== $data.talked_business false):
+    jump talk_to_k_named
+  choice:
+    "What's your business idea?"
+    "I'm an ARTIST, I thought to start a dog portrait business":
+      talk k idle "A dog portrait painter? I love that."
+      talk k idle "I know people in the dog world. I've run a shop before."
+      talk k idle "Let me help you."
+      set data.talked_artist true
+      jump talk_to_k_continue
+    "Back":
+      jump beach_choice
+
+talk_to_k_continue:
+  if (== $data.talked_artist false):
+    jump talk_to_k_business
+  choice:
+    "The sun is setting. What now?"
+    "The sun is going down. Want to CONTINUE to the sunset?":
+      talk k idle "I've never met anyone like you. Yes."
+      talk k idle "Let's walk south, along the SUNSET, toward JAFFA."
+      set data.can_go_sunset true
+      jump sunset_scene
+    "Back":
+      jump beach_choice
+
+try_go_sunset:
+  if $data.can_go_sunset:
+    jump sunset_scene
+  "Not yet. There's still something here."
+  jump beach_choice

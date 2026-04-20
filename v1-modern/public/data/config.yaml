@@ -1,0 +1,85 @@
+common:
+  gameTitle: P&K Forever
+  saveFileName: pnk-forever-save
+  layout:
+    backgrounds:
+      width: 1280
+      height: 720
+    dialogBottomPadding: '2rem'
+    verticalLayoutThreshold: 600
+    portraits:
+      width: 150
+      height: 225
+  images:
+    beach_rest: img/beach_rest.png
+    beach: img/beach.png
+    beach_sunset: img/sunset.png
+    jaffa_apt: img/apartment.png
+    jaffa_street: img/street.png
+    japan: img/kyoto.png
+    kyoto_apt: img/kyoto_apt.png
+    kitchen: img/kitchen.png
+    home: img/home.png
+  hudStats: {}
+
+dialoguePanel:
+  textSpeed: 30
+  animateText: true
+  timeBetweenLines: 100
+
+saves:
+  mode: manual
+  slots: 10
+
+audio:
+  files: {}
+  audioTriggers: {}
+  options: {}
+
+screens:
+  screens:
+    default:
+      background: beach_rest
+    beach_rest:
+      background: beach_rest
+    beach:
+      background: beach
+    beach_sunset:
+      background: beach_sunset
+    jaffa_apt:
+      background: jaffa_apt
+    jaffa_street:
+      background: jaffa_street
+    japan:
+      background: japan
+    kyoto_apt:
+      background: kyoto_apt
+    kitchen:
+      background: kitchen
+    home:
+      background: home
+
+characters:
+  config:
+    imagesPath: img/
+  characters:
+    game:
+      name: ""
+      style:
+        color: white
+    player:
+      name: You
+      style:
+        color: orange
+    phoenix:
+      name: Phoenix
+      style:
+        color: '#FF6B35'
+      sprites:
+        idle: phoenix.png
+    k:
+      name: K
+      style:
+        color: '#1A1A1A'
+      sprites:
+        idle: k.png

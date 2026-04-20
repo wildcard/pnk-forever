@@ -1,0 +1,12 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "cd v1-modern && npm install && npm run build",
+  "outputDirectory": "v1-modern/dist",
+  "framework": null,
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "rewrites": [
+    { "source": "/v0-original-text-engine", "destination": "/v0-original-text-engine/index.html" },
+    { "source": "/v0-original-text-engine/", "destination": "/v0-original-text-engine/index.html" }
+  ]
+}

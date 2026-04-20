@@ -1,0 +1,187 @@
+sunset_scene:
+  set_screen beach_sunset
+  "You walk south. The crowds thin. The sky turns coral."
+  "A gull wheels once and is gone. Peaceful."
+  ""
+  "A good moment to really talk."
+  talk k idle "I live nearby. In JAFFA. We could go to my place."
+
+  set data.talked_food false
+  set data.talked_mango false
+  set data.talked_drink false
+  set data.talked_tea false
+  set data.talked_sweet false
+  set data.talked_chocolate false
+  set data.talked_travel false
+  set data.talked_nomad false
+  set data.talked_world false
+  set data.talked_china false
+  set data.talked_japan false
+  set data.can_fly false
+
+  jump sunset_conversation
+
+sunset_conversation:
+  if $data.can_fly:
+    talk k idle "We've walked and talked. Let's head to JAFFA."
+    jump jaffa_apt_scene
+  talk k idle "What would you like to talk about?"
+
+  choice:
+    "Pick a topic to discuss"
+    "What's your favorite type of FOOD?":
+      jump sunset_food_branch
+    "What's your favorite hot beverage to DRINK?":
+      jump sunset_drink_branch
+    "Do you have a SWEET you can't resist?":
+      jump sunset_sweet_branch
+    "Do you want to TRAVEL the world?":
+      jump sunset_travel_branch
+    "What's a digital NOMAD?":
+      jump sunset_nomad_branch
+    "Do you want to travel with me around the WORLD?":
+      jump sunset_world_branch
+    "Go to Jaffa":
+      jump jaffa_apt_scene
+
+sunset_food_branch:
+  if $data.talked_food:
+    jump sunset_drink_branch
+  talk k idle "Easy. Fruit and vegetables. Nothing beats them. You?"
+  set data.talked_food true
+  jump sunset_food
+
+sunset_drink_branch:
+  if $data.talked_drink:
+    jump sunset_sweet_branch
+  talk k idle "Coffee, always. And you?"
+  set data.talked_drink true
+  jump sunset_drink
+
+sunset_sweet_branch:
+  if $data.talked_sweet:
+    jump sunset_travel_branch
+  talk k idle "Ice cream. I'd eat it in winter. What about you?"
+  set data.talked_sweet true
+  jump sunset_sweet
+
+sunset_travel_branch:
+  if $data.talked_travel:
+    jump sunset_nomad_branch
+  talk k idle "I love to travel. I've been everywhere I could."
+  talk k idle "My dream is to live as a digital nomad."
+  set data.talked_travel true
+  jump sunset_conversation
+
+sunset_nomad_branch:
+  if (== $data.talked_travel false):
+    jump sunset_travel_branch
+  if $data.talked_nomad:
+    jump sunset_world_branch
+  talk k idle "A nomad works from anywhere. A new view every season."
+  set data.talked_nomad true
+  jump sunset_conversation
+
+sunset_world_branch:
+  if (== $data.talked_nomad false):
+    jump sunset_nomad_branch
+  if $data.talked_world:
+    jump sunset_conversation
+  talk k idle "I'd love that. Where should we go first?"
+  set data.talked_world true
+  jump sunset_world
+
+sunset_food:
+  choice:
+    "What's your favorite food?"
+    "MANGO!":
+      talk phoenix idle "Mango. I'd eat it every day if I could."
+      talk k idle "Noted. I'll find you the best ones."
+      set data.talked_mango true
+      run trigger_easter_egg pnk_mango
+      jump sunset_conversation
+    "Back":
+      jump sunset_conversation
+
+sunset_drink:
+  choice:
+    "What's your favorite drink?"
+    "TEA":
+      talk phoenix idle "TEA. With mint and lemon verbena. No sugar."
+      talk k idle "Same. We should've met sooner."
+      set data.talked_tea true
+      run trigger_easter_egg pnk_drink
+      jump sunset_conversation
+    "Back":
+      jump sunset_conversation
+
+sunset_sweet:
+  choice:
+    "What's your favorite sweet?"
+    "CHOCOLATE":
+      talk phoenix idle "Dark CHOCOLATE. The kind you break with a snap."
+      talk k idle "The bitter ones. Yes."
+      ""
+      "TIP: look for a drawer. Its number is four."
+      set data.talked_chocolate true
+      run trigger_easter_egg pnk_chocolate
+      jump sunset_conversation
+    "Back":
+      jump sunset_conversation
+
+sunset_world:
+  choice:
+    "Where should we travel?"
+    "JAPAN":
+      talk phoenix idle "JAPAN. The food, the quiet streets, the lanterns."
+      talk phoenix idle "My ancestors are from there. It's been calling me."
+      set data.talked_japan true
+      set data.agreed_to_travel true
+      jump sunset_fly
+    "GERMANY":
+      talk k idle "Berlin? Ich bin ein Berliner."
+      talk phoenix idle "Hmm. On second thought — not Germany."
+      jump sunset_world
+    "CHINA":
+      talk phoenix idle "Too big. I want somewhere we can actually live."
+      set data.talked_china true
+      jump sunset_world_china
+    "INDIA":
+      talk k idle "The food is incredible. The rest — maybe another life."
+      jump sunset_world
+    "FRANCE":
+      talk phoenix idle "Pass. You know why."
+      jump sunset_world
+    "ITALY":
+      talk k idle "I love Italy. But not to live in. Not yet."
+      jump sunset_world
+    "USA":
+      talk phoenix idle "USA? Maybe. But not right now."
+      jump sunset_world
+    "Back":
+      jump sunset_conversation
+
+sunset_world_china:
+  choice:
+    "Where in China?"
+    "HONG KONG":
+      talk phoenix idle "Beautiful. But not for us, not now."
+      jump sunset_world
+    "Back":
+      jump sunset_world
+
+sunset_fly:
+  choice:
+    "How should we get to Japan?"
+    "How can we FLY to Japan?":
+      talk phoenix idle "A plane? That's the obvious way."
+      talk k idle "Or — I can take us there myself. I can FLY."
+      ""
+      "Use FLY in a place to unlock K.'s secret."
+      set data.can_fly true
+      jump sunset_conversation
+    "Back":
+      jump sunset_conversation
+
+trigger_easter_egg event_name:
+  return true

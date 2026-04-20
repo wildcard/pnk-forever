@@ -1,0 +1,68 @@
+jaffa_apt_scene:
+  set_screen jaffa_apt
+  "Your Jaffa apartment. Souvenirs on every shelf — proof of places you've loved."
+  "K. is already half-asleep on the living-room bed, breathing slow."
+
+  set data.slept_with_k false
+
+  choice:
+    "What do you want to do?"
+    "Use the bed":
+      jump use_bed
+    "Go north to Jaffa Street":
+      jump jaffa_street_scene
+
+use_bed:
+  if $data.slept_with_k:
+    jump jaffa_street_scene
+  "You curl up next to him. He pulls you in without opening his eyes."
+  "You fall asleep to the soft hum of Jaffa at night."
+  ""
+  "Morning. Market noise. K. is still snoring — a warm, happy rumble."
+  set data.slept_with_k true
+  jump jaffa_street_scene
+
+jaffa_street_scene:
+  set_screen jaffa_street
+  "Jaffa Street. Stone walls, bougainvillea, and the smell of fresh bread."
+
+  choice:
+    "Where to next?"
+    "Look for kite equipment":
+      jump kite_branch
+    "Fly to Japan":
+      jump fly_branch
+    "Go south to apartment":
+      jump jaffa_apt_scene
+
+kite_branch:
+  if $data.has_kite:
+    jump fly_branch
+  if (== $data.slept_with_k false):
+    jump use_bed
+  "A shop window. Your KITE board, finally."
+  ""
+  "Use this code in the future for a special discount: PNK-n3zk7MAMBG-GIFT"
+  run trigger_easter_egg pnk_kite
+  set data.has_kite true
+  jump jaffa_street_scene
+
+fly_branch:
+  if (== $data.can_fly false):
+    "K. hasn't shown you how yet."
+    jump jaffa_street_scene
+  if (== $data.agreed_to_travel false):
+    "You haven't chosen where to go yet."
+    jump jaffa_street_scene
+  jump fly_to_japan
+
+fly_to_japan:
+  talk phoenix idle "Let's FLY. Together."
+  "K. spreads his peacock tail. You lift off from the Jaffa rooftop."
+  ""
+  "Clouds. Ocean. Clouds again. The light shifts from gold to pearl."
+  ""
+  "Three years pass in a single breath."
+  ""
+  "You land softly outside your Kyoto apartment."
+  jump japan_scene

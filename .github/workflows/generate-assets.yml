@@ -1,0 +1,49 @@
+name: Generate Game Assets
+
+on:
+  workflow_dispatch:
+    inputs:
+      force:
+        description: 'Force regenerate all images (even existing ones)'
+        type: boolean
+        default: false
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Generate assets
+        working-directory: v1-modern
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          if [ "${{ inputs.force }}" = "true" ]; then
+            node scripts/generate-assets.mjs --force
+          else
+            node scripts/generate-assets.mjs
+          fi
+
+      - name: Commit generated images
+        run: |
+          git config --global user.name  "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add v1-modern/public/img/
+          if git diff --staged --quiet; then
+            echo "No new images generated."
+          else
+            git commit -m "chore: regenerate game assets via Gemini Imagen [skip ci]"
+            git push
+          fi

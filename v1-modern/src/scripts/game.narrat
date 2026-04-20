@@ -1,0 +1,165 @@
+main:
+  set_screen beach_rest
+  "P. & K. — A Love Story in Two Volumes"
+  ""
+  jump chapter_1_start
+
+# chapter_select kept for testing/QA — not in main player flow
+
+chapter_select:
+  choice:
+    "Which chapter?"
+    "Chapter 1 · Meet Cute (Tel Aviv Beach)":
+      jump chapter_1_start
+    "Chapter 2 · The Sunset Walk":
+      jump chapter_2_start
+    "Chapter 3 · Jaffa Nights":
+      jump chapter_3_start
+    "Chapter 4 · Kyoto Kitchen":
+      jump chapter_4_start
+    "Chapter 5 · Forever Home":
+      jump chapter_5_start
+
+chapter_1_start:
+  "Chapter 1 — Meet Cute"
+  "Tel Aviv. A hot beach café. A slushy melting in your hand."
+  ""
+  jump intro_scene
+
+chapter_2_start:
+  "Chapter 2 — The Sunset Walk"
+  "You and K. are leaving the beach, heading south toward Jaffa."
+  ""
+  set data.knows_name true
+  set data.talked_business true
+  set data.talked_artist true
+  set data.can_go_sunset true
+  set data.has_shekel true
+  jump sunset_scene
+
+chapter_3_start:
+  "Chapter 3 — Jaffa Nights"
+  "Your Jaffa apartment. K. is beside you. Tomorrow you leave for Japan."
+  ""
+  set data.knows_name true
+  set data.talked_business true
+  set data.talked_artist true
+  set data.can_go_sunset true
+  set data.has_shekel true
+  set data.talked_food true
+  set data.talked_mango true
+  set data.talked_drink true
+  set data.talked_tea true
+  set data.talked_sweet true
+  set data.talked_chocolate true
+  set data.talked_travel true
+  set data.talked_nomad true
+  set data.talked_world true
+  set data.talked_japan true
+  set data.talked_china false
+  set data.agreed_to_travel true
+  set data.can_fly true
+  jump jaffa_apt_scene
+
+chapter_4_start:
+  "Chapter 4 — Kyoto Kitchen"
+  "Three years later. Kyoto. Lanterns, rain, cedar."
+  ""
+  set data.knows_name true
+  set data.talked_business true
+  set data.talked_artist true
+  set data.can_go_sunset true
+  set data.has_shekel true
+  set data.talked_food true
+  set data.talked_mango true
+  set data.talked_drink true
+  set data.talked_tea true
+  set data.talked_sweet true
+  set data.talked_chocolate true
+  set data.talked_travel true
+  set data.talked_nomad true
+  set data.talked_world true
+  set data.talked_japan true
+  set data.talked_china false
+  set data.agreed_to_travel true
+  set data.can_fly true
+  set data.slept_with_k true
+  set data.has_kite true
+  jump japan_scene
+
+chapter_5_start:
+  "Chapter 5 — Forever Home"
+  "Back in Tel Aviv. The balcony. Two cups of tea."
+  ""
+  jump home_scene
+
+intro_scene:
+  "The tales of P."
+  "P. — short for Phoenix — is a bird-cat, depending on who you ask."
+  "Some days a feathered thing. Some days a purring one. Always curious."
+  ""
+  "She lives for salty air, warm sand, and small adventures."
+  "Today she's at her favorite beach café in Tel Aviv, watching the sea."
+  ""
+  talk phoenix idle "Type LOOK to have a look around."
+
+  choice:
+    "What will you do?"
+    "Look around":
+      jump beach_rest_look
+    "Continue":
+      jump beach_rest_look
+
+beach_rest_look:
+  "The midday sun is relentless. P. sips a slushy acai, waiting for the wind to settle."
+  "She's been turning an idea over in her head — what comes next?"
+  ""
+  "Then she sees him. A dog on a BROMPTON folding bicycle. Shiba face, peacock feathers."
+  "She's never seen anything like it. Her tail flicks once. Curious."
+  "She decides to say hello."
+
+  set data.has_slushy false
+  set data.slushy_gulps 3
+  set data.can_leave false
+
+  choice:
+    "There's a slushy on the table. What do you do?"
+    "Take the slushy":
+      set data.has_slushy true
+      "Cold condensation drips down your feathers. You take it."
+      jump slushy_choice
+    "Leave it":
+      "The heat wins. You grab the slushy anyway."
+      set data.has_slushy true
+      jump slushy_choice
+
+slushy_choice:
+  choice:
+    "The slushy is in your hand. What now?"
+    "Use the slushy":
+      jump use_slushy
+    "Try to leave":
+      jump try_leave
+
+use_slushy:
+  if (== $data.slushy_gulps 3):
+    "A long, icy pull. The world slows. You can breathe again."
+    set data.can_leave true
+  "gulp"
+  set data.slushy_gulps (- $data.slushy_gulps 1)
+  if (> $data.slushy_gulps 0):
+    "A little slushy left, clinging to the cup."
+    jump slushy_choice
+  "The last drop. Purple-pink on your beak."
+  "You set the empty cup down."
+  jump go_to_beach
+
+try_leave:
+  if $data.can_leave:
+    jump go_to_beach
+  "The air outside shimmers. Not yet."
+  "Maybe something COLD would help."
+  jump slushy_choice
+
+go_to_beach:
+  jump beach_scene
