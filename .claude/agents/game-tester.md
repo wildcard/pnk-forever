@@ -69,7 +69,7 @@ Write `/tmp/pnk-test-report.md` with:
 Print the report's summary to stdout at end.
 
 # Heuristics that matter
-- **Loop detection**: a choice-set is identified by its prompt text. Track visits per prompt. >6 visits = stuck.
+- **Loop detection**: a choice-set is identified by its prompt text. Track visits per prompt. >6 visits = stuck. The invariant you're enforcing is defined in `.claude/rules/narrat-no-autoplay-loops.md`; when you report a loop failure, name which of the three safe patterns (cascade via guard / monotonic advance / no self-jump) is missing at the failing label so the fix is obvious.
 - **Repetition detection**: if the same dialog-line appears 4× in a 10-turn window, flag it.
 - **Dead-end detection**: if the game never reaches a label named "home_scene" or text containing "THE END" or "For Anastasia. Forever." within 200 turns, fail.
 - **Asset sanity**: `document.querySelectorAll('img').forEach(img => !img.complete && record missing)`.

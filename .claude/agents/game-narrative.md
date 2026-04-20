@@ -59,3 +59,4 @@ These words MUST appear in dialog because they trigger in-game unlocks:
 - Do NOT break the flag logic that gates progression.
 - Do NOT rename labels (other files/jumps reference them).
 - Keep `"For Anastasia. Forever."` as the final line in `home_scene`.
+- **Before writing any `.narrat` edit, read `.claude/rules/narrat-no-autoplay-loops.md`.** Every `choice:` block you touch must satisfy one of the three safe patterns there (cascade via guard / monotonic advance / no self-jump). Run the diagnostic grep from that rule; any self-jump you introduce must be justified against those patterns in your diff summary.

@@ -123,7 +123,7 @@ label_name:
   jump next_label
 ```
 
-Autoplay **always picks the first choice**. Design choice order so progression comes first; flavor/repeat options last. Never let an "already covered" guard loop back to the same prompt — **cascade to the next uncovered topic instead.**
+Autoplay **always picks the first choice**. Design choice order so progression comes first; flavor/repeat options last. Never let an "already covered" guard loop back to the same prompt — **cascade to the next uncovered topic instead.** Full invariant, three safe patterns, and diagnostic grep: [`.claude/rules/narrat-no-autoplay-loops.md`](.claude/rules/narrat-no-autoplay-loops.md). Read it before editing any `choice:` block.
 
 ### 9. Vercel quirks
 
