@@ -2,6 +2,7 @@
   "id": "beach_choice",
   "scene": null,
   "sacred": false,
+  "sourceFile": "beach",
   "statements": [
     {
       "op": "choice",

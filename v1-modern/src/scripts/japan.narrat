@@ -1,3 +1,41 @@
+# DO NOT EDIT — emitted by tools/adapters/narrat/emit.ts from content/ IR.
+
+eat_dumplings:
+  if (== $data.has_chopsticks false):
+    jump take_chopsticks
+  if $data.ate_dumplings:
+    jump talk_tiger
+  "One dumpling. Hot. Perfect. You close your eyes for a second."
+  set data.ate_dumplings true
+  jump kitchen_conversation
+
+fly_home:
+  "You step onto the balcony. He spreads his tail. You lift off."
+  "The world curves beneath you — Kyoto, then cloud, then sea."
+  jump home_scene
+
+give_necklace:
+  "K. opens a small wooden box."
+  "Inside — a silver double NECKLACE. An infinity ouroboros amulet, joined by a tiny kite charm."
+  talk k idle "Here. Put it on."
+  set data.has_necklace true
+  jump kitchen_conversation
+
+go_kitchen:
+  if (== $data.wearing_slippers false):
+    talk k idle "Hey! No shoes in the house. You know better."
+    jump kyoto_apt_choice
+  jump kitchen_scene
+
+home_scene:
+  set_screen home
+  "Home. Tel Aviv light through the window. Two cups of tea."
+  "And they lived, and loved, and kept going — forever."
+  ""
+  "THE END"
+  ""
+  "For Anastasia. Forever."
+
 japan_scene:
   set_screen japan
   "KYOTO. Red lanterns glow along the street. The air smells like rain and cedar."
@@ -10,67 +48,10 @@ japan_scene:
       "You stand still. Watch the lantern light catch the rain."
       jump kyoto_apt_scene
 
-kyoto_apt_scene:
-  set_screen kyoto_apt
-  "Your Kyoto apartment. Tatami, soft light, the slide of shoji doors."
-  "Something is cooking in the KITCHEN. Warm, savory steam."
-
-  set data.wearing_slippers false
-  set data.has_tiger_sign false
-
-  jump kyoto_apt_choice
-
-kyoto_apt_choice:
-  choice:
-    "What do you want to do?"
-    "Use the slippers Uwabaki":
-      jump kyoto_wear_slippers
-    "Take Tiger Zodiac Sign":
-      jump kyoto_take_tiger
-    "Go east to the kitchen":
-      jump go_kitchen
-
-kyoto_wear_slippers:
-  if $data.wearing_slippers:
-    jump kyoto_take_tiger
-  "You slip into your uwabaki — soft, clean, house-only SLIPPERS."
-  set data.wearing_slippers true
-  jump kyoto_apt_choice
-
-kyoto_take_tiger:
-  if $data.has_tiger_sign:
-    jump go_kitchen
-  "A small carved wooden TIGER. Your ZODIAC. You pocket it with a smile."
-  set data.has_tiger_sign true
-  jump kyoto_apt_choice
-
-go_kitchen:
-  if (== $data.wearing_slippers false):
-    talk k idle "Hey! No shoes in the house. You know better."
-    jump kyoto_apt_choice
-  jump kitchen_scene
-
-kitchen_scene:
-  set_screen kitchen
-  "The KITCHEN. Steam curls from bamboo baskets."
-  "K. is making DIM SUM — pleated, plump, glistening."
-
-  set data.has_chopsticks false
-  set data.ate_dumplings false
-  set data.talked_making false
-  set data.talked_love false
-  set data.talked_tiger false
-  set data.talked_zodiac false
-  set data.talked_future false
-  set data.has_necklace false
-
-  jump kitchen_conversation
-
 kitchen_conversation:
   if $data.has_necklace:
     jump use_necklace
   talk k idle "What would you like to know?"
-
   choice:
     "What do you want to talk about or do?"
     "What're you MAKING?":
@@ -90,12 +71,71 @@ kitchen_conversation:
     "Use the necklace":
       jump use_necklace_branch
 
-talk_making:
-  if $data.talked_making:
-    jump talk_love
-  talk k idle "DIM SUM. Your favorite. Almost ready."
-  set data.talked_making true
+kitchen_scene:
+  set_screen kitchen
+  "The KITCHEN. Steam curls from bamboo baskets."
+  "K. is making DIM SUM — pleated, plump, glistening."
+  set data.has_chopsticks false
+  set data.ate_dumplings false
+  set data.talked_making false
+  set data.talked_love false
+  set data.talked_tiger false
+  set data.talked_zodiac false
+  set data.talked_future false
+  set data.has_necklace false
   jump kitchen_conversation
+
+kyoto_apt_choice:
+  choice:
+    "What do you want to do?"
+    "Use the slippers Uwabaki":
+      jump kyoto_wear_slippers
+    "Take Tiger Zodiac Sign":
+      jump kyoto_take_tiger
+    "Go east to the kitchen":
+      jump go_kitchen
+
+kyoto_apt_scene:
+  set_screen kyoto_apt
+  "Your Kyoto apartment. Tatami, soft light, the slide of shoji doors."
+  "Something is cooking in the KITCHEN. Warm, savory steam."
+  set data.wearing_slippers false
+  set data.has_tiger_sign false
+  jump kyoto_apt_choice
+
+kyoto_take_tiger:
+  if $data.has_tiger_sign:
+    jump go_kitchen
+  "A small carved wooden TIGER. Your ZODIAC. You pocket it with a smile."
+  set data.has_tiger_sign true
+  jump kyoto_apt_choice
+
+kyoto_wear_slippers:
+  if $data.wearing_slippers:
+    jump kyoto_take_tiger
+  "You slip into your uwabaki — soft, clean, house-only SLIPPERS."
+  set data.wearing_slippers true
+  jump kyoto_apt_choice
+
+take_chopsticks:
+  if $data.has_chopsticks:
+    jump eat_dumplings
+  "A pair of fancy lacquered chopsticks. You pick them up."
+  set data.has_chopsticks true
+  jump kitchen_conversation
+
+talk_future:
+  if (== $data.talked_zodiac false):
+    jump talk_zodiac
+  if $data.talked_future:
+    jump give_necklace
+  talk k idle "Our FUTURE? Only stronger. Year after year."
+  talk k idle "We'll challenge each other. Make each other better."
+  talk k idle "You protect me. I protect you."
+  talk k idle "Stronger together. One. To eternity."
+  talk k idle "I have something for you. My zodiac — the SNAKE. To watch over you."
+  set data.talked_future true
+  jump give_necklace
 
 talk_love:
   if $data.talked_love:
@@ -105,20 +145,11 @@ talk_love:
   run trigger_easter_egg pnk_love
   jump kitchen_conversation
 
-take_chopsticks:
-  if $data.has_chopsticks:
-    jump eat_dumplings
-  "A pair of fancy lacquered chopsticks. You pick them up."
-  set data.has_chopsticks true
-  jump kitchen_conversation
-
-eat_dumplings:
-  if (== $data.has_chopsticks false):
-    jump take_chopsticks
-  if $data.ate_dumplings:
-    jump talk_tiger
-  "One dumpling. Hot. Perfect. You close your eyes for a second."
-  set data.ate_dumplings true
+talk_making:
+  if $data.talked_making:
+    jump talk_love
+  talk k idle "DIM SUM. Your favorite. Almost ready."
+  set data.talked_making true
   jump kitchen_conversation
 
 talk_tiger:
@@ -139,32 +170,6 @@ talk_zodiac:
   set data.talked_zodiac true
   jump kitchen_conversation
 
-talk_future:
-  if (== $data.talked_zodiac false):
-    jump talk_zodiac
-  if $data.talked_future:
-    jump give_necklace
-  talk k idle "Our FUTURE? Only stronger. Year after year."
-  talk k idle "We'll challenge each other. Make each other better."
-  talk k idle "You protect me. I protect you."
-  talk k idle "Stronger together. One. To eternity."
-  talk k idle "I have something for you. My zodiac — the SNAKE. To watch over you."
-  set data.talked_future true
-  jump give_necklace
-
-give_necklace:
-  "K. opens a small wooden box."
-  "Inside — a silver double NECKLACE. An infinity ouroboros amulet, joined by a tiny kite charm."
-  talk k idle "Here. Put it on."
-  set data.has_necklace true
-  jump kitchen_conversation
-
-use_necklace_branch:
-  if (== $data.has_necklace false):
-    "K. hasn't given you the NECKLACE yet."
-    jump kitchen_conversation
-  jump use_necklace
-
 use_necklace:
   "The silver rests cool on your chest. A perfect weight."
   talk k idle "It's time. Let's FLY home. To TLV."
@@ -172,16 +177,8 @@ use_necklace:
   run trigger_easter_egg pnk_fly
   jump fly_home
 
-fly_home:
-  "You step onto the balcony. He spreads his tail. You lift off."
-  "The world curves beneath you — Kyoto, then cloud, then sea."
-  jump home_scene
-
-home_scene:
-  set_screen home
-  "Home. Tel Aviv light through the window. Two cups of tea."
-  "And they lived, and loved, and kept going — forever."
-  ""
-  "THE END"
-  ""
-  "For Anastasia. Forever."
+use_necklace_branch:
+  if (== $data.has_necklace false):
+    "K. hasn't given you the NECKLACE yet."
+    jump kitchen_conversation
+  jump use_necklace

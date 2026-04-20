@@ -70,5 +70,6 @@ export type DialogNode = {
   id: string;
   scene?: string | null;
   sacred?: boolean;
+  sourceFile?: string;
   statements: Statement[];
 };

@@ -2,6 +2,7 @@
   "id": "kyoto_apt_choice",
   "scene": null,
   "sacred": false,
+  "sourceFile": "japan",
   "statements": [
     {
       "op": "choice",

@@ -21,6 +21,11 @@
       "default": false,
       "description": "If true, this node is terminal, appears exactly once in a run, and must have no outgoing choices. Enforces the 'For Anastasia. Forever.' invariant."
     },
+    "sourceFile": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*$",
+      "description": "Engine-specific hint: which source file this node belongs to when emitted (e.g. 'beach' → beach.narrat). Round-trip fidelity only."
+    },
     "statements": {
       "type": "array",
       "description": "Ordered list of what happens in this node.",

@@ -2,6 +2,7 @@
   "id": "chapter_select",
   "scene": null,
   "sacred": false,
+  "sourceFile": "game",
   "statements": [
     {
       "op": "choice",

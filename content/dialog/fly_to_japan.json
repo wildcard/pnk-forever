@@ -2,6 +2,7 @@
   "id": "fly_to_japan",
   "scene": null,
   "sacred": false,
+  "sourceFile": "jaffa",
   "statements": [
     {
       "op": "say",

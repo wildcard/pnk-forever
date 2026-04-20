@@ -2,6 +2,7 @@
   "id": "use_bed",
   "scene": null,
   "sacred": false,
+  "sourceFile": "jaffa",
   "statements": [
     {
       "op": "if",

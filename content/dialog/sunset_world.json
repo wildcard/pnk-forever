@@ -2,6 +2,7 @@
   "id": "sunset_world",
   "scene": null,
   "sacred": false,
+  "sourceFile": "sunset",
   "statements": [
     {
       "op": "choice",

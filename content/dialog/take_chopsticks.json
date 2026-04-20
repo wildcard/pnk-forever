@@ -2,6 +2,7 @@
   "id": "take_chopsticks",
   "scene": null,
   "sacred": false,
+  "sourceFile": "japan",
   "statements": [
     {
       "op": "if",

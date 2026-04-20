@@ -2,6 +2,7 @@
   "id": "use_slushy",
   "scene": null,
   "sacred": false,
+  "sourceFile": "game",
   "statements": [
     {
       "op": "if",

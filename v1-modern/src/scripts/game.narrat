@@ -1,24 +1,25 @@
-main:
-  set_screen beach_rest
-  "P. & K. — A Love Story in Two Volumes"
+# DO NOT EDIT — emitted by tools/adapters/narrat/emit.ts from content/ IR.
+
+beach_rest_look:
+  "The midday sun is relentless. P. sips a slushy acai, waiting for the wind to settle."
+  "She's been turning an idea over in her head — what comes next?"
   ""
-  jump chapter_1_start
-
-# chapter_select kept for testing/QA — not in main player flow
-
-chapter_select:
+  "Then she sees him. A dog on a BROMPTON folding bicycle. Shiba face, peacock feathers."
+  "She's never seen anything like it. Her tail flicks once. Curious."
+  "She decides to say hello."
+  set data.has_slushy false
+  set data.slushy_gulps 3
+  set data.can_leave false
   choice:
-    "Which chapter?"
-    "Chapter 1 · Meet Cute (Tel Aviv Beach)":
-      jump chapter_1_start
-    "Chapter 2 · The Sunset Walk":
-      jump chapter_2_start
-    "Chapter 3 · Jaffa Nights":
-      jump chapter_3_start
-    "Chapter 4 · Kyoto Kitchen":
-      jump chapter_4_start
-    "Chapter 5 · Forever Home":
-      jump chapter_5_start
+    "There's a slushy on the table. What do you do?"
+    "Take the slushy":
+      set data.has_slushy true
+      "Cold condensation drips down your feathers. You take it."
+      jump slushy_choice
+    "Leave it":
+      "The heat wins. You grab the slushy anyway."
+      set data.has_slushy true
+      jump slushy_choice
 
 chapter_1_start:
   "Chapter 1 — Meet Cute"
@@ -93,6 +94,23 @@ chapter_5_start:
   ""
   jump home_scene
 
+chapter_select:
+  choice:
+    "Which chapter?"
+    "Chapter 1 · Meet Cute (Tel Aviv Beach)":
+      jump chapter_1_start
+    "Chapter 2 · The Sunset Walk":
+      jump chapter_2_start
+    "Chapter 3 · Jaffa Nights":
+      jump chapter_3_start
+    "Chapter 4 · Kyoto Kitchen":
+      jump chapter_4_start
+    "Chapter 5 · Forever Home":
+      jump chapter_5_start
+
+go_to_beach:
+  jump beach_scene
+
 intro_scene:
   "The tales of P."
   "P. — short for Phoenix — is a bird-cat, depending on who you ask."
@@ -102,7 +120,6 @@ intro_scene:
   "Today she's at her favorite beach café in Tel Aviv, watching the sea."
   ""
   talk phoenix idle "Type LOOK to have a look around."
-
   choice:
     "What will you do?"
     "Look around":
@@ -110,28 +127,11 @@ intro_scene:
     "Continue":
       jump beach_rest_look
 
-beach_rest_look:
-  "The midday sun is relentless. P. sips a slushy acai, waiting for the wind to settle."
-  "She's been turning an idea over in her head — what comes next?"
+main:
+  set_screen beach_rest
+  "P. & K. — A Love Story in Two Volumes"
   ""
-  "Then she sees him. A dog on a BROMPTON folding bicycle. Shiba face, peacock feathers."
-  "She's never seen anything like it. Her tail flicks once. Curious."
-  "She decides to say hello."
-
-  set data.has_slushy false
-  set data.slushy_gulps 3
-  set data.can_leave false
-
-  choice:
-    "There's a slushy on the table. What do you do?"
-    "Take the slushy":
-      set data.has_slushy true
-      "Cold condensation drips down your feathers. You take it."
-      jump slushy_choice
-    "Leave it":
-      "The heat wins. You grab the slushy anyway."
-      set data.has_slushy true
-      jump slushy_choice
+  jump chapter_1_start
 
 slushy_choice:
   choice:
@@ -141,19 +141,6 @@ slushy_choice:
     "Try to leave":
       jump try_leave
 
-use_slushy:
-  if (== $data.slushy_gulps 3):
-    "A long, icy pull. The world slows. You can breathe again."
-    set data.can_leave true
-  "gulp"
-  set data.slushy_gulps (- $data.slushy_gulps 1)
-  if (> $data.slushy_gulps 0):
-    "A little slushy left, clinging to the cup."
-    jump slushy_choice
-  "The last drop. Purple-pink on your beak."
-  "You set the empty cup down."
-  jump go_to_beach
-
 try_leave:
   if $data.can_leave:
     jump go_to_beach
@@ -161,5 +148,15 @@ try_leave:
   "Maybe something COLD would help."
   jump slushy_choice
 
-go_to_beach:
-  jump beach_scene
+use_slushy:
+  if (== $data.slushy_gulps 3):
+    "A long, icy pull. The world slows. You can breathe again."
+    set data.can_leave true
+  "gulp"
+  set data.slushy_gulps "(- $data.slushy_gulps 1)"
+  if (> $data.slushy_gulps 0):
+    "A little slushy left, clinging to the cup."
+    jump slushy_choice
+  "The last drop. Purple-pink on your beak."
+  "You set the empty cup down."
+  jump go_to_beach

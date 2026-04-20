@@ -234,6 +234,7 @@ function parseNarrat(file: string): DialogNode[] {
   const lines = tokenize(file, src);
   const nodes: DialogNode[] = [];
   const cursor = { i: 0 };
+  const sourceFile = file.split("/").pop()!.replace(/\.narrat$/, "");
 
   while (cursor.i < lines.length) {
     const head = lines[cursor.i];
@@ -251,7 +252,7 @@ function parseNarrat(file: string): DialogNode[] {
     const id = labelMatch[1];
     cursor.i++;
     const statements = parseLabelBody(lines, 2, cursor);
-    nodes.push({ id, scene: null, sacred: false, statements });
+    nodes.push({ id, scene: null, sacred: false, sourceFile, statements });
   }
   return nodes;
 }

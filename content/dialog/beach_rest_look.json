@@ -2,6 +2,7 @@
   "id": "beach_rest_look",
   "scene": null,
   "sacred": false,
+  "sourceFile": "game",
   "statements": [
     {
       "op": "say",

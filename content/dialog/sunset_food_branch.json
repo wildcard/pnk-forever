@@ -2,6 +2,7 @@
   "id": "sunset_food_branch",
   "scene": null,
   "sacred": false,
+  "sourceFile": "sunset",
   "statements": [
     {
       "op": "if",

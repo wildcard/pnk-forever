@@ -2,6 +2,7 @@
   "id": "kitchen_conversation",
   "scene": null,
   "sacred": false,
+  "sourceFile": "japan",
   "statements": [
     {
       "op": "if",

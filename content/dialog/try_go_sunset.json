@@ -2,6 +2,7 @@
   "id": "try_go_sunset",
   "scene": null,
   "sacred": false,
+  "sourceFile": "beach",
   "statements": [
     {
       "op": "if",

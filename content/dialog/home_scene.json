@@ -2,6 +2,7 @@
   "id": "home_scene",
   "scene": null,
   "sacred": true,
+  "sourceFile": "japan",
   "statements": [
     {
       "op": "set_scene",

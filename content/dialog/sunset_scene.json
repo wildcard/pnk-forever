@@ -2,6 +2,7 @@
   "id": "sunset_scene",
   "scene": null,
   "sacred": false,
+  "sourceFile": "sunset",
   "statements": [
     {
       "op": "set_scene",

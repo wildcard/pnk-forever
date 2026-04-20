@@ -2,6 +2,7 @@
   "id": "beach_scene",
   "scene": null,
   "sacred": false,
+  "sourceFile": "beach",
   "statements": [
     {
       "op": "set_scene",

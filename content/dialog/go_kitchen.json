@@ -2,6 +2,7 @@
   "id": "go_kitchen",
   "scene": null,
   "sacred": false,
+  "sourceFile": "japan",
   "statements": [
     {
       "op": "if",

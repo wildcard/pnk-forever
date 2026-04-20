@@ -2,6 +2,7 @@
   "id": "try_leave",
   "scene": null,
   "sacred": false,
+  "sourceFile": "game",
   "statements": [
     {
       "op": "if",

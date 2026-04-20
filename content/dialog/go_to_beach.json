@@ -2,6 +2,7 @@
   "id": "go_to_beach",
   "scene": null,
   "sacred": false,
+  "sourceFile": "game",
   "statements": [
     {
       "op": "jump",

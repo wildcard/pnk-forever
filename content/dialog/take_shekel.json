@@ -2,6 +2,7 @@
   "id": "take_shekel",
   "scene": null,
   "sacred": false,
+  "sourceFile": "beach",
   "statements": [
     {
       "op": "if",

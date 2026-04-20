@@ -2,6 +2,7 @@
   "id": "sunset_conversation",
   "scene": null,
   "sacred": false,
+  "sourceFile": "sunset",
   "statements": [
     {
       "op": "if",

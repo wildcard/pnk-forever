@@ -2,6 +2,7 @@
   "id": "jaffa_street_scene",
   "scene": null,
   "sacred": false,
+  "sourceFile": "jaffa",
   "statements": [
     {
       "op": "set_scene",

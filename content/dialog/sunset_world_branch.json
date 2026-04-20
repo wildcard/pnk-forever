@@ -2,6 +2,7 @@
   "id": "sunset_world_branch",
   "scene": null,
   "sacred": false,
+  "sourceFile": "sunset",
   "statements": [
     {
       "op": "if",

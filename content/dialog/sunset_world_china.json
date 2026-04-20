@@ -2,6 +2,7 @@
   "id": "sunset_world_china",
   "scene": null,
   "sacred": false,
+  "sourceFile": "sunset",
   "statements": [
     {
       "op": "choice",

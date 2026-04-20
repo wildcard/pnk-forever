@@ -2,6 +2,7 @@
   "id": "chapter_3_start",
   "scene": null,
   "sacred": false,
+  "sourceFile": "game",
   "statements": [
     {
       "op": "say",
