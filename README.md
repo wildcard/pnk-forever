@@ -24,13 +24,13 @@ Created on April 21, 2022 - the first anniversary of the day Phoenix met Anastas
 
 **April 21, 2021. Friday. Geula Beach, Tel Aviv.**
 
-Phoenix came down from Geula, riding her Brompton bicycle with Caro in the basket, just looking for a rest stop to get some water, to cool down from the heat. She folded the back wheel, grabbed a sip of water, and then...
+*K* came down from Geula on his Brompton, Caro curled up in the front basket. Just a water stop. Somewhere to cool off, fold the back wheel, catch his breath.
 
-She appeared.
+He looked up.
 
-Wait, no. Phoenix was already there. Then *K* appeared.
+*P* was there.
 
-A dog on a bicycle. Not just any dog - a peacockdog wearing colorful feathers. A shiba riding a Brompton folding bicycle.
+From her side of the beach, what she saw was this: a dog on a bicycle. Not just any dog — a peacockdog wearing colorful feathers. A shiba riding a Brompton folding bicycle.
 
 From that moment on, they've been inseparable.
 
