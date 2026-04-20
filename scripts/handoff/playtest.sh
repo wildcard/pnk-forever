@@ -132,9 +132,11 @@ async function runPlaytest() {
     // === Phase 4: Narrative progression - play deep into the game ===
     console.error('Phase 4: Progressing through narrative...');
     const uniqueTexts = new Set();
+    const seenChoiceSets = new Map(); // key: joined options, value: count of visits
+    const takenChoices = new Set();  // "choiceSetKey||optionText" of options we've already clicked
     let choicesEncounters = 0;
     let successfulChoiceClicks = 0;
-    let maxIterations = 150;  // Play through much more of the game
+    let maxIterations = 250;  // Play deep into the game
 
     for (let i = 0; i < maxIterations; i++) {
       const state = await page.evaluate(() => {
@@ -143,10 +145,12 @@ async function runPlaytest() {
         const textEl = newBox?.querySelector('.text-command');
         const text = (textEl?.textContent || newBox?.textContent || '').trim();
 
-        const choiceEls = newBox?.querySelectorAll('.dialog-choice') || [];
+        // Only look at choices INSIDE the active choices container, not history
+        const choicesWrap = document.querySelector('.dialog-choices');
+        const choiceEls = choicesWrap ? choicesWrap.querySelectorAll('.dialog-choice') : [];
         const choices = Array.from(choiceEls).map(el => ({
-          text: el.textContent.trim(),
-          disabled: el.classList.contains('disabled'),
+          text: (el.querySelector('.choice-text')?.textContent || el.textContent || '').trim(),
+          disabled: el.classList.contains('disabled') || el.hasAttribute('disabled'),
         }));
 
         return { hasChoices, text: text.substring(0, 200), choices };
@@ -164,20 +168,47 @@ async function runPlaytest() {
           await page.screenshot({ path: `${OUTPUT_DIR}/04-first-choice.png` });
         }
 
-        // Click the first non-"Back" enabled choice
-        const clicked = await page.evaluate(() => {
-          const choices = Array.from(document.querySelectorAll('.dialog-box-new .dialog-choice'));
-          // Prefer choices that aren't "Back" - try to progress forward
-          const forward = choices.find(c =>
-            !c.classList.contains('disabled') &&
-            !c.textContent.trim().toLowerCase().includes('back')
-          ) || choices.find(c => !c.classList.contains('disabled'));
-          if (forward) {
-            forward.click();
-            return forward.textContent.trim();
+        // Track which choice set we're in
+        const choiceKey = state.choices.map(c => c.text).sort().join('|');
+        seenChoiceSets.set(choiceKey, (seenChoiceSets.get(choiceKey) || 0) + 1);
+
+        // Exploration strategy: prefer options we haven't clicked yet in THIS choice set
+        const visits = seenChoiceSets.get(choiceKey);
+        const options = state.choices.filter(c => !c.disabled);
+        let pickIdx = 0;
+        const untried = options.findIndex(c =>
+          !takenChoices.has(choiceKey + '||' + c.text) &&
+          !c.text.toLowerCase().includes('back')
+        );
+        if (untried >= 0) {
+          pickIdx = untried;
+        } else {
+          // Cycle through options based on visit count to ensure variety
+          const forward = options.filter(c => !c.text.toLowerCase().includes('back'));
+          if (forward.length > 0) {
+            const cycleOpts = forward;
+            pickIdx = options.indexOf(cycleOpts[(visits - 1) % cycleOpts.length]);
+          }
+        }
+
+        const picked = options[pickIdx] || options[0];
+        if (picked) {
+          takenChoices.add(choiceKey + '||' + picked.text);
+        }
+        const targetText = picked ? picked.text : null;
+
+        const clicked = await page.evaluate((target) => {
+          const choices = Array.from(document.querySelectorAll('.dialog-choices .dialog-choice'));
+          const enabled = choices.filter(c => !c.classList.contains('disabled') && !c.hasAttribute('disabled'));
+          const getText = el => (el.querySelector('.choice-text')?.textContent || el.textContent || '').trim();
+          const match = target ? enabled.find(c => getText(c) === target) : null;
+          const pick = match || enabled[0];
+          if (pick) {
+            pick.click();
+            return getText(pick);
           }
           return null;
-        });
+        }, targetText);
 
         if (clicked) {
           successfulChoiceClicks++;
@@ -185,7 +216,7 @@ async function runPlaytest() {
             findings.ready_criteria.choices_work = true;
             findings.positives.push('Choices advance the game');
           }
-          await page.waitForTimeout(1200);
+          await page.waitForTimeout(1000);
         } else {
           console.error(`  Stuck: no clickable choice at step ${i}`);
           break;

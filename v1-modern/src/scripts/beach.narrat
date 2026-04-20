@@ -1,78 +1,96 @@
 beach_scene:
   set_screen beach
   "You are on the beach."
-  "The fascinating **DOG** is here"
+  "The fascinating DOG is here"
 
   set data.knows_name false
   set data.talked_business false
   set data.talked_artist false
   set data.has_shekel false
+  set data.can_go_sunset false
 
+  jump beach_choice
+
+beach_choice:
   choice:
+    "What do you want to do on the beach?"
     "Look at the beach":
       "You are on the sandy beach of TLV."
-      jump beach_scene
+      jump beach_choice
     "Look at the bicycle":
       "A bicycle. It's a Brompton, a folding bicycle."
-      jump beach_scene
+      jump beach_choice
     "Take the shekel":
-      if (== $data.has_shekel false):
-        set data.has_shekel true
-        "You bend down and pick up the tiny, shiny coin."
-        ""
-        "*Now it's in your **inventory**, and you can use it at any time, anywhere. (Don't spend it all in one place!)*"
-      jump beach_scene
+      jump take_shekel
     "Talk to the dog":
       jump talk_to_k
     "Try to go south":
       jump try_go_sunset
 
+take_shekel:
+  if (== $data.has_shekel false):
+    set data.has_shekel true
+    "You bend down and pick up the tiny, shiny coin."
+    ""
+    "Now it's in your inventory, and you can use it at any time, anywhere."
+  jump beach_choice
+
 talk_to_k:
-  talk k idle "'Hi,' he says, 'How can I help you?'"
+  talk k idle "Hi, he says, How can I help you?"
 
   choice:
+    "What will you ask the dog?"
     "What's your NAME?":
-      "'My name is **K.** It's actually 'Ehecatl' but everybody calls me **K.**'"
+      "My name is K. It's actually Ehecatl but everybody calls me K."
       set data.knows_name true
       jump talk_to_k_named
     "Your BICYCLE is cool, what is it?":
-      "'It's a Brompton, it's a folding bicycle'"
+      "It's a Brompton, it's a folding bicycle"
       jump talk_to_k
     "Back":
-      jump beach_scene
+      jump beach_choice
 
 talk_to_k_named:
+  if (== $data.knows_name false):
+    jump talk_to_k
   choice:
-    "I've a BUSINESS question, do you mind?" if $data.knows_name:
-      "'Not at all, ask away'"
+    "Now that you know his name, what next?"
+    "I've a BUSINESS question, do you mind?":
+      "Not at all, ask away"
       set data.talked_business true
       jump talk_to_k_business
     "Back":
-      jump beach_scene
+      jump beach_choice
 
 talk_to_k_business:
+  if (== $data.talked_business false):
+    jump talk_to_k_named
   choice:
-    "I'm an ARTIST, I thought to start dog portrait business" if $data.talked_business:
-      "'I'm not sure I'm up to it, but I'm sure you can help me out here. I know various dog association people & I've some business experience myself'"
-      "'I'll be glad to help out'"
+    "What's your business idea?"
+    "I'm an ARTIST, I thought to start dog portrait business":
+      "I'm not sure I'm up to it, but I'm sure you can help me out here."
+      "I know various dog association people and I've some business experience myself"
+      "I'll be glad to help out"
       set data.talked_artist true
       jump talk_to_k_continue
     "Back":
-      jump beach_scene
+      jump beach_choice
 
 talk_to_k_continue:
+  if (== $data.talked_artist false):
+    jump talk_to_k_business
   choice:
-    "The sun is going down. Want to CONTINUE our conversation to the sunset?" if (&& $data.talked_business $data.talked_artist):
-      "'Sure, I've never met someone like you. I would love that'"
-      "'Let's walk beside the sunset to Jaffa. It's **SOUTH** of here'"
+    "The sun is setting. What now?"
+    "The sun is going down. Want to CONTINUE to the sunset?":
+      "Sure, I've never met someone like you. I would love that"
+      "Let's walk beside the sunset to Jaffa. It's SOUTH of here"
       set data.can_go_sunset true
-      jump beach_scene
+      jump beach_choice
     "Back":
-      jump beach_scene
+      jump beach_choice
 
 try_go_sunset:
   if $data.can_go_sunset:
     jump sunset_scene
-  else:
-    "There's still much to do here"
-    jump beach_scene
+  "There's still much to do here"
+  jump beach_choice

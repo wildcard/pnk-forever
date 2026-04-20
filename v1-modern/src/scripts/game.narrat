@@ -4,41 +4,47 @@ main:
   "P. it's short for Phoenix, but everyone calls her P."
   "P. is a very nice, friendly, and helpful bird or a cat. depends on how you look at it. or her mood."
   ""
-  "She's a curious little 'birdcat'. she is always on the look for new adventures & challenges."
-  "We meet Phoenix in another ordinary day of adventures at the TLV beach. Phoenix likes the salty air at the beach & the humans catching sun."
-  "P. likes to stretch her feathers & glide above the open waters of the sea."
+  "She's a curious little birdcat. she is always on the look for new adventures and challenges."
+  "We meet Phoenix in another ordinary day of adventures at the TLV beach."
+  "Phoenix likes the salty air at the beach and the humans catching sun."
+  "P. likes to stretch her feathers and glide above the open waters of the sea."
   ""
   talk phoenix idle "Type LOOK to have a look around."
 
   choice:
+    "What will you do?"
     "Look around":
       jump beach_rest_look
     "Continue":
       jump beach_rest_look
 
 beach_rest_look:
-  "P. is taking a rest at her favorite beach restaurant, gulping her Slushy acai waiting for the winds to calm so she could enjoy the warm winds of this particular summer day."
-  "P. was contemplating about her business. P. is very talented & has many skills and she was thinking what will be her next endeavor."
+  "P. is taking a rest at her favorite beach restaurant, gulping her Slushy acai waiting for the winds to calm."
+  "P. was contemplating about her business. P. is very talented and has many skills and she was thinking what will be her next endeavor."
   ""
-  "Suddenly she spotted a dog on a bicycle, not just any dog - a peacockdog and the little that she knew is that this doggo is a shiba and that both of them will be her next adventure."
+  "Suddenly she spotted a dog on a bicycle, not just any dog - a peacockdog shiba mix that will be her next adventure."
   "She never seen a dog like that, this dog was wearing some colorful feathers - intriguing! She thought to herself"
-  "Fascinated by this dog, she decided to approach him 💬"
+  "Fascinated by this dog, she decided to approach him"
 
   set data.has_slushy false
   set data.slushy_gulps 3
   set data.can_leave false
 
   choice:
+    "There's a slushy on the table. What do you do?"
     "Take the slushy":
       set data.has_slushy true
-      "You take the slushy 🥤"
+      "You take the slushy"
       jump slushy_choice
     "Leave it":
-      jump try_leave
+      "It's too hot! You give in and take the slushy anyway."
+      set data.has_slushy true
+      jump slushy_choice
 
 slushy_choice:
   choice:
-    "Use the slushy" if (== $data.has_slushy true):
+    "The slushy is in your hand. What now?"
+    "Use the slushy":
       jump use_slushy
     "Try to leave":
       jump try_leave
@@ -50,20 +56,18 @@ use_slushy:
   "gulp"
   set data.slushy_gulps (- $data.slushy_gulps 1)
   if (> $data.slushy_gulps 0):
-    "You have %{data.slushy_gulps} slushy 🥤 left"
+    "You have some slushy left"
     jump slushy_choice
-  else:
-    "That was the last drop"
-    "You dropped the empty slushy"
-    jump go_to_beach
+  "That was the last drop"
+  "You dropped the empty slushy"
+  jump go_to_beach
 
 try_leave:
   if $data.can_leave:
     jump go_to_beach
-  else:
-    "It's too hot outside! 🥵"
-    "Maybe something COLD can help"
-    jump slushy_choice
+  "It's too hot outside!"
+  "Maybe something COLD can help"
+  jump slushy_choice
 
 go_to_beach:
   jump beach_scene

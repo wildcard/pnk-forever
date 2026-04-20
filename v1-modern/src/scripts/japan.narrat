@@ -1,33 +1,43 @@
 japan_scene:
   set_screen japan
-  "You're in Kyoto, Japan 🏯"
-  "K. is with you 🖤"
-
+  "You are in Kyoto, Japan"
+  "K. is with you"
   choice:
+    "Where to?"
     "Go north to the apartment":
       jump kyoto_apt_scene
+    "Stay here":
+      jump japan_scene
 
 kyoto_apt_scene:
   set_screen kyoto_apt
   "You're in your cozy Japanese apartment"
-  "You smell a wonderful smell, something is cooking in the **KITCHEN**."
+  "You smell a wonderful smell, something is cooking in the KITCHEN."
 
   set data.wearing_slippers false
+  set data.has_tiger_sign false
 
+  jump kyoto_apt_choice
+
+kyoto_apt_choice:
   choice:
-    "Use the slippers (Uwabaki)":
-      "You wear your nice & clean house slippers 'Uwabaki' instead of your dirty shoes"
+    "What do you want to do?"
+    "Use the slippers Uwabaki":
+      "You wear your nice and clean house slippers Uwabaki instead of your dirty shoes"
       set data.wearing_slippers true
-      jump kyoto_apt_scene
+      jump kyoto_apt_choice
     "Take Tiger Zodiac Sign":
-      "You found your Zodiac sign. The Tiger 🐅"
+      "You found your Zodiac sign. The Tiger"
       set data.has_tiger_sign true
-      jump kyoto_apt_scene
-    "Go east to the kitchen" if $data.wearing_slippers:
-      jump kitchen_scene
-    "Try to go to kitchen" if (== $data.wearing_slippers false):
-      "K. yells at you! No walking in the house with dirty shoes!"
-      jump kyoto_apt_scene
+      jump kyoto_apt_choice
+    "Go east to the kitchen":
+      jump go_kitchen
+
+go_kitchen:
+  if (== $data.wearing_slippers false):
+    "K. yells at you! No walking in the house with dirty shoes!"
+    jump kyoto_apt_choice
+  jump kitchen_scene
 
 kitchen_scene:
   set_screen kitchen
@@ -49,71 +59,126 @@ kitchen_conversation:
   talk k idle "What would you like to know?"
 
   choice:
-    "What're you MAKING? 🍜" if (== $data.talked_making false):
-      "'I'm making dim sum.'"
-      set data.talked_making true
-      jump kitchen_conversation
-    "I LOVE you 🧡" if (== $data.talked_love false):
-      "'I love you too. 🖤'"
-      set data.talked_love true
-      run trigger_easter_egg pnk_love
-      jump kitchen_conversation
-    "Take fancy chopsticks" if (== $data.has_chopsticks false):
-      "You found your fancy chopsticks."
-      set data.has_chopsticks true
-      jump kitchen_conversation
-    "Eat the dumplings" if (&& $data.has_chopsticks (== $data.ate_dumplings false)):
-      "You eat the Japanese dumpling. yum yum yum"
-      set data.ate_dumplings true
-      jump kitchen_conversation
-    "What's the deal with the TIGER sign? 🐅📖" if (&& $data.ate_dumplings (== $data.talked_tiger false)):
-      "'This is your Zodiac sign, the Tiger'"
-      set data.talked_tiger true
-      jump kitchen_conversation
-    "What is your ZODIAC sign?" if (&& $data.talked_tiger (== $data.talked_zodiac false)):
-      "'I'm Snake 🐍'"
-      set data.talked_zodiac true
-      jump kitchen_conversation
-    "How will our FUTURE be like?" if (&& $data.talked_zodiac (== $data.talked_future false)):
-      "'Our relationship will grow only stronger & stronger with the years.'"
-      "'We will continue to challenge each other & make each other stronger, better together as a whole.'"
-      "'You're my protector & I'm yours'"
-      "'Stronger together, we're one. To eternity.'"
-      "'I've prepared a small gift for you. It's my **ZODIAC** sign, the **SNAKE**, to always protect you and help you be strong.'"
-      set data.talked_future true
-      jump give_necklace
-    "Use the necklace" if $data.has_necklace:
-      jump use_necklace
+    "What do you want to talk about or do?"
+    "What're you MAKING?":
+      jump talk_making
+    "I LOVE you":
+      jump talk_love
+    "Take fancy chopsticks":
+      jump take_chopsticks
+    "Eat the dumplings":
+      jump eat_dumplings
+    "What's the deal with the TIGER sign?":
+      jump talk_tiger
+    "What is your ZODIAC sign?":
+      jump talk_zodiac
+    "How will our FUTURE be like?":
+      jump talk_future
+    "Use the necklace":
+      jump use_necklace_branch
     "Back":
       jump japan_scene
 
+talk_making:
+  if $data.talked_making:
+    jump kitchen_conversation
+  "I'm making dim sum."
+  set data.talked_making true
+  jump kitchen_conversation
+
+talk_love:
+  if $data.talked_love:
+    jump kitchen_conversation
+  "I love you too."
+  set data.talked_love true
+  run trigger_easter_egg pnk_love
+  jump kitchen_conversation
+
+take_chopsticks:
+  if $data.has_chopsticks:
+    jump kitchen_conversation
+  "You found your fancy chopsticks."
+  set data.has_chopsticks true
+  jump kitchen_conversation
+
+eat_dumplings:
+  if (== $data.has_chopsticks false):
+    "You need chopsticks first"
+    jump kitchen_conversation
+  if $data.ate_dumplings:
+    jump kitchen_conversation
+  "You eat the Japanese dumpling. yum yum yum"
+  set data.ate_dumplings true
+  jump kitchen_conversation
+
+talk_tiger:
+  if (== $data.ate_dumplings false):
+    "Eat the dumplings first"
+    jump kitchen_conversation
+  if $data.talked_tiger:
+    jump kitchen_conversation
+  "This is your Zodiac sign, the Tiger"
+  set data.talked_tiger true
+  jump kitchen_conversation
+
+talk_zodiac:
+  if (== $data.talked_tiger false):
+    "Ask about the tiger first"
+    jump kitchen_conversation
+  if $data.talked_zodiac:
+    jump kitchen_conversation
+  "I'm Snake"
+  set data.talked_zodiac true
+  jump kitchen_conversation
+
+talk_future:
+  if (== $data.talked_zodiac false):
+    "Ask about the zodiac first"
+    jump kitchen_conversation
+  if $data.talked_future:
+    jump kitchen_conversation
+  "Our relationship will grow only stronger and stronger with the years."
+  "We will continue to challenge each other and make each other stronger, better together as a whole."
+  "You're my protector and I'm yours"
+  "Stronger together, we're one. To eternity."
+  "I've prepared a small gift for you. It's my ZODIAC sign, the SNAKE, to always protect you and help you be strong."
+  set data.talked_future true
+  jump give_necklace
+
 give_necklace:
-  "**K.** pulls a beautiful silver double necklace with an infinity Ouroboros amulet connected with a kite connector."
-  "'Here, put this on your neck.' K. says. Use it to wear it."
+  "K. pulls a beautiful silver double necklace with an infinity Ouroboros amulet connected with a kite connector."
+  "Here, put this on your neck. K. says. Use it to wear it."
   set data.has_necklace true
   jump kitchen_conversation
 
+use_necklace_branch:
+  if (== $data.has_necklace false):
+    "You don't have a necklace yet"
+    jump kitchen_conversation
+  jump use_necklace
+
 use_necklace:
-  "You put the necklace on your neck. 🧡🖤🧡🖤"
-  "K. says: 'I think it's time to fly back to TLV'"
-  "'Let's get out of here together & fly'"
+  "You put the necklace on your neck."
+  "K. says: I think it's time to fly back to TLV"
+  "Let's get out of here together and fly"
   run trigger_easter_egg pnk_fly
   jump fly_home
 
 fly_home:
-  "You fly back to TLV together ✈️"
+  "You fly back to TLV together"
   jump home_scene
 
 home_scene:
   set_screen home
   "You're in your home."
-  "And they lived happily ever after. In TLV Israel ✡️"
+  "And they lived happily ever after. In TLV Israel"
   "THE END"
-  "🧡🖤 For Anastasia. Forever. 🧡🖤"
+  "For Anastasia. Forever."
 
   choice:
-    "I Love you 🧡":
-      "'I love you too. 🖤'"
+    "The end. What now?"
+    "I Love you":
+      "I love you too."
       run trigger_easter_egg pnk_love
       jump home_scene
     "Play again":
