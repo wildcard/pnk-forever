@@ -14,18 +14,18 @@ beach_scene:
 beach_choice:
   choice:
     "What do you want to do on the beach?"
+    "Talk to the dog":
+      jump talk_to_k
+    "Try to go south":
+      jump try_go_sunset
+    "Take the shekel":
+      jump take_shekel
     "Look at the beach":
       "Wide sand, turquoise water. Tel Aviv in gentle chaos behind you."
       jump beach_choice
     "Look at the bicycle":
       "A BROMPTON. Folds neat as a promise."
       jump beach_choice
-    "Take the shekel":
-      jump take_shekel
-    "Talk to the dog":
-      jump talk_to_k
-    "Try to go south":
-      jump try_go_sunset
 
 take_shekel:
   if (== $data.has_shekel false):
