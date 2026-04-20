@@ -225,6 +225,8 @@ Use your scheduler to run these on the cadence shown. Each entry is a shell comm
 | Hourly | Auto-merge green PRs that have `auto-merge` label | `./scripts/handoff/automerge.sh` |
 | Daily 09:00 | Regenerate assets if any prompts changed | `./scripts/handoff/maybe-regen-assets.sh` |
 | Daily 10:00 | Smoke test the deployed preview | `./scripts/handoff/smoke-preview.sh` |
+| Daily 14:00 | Run automated playtest and quality check | `./scripts/handoff/playtest.sh` |
+| After each deployment (optional) | Auto-improve based on playtest results | `./scripts/handoff/auto-improve.sh` |
 | Weekly Mon 09:00 | Review open issues, bump stale ones | `./scripts/handoff/triage.sh` |
 | On every new commit to the dev branch | Self-review the diff, comment on PR | `./scripts/handoff/self-review.sh <PR#>` |
 
@@ -234,6 +236,48 @@ Implementations live in `scripts/handoff/`. They're intentionally small — read
 
 - **Daily 17:00** — post a summary comment on the active dev branch with: PRs merged today, PRs blocked, current deployment URL.
 - **Weekly Fri 16:00** — create a tracking issue `Week of <date>: review` listing what shipped, what slipped, top 3 for next week.
+
+### Automated Playtest & Improvement System
+
+Three scripts work together to continuously test and improve game quality:
+
+**`playtest.sh`** — Automated quality check using Playwright:
+- Launches browser, loads game, captures screenshots at key points
+- Checks 6 ready-to-ship criteria:
+  1. **visuals_present** — real images loaded (not just CSS gradients)
+  2. **narrat_playable** — game loads, choices work, dialog progresses
+  3. **v0_accessible** — original text adventure still reachable
+  4. **engaging_narrative** — dialog text displays properly
+  5. **clear_choices** — interactive buttons present
+  6. **easter_eggs_work** — keyword triggers found in game
+- Generates markdown report with critical issues, warnings, improvements, and positives
+- Exit code 0 = ready to ship, 1 = needs work
+
+**`auto-improve.sh`** — Intelligent improvement loop (optional):
+- Runs playtest, analyzes failures
+- Applies automated fixes:
+  - Missing visuals → triggers `generate-assets.mjs`
+  - Missing sprites → adds `show` commands to scripts
+  - Common errors → patches code
+- Commits, pushes, waits for deployment, re-tests
+- Stops when game passes or max cycles reached (default: 5)
+
+**`continuous-improve.sh`** — Simple test loop without automation:
+- Runs playtest repeatedly (default: 10 iterations)
+- Human manually fixes issues between runs
+- Good for guided improvement without automated changes
+
+**Usage**:
+```bash
+# One-time quality check
+./scripts/handoff/playtest.sh
+
+# Automated improvement (requires GEMINI_API_KEY)
+GEMINI_API_KEY=xxx ./scripts/handoff/auto-improve.sh
+
+# Manual improvement loop (fix issues yourself between runs)
+./scripts/handoff/continuous-improve.sh
+```
 
 ---
 
@@ -246,6 +290,9 @@ Create these under `scripts/handoff/` as part of the first PR (issue I-0 below).
 - `automerge.sh` — for each PR with label `auto-merge` and green checks, `gh pr merge --squash --delete-branch`
 - `maybe-regen-assets.sh` — if `git log -1 v1-modern/scripts/generate-assets.mjs` is newer than any `public/img/*.png`, run the workflow
 - `smoke-preview.sh` — `curl` the preview, fetch `/data/config.yaml`, assert HTTP 200 and at least one expected scene key exists
+- `playtest.sh` — runs Playwright browser automation to test game quality, checks visuals/choices/progression, outputs readiness report with screenshots
+- `auto-improve.sh` — intelligent loop that runs playtest, applies automated fixes (asset generation, sprite commands, etc.), commits and deploys until game passes
+- `continuous-improve.sh` — simple wrapper around playtest.sh for repeated testing without automated fixes
 - `triage.sh` — `gh issue list --state open --json number,title,updatedAt,labels`, bump anything untouched >7 days with a comment
 - `self-review.sh <PR>` — diff the PR, post a review comment listing files changed + any red flags (files >500 lines, any `any`, any `console.log` in src/)
 
