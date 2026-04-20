@@ -4,5 +4,9 @@
   "outputDirectory": "v1-modern/dist",
   "framework": null,
   "cleanUrls": true,
-  "trailingSlash": false
+  "trailingSlash": false,
+  "rewrites": [
+    { "source": "/v0-original-text-engine", "destination": "/v0-original-text-engine/index.html" },
+    { "source": "/v0-original-text-engine/", "destination": "/v0-original-text-engine/index.html" }
+  ]
 }
