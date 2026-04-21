@@ -67,7 +67,8 @@ Chapter flow lives in `v1-modern/src/scripts/game.narrat`. `main:` shows a title
 2. **Ch 2 · The Sunset Walk** — `sunset_scene` (preset: knows_name, talked_business/artist, has_shekel, can_go_sunset)
 3. **Ch 3 · Jaffa Nights** — `jaffa_apt_scene` (preset: all Ch 2 flags + sunset topics + can_fly + agreed_to_travel)
 4. **Ch 4 · Kyoto Kitchen** — `japan_scene` → `kyoto_apt_scene` → `kitchen_scene` (preset: all Ch 3 + slept_with_k + has_kite)
-5. **Ch 5 · Forever Home** — `home_scene` (the sacred-line scene)
+5. **Ch 5 · Forever Home** — `home_scene` (the sacred-line scene — terminates cleanly after "For Anastasia. Forever.")
+6. **Ch 6 · The West Coast Years (Epilogue)** — `vancouver_intro` → `vancouver_apt_scene` → `vancouver_day_prompt` (4-topic cascade: trails, squamish-kite, north-van-persian, costco) → `vancouver_outro`. Accessed via `chapter_select` only; does **not** play after Ch 5 in the main flow (sacred-line constraint). Chronologically: years after Ch 5.
 
 ### 6. Known-good commands
 
