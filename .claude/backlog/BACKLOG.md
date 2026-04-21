@@ -78,15 +78,19 @@
 
 ## Open — producer-generated (from the legendary-game research lenses)
 
-- [ ] **[P1] Identify and document the 3–5 "remembered moments"** — Engineer-the-Moments lens (Hades, Undertale). The moments Anastasia will still remember a year from playing.
+- [x] **[P1] Identify and document the 3–5 "remembered moments"** — Engineer-the-Moments lens (Hades, Undertale). The moments Anastasia will still remember a year from playing.
   - owner: game-producer (with game-narrative input)
   - acceptance: `.claude/docs/remembered-moments.md` lists each beat + scene + why it lands for Anastasia specifically + current implementation status (PASS / WEAK / MISSING).
   - added: 2026-04-20
+  - completed: 2026-04-20
+  - result: 5 moments identified — 3 PASS (Brompton meeting, Ehecatl naming, sacred line), 2 WEAK (JAPAN/FLY pivot, necklace gift dialog). Polish budget steered to items 5 & 6 in this backlog. See `.claude/docs/remembered-moments.md`.
 
-- [ ] **[P1] Ambient-texture audit** — Night-in-the-Woods lens. Where are the quiet scenes lacking personal detail?
+- [x] **[P1] Ambient-texture audit** — Night-in-the-Woods lens. Where are the quiet scenes lacking personal detail?
   - owner: game-producer (dispatches `general-purpose` as a VN reviewer)
   - acceptance: audit report flagging at least 5 spots in the 5 narrat files where personal-detail density can go up one notch without bloat; each flagged spot has a concrete candidate line of dialog or detail to add.
   - added: 2026-04-20
+  - completed: 2026-04-20
+  - result: 7 flags filed. Producer note: Jaffa is the weakest link (flags 5, 6, 7). See `.claude/reviews/ambient-texture-audit-2026-04-20.md`. 4 of 7 flags have an author-supplied-detail option for real-memory grounding.
 
 - [x] **[P1] Landing-the-ending review** — focused pass on `japan.narrat:home_scene` + the sacred line's setup beats.
   - owner: game-narrative (brief from game-producer)

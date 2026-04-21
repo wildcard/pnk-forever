@@ -61,8 +61,8 @@ pnk-forever/
 │   ├── easter-eggs.md           ← The game-to-reality bridges
 │   └── integrations.md          ← Technical systems & architecture
 │
-└── v1-modern/                   ← Future: Modern reimagining
-    └── (coming soon)
+└── v1-modern/                   ← Volume 2: Modern Narrat edition (shipped)
+    └── src/scripts/             ← 5 chapters, playable on Vercel
 ```
 
 ---
@@ -79,21 +79,22 @@ The original game created with GitHub Copilot on the first anniversary. It tells
 
 **[Play v0 →](https://pnk-forever.vercel.app/v0-original-text-engine/)** · [source](v0-original-text-engine/)
 
-### v1: Modern Reimagining (In Planning)
+### v1: Modern Edition (Shipped)
 
-**Technology:** TBD (researching modern web game engines)
-**Created With:** Claude Code (2024-2025)
-**Status:** 📋 **PLANNING**
+**Technology:** Narrat v3 visual novel engine
+**Created With:** Claude Code (2025–2026)
+**Status:** 🚀 **LIVE ON VERCEL**
 
-Same narrative essence, same characters, same emotional beats - but brought to life with modern web technology and smart AI integration.
+Same story, same characters, same emotional beats — reimagined as a visual novel with real backgrounds, character sprites, and five chapters. The main flow runs straight through: beach → sunset → Jaffa → Japan → home. No menus in the way.
 
-**Goals:**
-- Preserve the story and soul
-- Enhanced presentation (visuals, sound, interactivity)
-- Smarter Easter egg system
-- Better mobile experience
-- Potential for expanded narrative (more years, more moments)
-- AI-enhanced dialogue and scenarios
+**Chapters:**
+1. Meet Cute — Geula Beach, the Brompton, the first conversation
+2. The Sunset Walk — south along the shore to Jaffa
+3. Jaffa Nights — the apartment, the terrace, the kite
+4. Kyoto Kitchen — three years on, dim sum and tiger signs
+5. Forever Home — the sacred line
+
+**[Play v1 →](https://pnk-forever.vercel.app)** · [source](v1-modern/)
 
 ---
 
@@ -186,31 +187,13 @@ This documentation serves two purposes:
 
 **Development Assistant:** GitHub Copilot (Tab9 era)
 
-### v1 Technology (TBD - In Research)
+### v1 Technology Stack
 
-**Goals:**
-- Modern web game engine (researching options)
-- Enhanced visuals while respecting the story
-- Smarter Easter egg system (backend, not exposed keys)
-- AI integration for dynamic elements
-- Mobile-first responsive design
-- Improved accessibility
+**Engine:** Narrat v3 (visual novel / narrative game engine)
+**Hosting:** Vercel (build output: `v1-modern/dist`)
+**Development Assistant:** Claude Code (2025–2026)
 
-**Candidates:**
-- Phaser (popular, mature, 2D focused)
-- Ren'Py Web (visual novel oriented)
-- ink + inkjs (narrative scripting)
-- Custom React/Vue + game engine
-- Godot (web export)
-- Three.js / PixiJS (if going visual)
-
-**Must Maintain:**
-- Browser-based (no installation)
-- Story-first focus
-- Lightweight and fast
-- Respect for the original's aesthetic
-
-**Development Assistant:** Claude Code (2024-2025)
+Browser-based, no installation. Story-first. The five narrat scripts compile to a single static site. Ship gate: 12 criteria, verified by an automated `game-tester` agent; three passing verdicts are archived under `.claude/test-reports/`.
 
 ---
 
@@ -275,15 +258,18 @@ One year later, Phoenix created the game with GitHub Copilot. A way to say: "Thi
 A love letter in code. A memory made interactive.
 
 ### December 2024
-**Preservation & Planning - v1 Begins**
+**Preservation — v1 Begins**
 
 With Claude Code, the project evolves:
 1. Restructured into monorepo
 2. Original preserved with full git history
 3. Complete documentation extracted
-4. Planning the modern reimagining
+4. Narrat v3 chosen as the modern engine
 
-The story continues.
+### April 2026
+**Five Chapters Shipped — v1 Live**
+
+Three years after the day on the beach. The modern edition ships with five chapters, real backgrounds, character sprites, and a kitchen crescendo that earns the sacred line. Verified by automated ship-gate passes. Ready for April 21.
 
 ---
 
@@ -401,37 +387,24 @@ Nothing is arbitrary. Everything matters.
 
 ---
 
-## What's Next
+## What's Shipped
 
-### Immediate (Current)
+- ✅ v0 preserved, never modified, playable at its original URL
+- ✅ Monorepo with full git history intact
+- ✅ Complete narrative documentation
+- ✅ v1 Modern Edition — Narrat v3, five chapters, live on Vercel
+- ✅ Main flow: beach → sunset → Jaffa → Japan → home (no chapter menu in the way)
+- ✅ Kitchen crescendo: 8-option hub split and polished; ship-gate verified
+- ✅ Final 60 seconds: Ren'Py postmortem review complete; necklace bridge, cut of surplus lines
+- ✅ Three automated ship-gate passes archived under `.claude/test-reports/`
 
-- ✅ Restructure into monorepo
-- ✅ Preserve v0 with git history
-- ✅ Extract and document complete narrative
-- ✅ Document all mechanics, characters, items, Easter eggs
-- 🔄 Research modern web game engines
-- 🔄 Design v1 architecture
-- ⏳ Plan AI integration strategy
+## What's Still Open
 
-### v1 Development
+- **Volume picker** — an in-game screen letting P choose between v0 and v1 before anything else loads. Not shipped yet; does not block the anniversary.
+- **Personal-detail density pass** — more inside-jokes and shared-memory lines in the kitchen scene. Currently scheduled for after the anniversary.
+- **Audio** — ambient beds per scene (beach waves, Kyoto rain, Tel Aviv night). No decision made; does not block the gift.
 
-- Choose technology stack
-- Design visual style (honoring original aesthetic)
-- Implement core engine
-- Port narrative to new format
-- Enhance Easter egg system (secure backend)
-- Add new content? (More years, more moments)
-- Mobile optimization
-- Accessibility improvements
-- Beta testing with Anastasia
-- Launch
-
-### Future Possibilities
-
-- **v2+:** Continued evolution
-- **Other formats:** Visual novel? Point-and-click? Interactive fiction?
-- **Other stories:** New chapters, new adventures
-- **Community:** Tools for others to create game-to-reality experiences?
+The game is ready. Everything else is polish.
 
 ---
 

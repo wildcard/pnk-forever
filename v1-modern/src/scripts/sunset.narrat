@@ -183,5 +183,41 @@ sunset_fly:
     "Back":
       jump sunset_conversation
 
+# =============================================================================
+# EASTER-EGG KEYWORD REGISTRY — single source of truth
+#
+# Every valid ID accepted by trigger_easter_egg is listed here.
+# To add a keyword: (1) add the ID below, (2) add the dialog keyword
+# in ALL-CAPS in the relevant .narrat file, (3) add the run call.
+# To rename: update this list AND every `run trigger_easter_egg <id>` call.
+#
+# Canonical keyword → ID mapping (keyword appears ALL-CAPS in player dialog):
+#   MANGO       → pnk_mango       (sunset.narrat)
+#   TEA         → pnk_drink       (sunset.narrat) [NOTE: ID predates rename]
+#   CHOCOLATE   → pnk_chocolate   (sunset.narrat)
+#   KITE        → pnk_kite        (jaffa.narrat)
+#   LOVE        → pnk_love        (japan.narrat)
+#   FLY         → pnk_fly         (japan.narrat)
+#   TIGER       → pnk_tiger       (japan.narrat — not yet wired)
+#   SNAKE       → pnk_snake       (japan.narrat — not yet wired)
+#   ZODIAC      → pnk_zodiac      (japan.narrat — not yet wired)
+#   FUTURE      → pnk_future      (japan.narrat — not yet wired)
+#   NECKLACE    → pnk_necklace    (japan.narrat — not yet wired)
+#   BROMPTON    → pnk_brompton    (beach.narrat  — not yet wired)
+#   JAFFA       → pnk_jaffa       (sunset.narrat — not yet wired)
+#   KYOTO       → pnk_kyoto       (japan.narrat  — not yet wired)
+#   SUNSET      → pnk_sunset      (sunset.narrat — not yet wired)
+#   SLIPPERS    → pnk_slippers    (japan.narrat  — not yet wired)
+#   DIM SUM     → pnk_dimsum      (japan.narrat  — not yet wired)
+#
+# VALID_IDS: pnk_mango pnk_drink pnk_chocolate pnk_kite pnk_love pnk_fly
+#            pnk_tiger pnk_snake pnk_zodiac pnk_future pnk_necklace
+#            pnk_brompton pnk_jaffa pnk_kyoto pnk_sunset pnk_slippers
+#            pnk_dimsum
+# =============================================================================
+
 trigger_easter_egg event_name:
+  # Stub — no-op today. JS runtime may override this function to handle
+  # unlocks, achievements, or analytics. Unknown IDs produce a console
+  # warning in the JS layer (see src/index.ts when implemented).
   return true
