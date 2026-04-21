@@ -15,7 +15,7 @@ You are the lead coder continuing development of **PNK Forever**, an anniversary
   - **Volume 2 — Modern Edition**: `v1-modern/` — a Narrat v3 visual novel with real backgrounds, sprites, and 5 chapters. This is where active development happens.
 - **Main characters**: P. (Phoenix — a bird-cat), K. (Ehecatl — a peacock-tailed shiba dog).
 - **Tone**: warm, witty, intimate. Easter-egg keywords in ALL-CAPS feel like inside jokes.
-- **Sacred easter-egg keywords that must keep appearing**: MANGO, TEA, CHOCOLATE, KITE, LOVE, FLY, TIGER, SNAKE, ZODIAC, FUTURE, NECKLACE, BROMPTON, JAFFA, JAPAN, and the discount code `PNK-n3zk7MAMBG-GIFT`.
+- **Sacred easter-egg keywords that must keep appearing**: see the canonical list in [`docs/easter-eggs.md`](docs/easter-eggs.md#canonical-keyword-list). That file is the single source of truth — do not re-list keywords here or anywhere else (playtest and CI read from it at runtime; duplicating invites silent drift).
 
 ### 2. Repo layout
 

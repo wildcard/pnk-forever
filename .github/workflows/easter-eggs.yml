@@ -1,0 +1,26 @@
+name: easter-egg keywords
+
+# Fails if any keyword in docs/easter-eggs.md's canonical keyword block is
+# absent from every v1-modern/src/scripts/*.narrat file. Prevents the silent
+# drift described in issue #6.
+#
+# This workflow does not use any untrusted input (no github.event.* in run:
+# commands); it only runs a checked-in script.
+
+on:
+  pull_request:
+    paths:
+      - 'docs/easter-eggs.md'
+      - 'v1-modern/src/scripts/**.narrat'
+      - 'scripts/check-easter-eggs.sh'
+      - '.github/workflows/easter-eggs.yml'
+  push:
+    branches: [main]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify every canonical keyword appears in some narrat script
+        run: bash scripts/check-easter-eggs.sh
