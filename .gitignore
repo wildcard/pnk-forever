@@ -71,6 +71,11 @@ typings/
 # dotenv environment variables file
 .env
 .env.test
+# Vite-style local env files (VITE_* keys loaded by `import.meta.env`).
+# NEVER commit these — they hold secrets like OpenRouter API keys.
+.env.local
+.env.*.local
+*.env.local
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache
@@ -102,3 +107,8 @@ dist
 
 # TernJS port file
 .tern-port
+
+# Editor / tooling caches — never commit
+.claude/tsc-cache/
+.playwright-mcp/
+RESUME.md

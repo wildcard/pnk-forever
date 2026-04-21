@@ -1,6 +1,7 @@
 main:
   set_screen beach_rest
   tester_route
+  ai_demo_route
   "P. & K. — A Love Story in Two Volumes"
   ""
   jump chapter_1_start

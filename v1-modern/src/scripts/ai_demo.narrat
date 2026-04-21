@@ -1,0 +1,31 @@
+ai_demo_start:
+  set_screen jaffa_apt
+  "Chapter X — A Conversation With K."
+  "(AI NPC demo — K.'s lines are generated live when ?ai=1 is set.)"
+  ""
+  jump ai_demo_question_1
+
+ai_demo_question_1:
+  talk phoenix idle "So — if you could live anywhere, anywhere at all, where would it be?"
+  "K. tilts his head, thinking…"
+  ai_say k idle "Where would you live if you could pick anywhere at all? Keep it warm and specific — name a city, a smell, a season."
+  jump ai_demo_question_2
+
+ai_demo_question_2:
+  talk phoenix idle "And what would we eat there? Be honest."
+  "K. grins, peacock feathers rustling…"
+  ai_say k idle "Your partner just asked what you'd eat together somewhere you love. Name a specific dish, weave in MANGO or CHOCOLATE or TEA if it fits."
+  jump ai_demo_question_3
+
+ai_demo_question_3:
+  talk phoenix idle "One more. What do you want to be doing in ten years?"
+  "K. looks at P. the way he always does…"
+  ai_say k idle "Tell your partner what your life looks like with them in ten years. Keep it intimate. One or two sentences."
+  jump ai_demo_end
+
+ai_demo_end:
+  "The conversation settles. Outside, the city hums."
+  ""
+  "— end of AI demo. Continuing into the authored story… —"
+  ""
+  jump chapter_1_start
