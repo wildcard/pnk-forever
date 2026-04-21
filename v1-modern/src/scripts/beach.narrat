@@ -8,6 +8,9 @@ beach_scene:
   set data.talked_artist false
   set data.has_shekel false
   set data.can_go_sunset false
+  set data.looked_beach false
+  set data.looked_bicycle false
+  set data.talked_bicycle false
 
   jump beach_choice
 
@@ -21,11 +24,23 @@ beach_choice:
     "Take the shekel":
       jump take_shekel
     "Look at the beach":
-      "Wide sand, turquoise water. Tel Aviv in gentle chaos behind you."
-      jump beach_choice
+      jump look_beach
     "Look at the bicycle":
-      "A BROMPTON. Folds neat as a promise."
-      jump beach_choice
+      jump look_bicycle
+
+look_beach:
+  if $data.looked_beach:
+    jump look_bicycle
+  "Wide sand, turquoise water. Tel Aviv in gentle chaos behind you."
+  set data.looked_beach true
+  jump beach_choice
+
+look_bicycle:
+  if $data.looked_bicycle:
+    jump talk_to_k
+  "A BROMPTON. Folds neat as a promise."
+  set data.looked_bicycle true
+  jump beach_choice
 
 take_shekel:
   if (== $data.has_shekel false):
@@ -45,10 +60,16 @@ talk_to_k:
       set data.knows_name true
       jump talk_to_k_named
     "Your BICYCLE is cool, what is it?":
-      talk k idle "A BROMPTON. I can fold it up and take it anywhere."
-      jump talk_to_k
+      jump talk_bicycle
     "Back":
       jump beach_choice
+
+talk_bicycle:
+  if $data.talked_bicycle:
+    jump talk_to_k_named
+  talk k idle "A BROMPTON. I can fold it up and take it anywhere."
+  set data.talked_bicycle true
+  jump talk_to_k
 
 talk_to_k_named:
   if (== $data.knows_name false):
