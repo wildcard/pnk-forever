@@ -69,6 +69,8 @@ kitchen_scene:
 kitchen_conversation:
   if $data.has_necklace:
     jump use_necklace
+  if $data.ate_dumplings:
+    jump kitchen_hub_b
   talk k idle "What would you like to know?"
 
   choice:
@@ -81,6 +83,14 @@ kitchen_conversation:
       jump take_chopsticks
     "Eat the dumplings":
       jump eat_dumplings
+
+kitchen_hub_b:
+  if $data.has_necklace:
+    jump use_necklace
+  talk k idle "The steam's gone. You're still here."
+
+  choice:
+    "What else?"
     "What's the deal with the TIGER sign?":
       jump talk_tiger
     "What is your ZODIAC sign?":

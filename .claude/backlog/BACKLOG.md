@@ -13,10 +13,12 @@
 
 ## Open — migrated from `docs/issues-session/SESSION-GAPS.md`
 
-- [ ] **[P0] Run the first full `game-tester` pass against the live build** — we have the agent but have never actually dispatched it end-to-end.
+- [x] **[P0] Run the first full `game-tester` pass against the live build** — we have the agent but have never actually dispatched it end-to-end.
   - owner: game-tester (dispatched by game-producer)
   - acceptance: a SHIP/BLOCK verdict report saved under `.claude/test-reports/<yyyy-mm-dd>.md` with pass/fail per chapter + per easter-egg keyword + sacred-line check.
   - added: 2026-04-20
+  - completed: 2026-04-20
+  - result: **BLOCK** — one P0 blocker (kitchen 8-option hub exceeds 6-visit cap). 5/12 criteria PASS as isolated checks; Ch 1–4 fail because all funnel into Ch5 kitchen. Sacred line + backgrounds + sprites + 0 console.errors all GREEN. Full report: `.claude/test-reports/2026-04-20.md`.
   - source: SESSION-GAPS.md #10
 
 - [ ] **[P0] Volume picker UI before chapter select** — let Anastasia pick Volume 1 (v0) or Volume 2 (v1) at game start.
@@ -53,6 +55,24 @@
   - acceptance: test report contains pass/fail per viewport — at minimum 375x667 (iPhone SE), 390x844 (iPhone 14), 768x1024 (iPad).
   - added: 2026-04-20
   - source: SESSION-GAPS.md #15
+
+---
+
+## Open — filed from the 2026-04-20 ship-gate verdict
+
+- [x] **[P0] Split `kitchen_conversation` 8-option hub into two 4-option hubs** — current hub in `v1-modern/src/scripts/japan.narrat:69` requires 7+ visits to clear; 6-visit ship-gate cap aborts Ch 1–4 (all funnel into Ch5 kitchen).
+  - owner: game-narrative
+  - acceptance: `kitchen_conversation` is replaced by two sequential hubs (Hub A: MAKING / LOVE / chopsticks / dumplings; Hub B: TIGER / ZODIAC / FUTURE / necklace). Each hub ≤4 options. Existing per-topic cascade guards (`if $data.talked_x: jump ...`) remain valid. After the split, dispatch `game-tester` for re-verdict — expected SHIP.
+  - added: 2026-04-20
+  - completed: 2026-04-20
+  - source: `.claude/test-reports/2026-04-20.md` — Blocker #1
+  - result: **SHIP** — Hub A clears in 4 visits, Hub B clears in 3 visits, dispatcher guard fires on N+1, all 4 keywords (TIGER/ZODIAC/FUTURE/NECKLACE) intact, sacred line untouched. Re-verdict: `.claude/test-reports/2026-04-20-reverdict.md`.
+
+- [ ] **[P3] game-tester harness ergonomics — 3 polish items** — noted during the inaugural run, do not block shipping.
+  - owner: game-tester (self-improvement PR to its own agent spec, not the game)
+  - acceptance: (a) wait for `.interact-button` before reading dialog text (currently polls mid-animation, misses BROMPTON in `game.narrat:119`); (b) scan `document.body.innerText` for sacred-line check (currently reads `.dialog-box-new` and captures mid-animation truncation); (c) install Playwright types so scratch `.mjs` scripts under `/tmp/` stop throwing TS `7016` diagnostics.
+  - added: 2026-04-20
+  - source: `.claude/test-reports/2026-04-20.md` — Non-blocking observations
 
 ---
 
