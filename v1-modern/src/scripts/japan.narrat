@@ -69,6 +69,8 @@ kitchen_scene:
 kitchen_conversation:
   if $data.has_necklace:
     jump use_necklace
+  if $data.talked_zodiac:
+    jump talk_future
   talk k idle "What would you like to know?"
 
   choice:

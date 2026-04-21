@@ -18,6 +18,11 @@ sunset_scene:
   set data.talked_china false
   set data.talked_japan false
   set data.can_fly false
+  set data.world_germany false
+  set data.world_india false
+  set data.world_france false
+  set data.world_italy false
+  set data.world_usa false
 
   jump sunset_conversation
 
@@ -139,27 +144,57 @@ sunset_world:
       set data.agreed_to_travel true
       jump sunset_fly
     "GERMANY":
-      talk k idle "Berlin? Ich bin ein Berliner."
-      talk phoenix idle "Hmm. On second thought — not Germany."
-      jump sunset_world
+      jump sunset_world_germany
     "CHINA":
       talk phoenix idle "Too big. I want somewhere we can actually live."
       set data.talked_china true
       jump sunset_world_china
     "INDIA":
-      talk k idle "The food is incredible. The rest — maybe another life."
-      jump sunset_world
+      jump sunset_world_india
     "FRANCE":
-      talk phoenix idle "Pass. You know why."
-      jump sunset_world
+      jump sunset_world_france
     "ITALY":
-      talk k idle "I love Italy. But not to live in. Not yet."
-      jump sunset_world
+      jump sunset_world_italy
     "USA":
-      talk phoenix idle "USA? Maybe. But not right now."
-      jump sunset_world
+      jump sunset_world_usa
     "Back":
       jump sunset_conversation
+
+sunset_world_germany:
+  if $data.world_germany:
+    jump sunset_world_india
+  talk k idle "Berlin? Ich bin ein Berliner."
+  talk phoenix idle "Hmm. On second thought — not Germany."
+  set data.world_germany true
+  jump sunset_world
+
+sunset_world_india:
+  if $data.world_india:
+    jump sunset_world_france
+  talk k idle "The food is incredible. The rest — maybe another life."
+  set data.world_india true
+  jump sunset_world
+
+sunset_world_france:
+  if $data.world_france:
+    jump sunset_world_italy
+  talk phoenix idle "Pass. You know why."
+  set data.world_france true
+  jump sunset_world
+
+sunset_world_italy:
+  if $data.world_italy:
+    jump sunset_world_usa
+  talk k idle "I love Italy. But not to live in. Not yet."
+  set data.world_italy true
+  jump sunset_world
+
+sunset_world_usa:
+  if $data.world_usa:
+    jump sunset_conversation
+  talk phoenix idle "USA? Maybe. But not right now."
+  set data.world_usa true
+  jump sunset_world
 
 sunset_world_china:
   choice:

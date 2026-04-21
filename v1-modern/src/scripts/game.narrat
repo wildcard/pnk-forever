@@ -45,6 +45,9 @@ chapter_2_start:
   set data.talked_artist true
   set data.can_go_sunset true
   set data.has_shekel true
+  set data.looked_beach true
+  set data.looked_bicycle true
+  set data.talked_bicycle true
   jump sunset_scene
 
 chapter_3_start:
@@ -56,6 +59,9 @@ chapter_3_start:
   set data.talked_artist true
   set data.can_go_sunset true
   set data.has_shekel true
+  set data.looked_beach true
+  set data.looked_bicycle true
+  set data.talked_bicycle true
   set data.talked_food true
   set data.talked_mango true
   set data.talked_drink true
@@ -69,6 +75,11 @@ chapter_3_start:
   set data.talked_china false
   set data.agreed_to_travel true
   set data.can_fly true
+  set data.world_germany true
+  set data.world_india true
+  set data.world_france true
+  set data.world_italy true
+  set data.world_usa true
   jump jaffa_apt_scene
 
 chapter_4_start:
@@ -80,6 +91,9 @@ chapter_4_start:
   set data.talked_artist true
   set data.can_go_sunset true
   set data.has_shekel true
+  set data.looked_beach true
+  set data.looked_bicycle true
+  set data.talked_bicycle true
   set data.talked_food true
   set data.talked_mango true
   set data.talked_drink true
@@ -95,6 +109,11 @@ chapter_4_start:
   set data.can_fly true
   set data.slept_with_k true
   set data.has_kite true
+  set data.world_germany true
+  set data.world_india true
+  set data.world_france true
+  set data.world_italy true
+  set data.world_usa true
   jump japan_scene
 
 chapter_5_start:

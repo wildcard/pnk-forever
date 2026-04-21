@@ -86,7 +86,7 @@ The option jumps forward only. No flag, no loop. Used for pure navigation.
 
 ---
 
-## The three loop-smells (reject in review)
+## The four loop-smells (reject in review)
 
 1. **Unguarded set-and-return.** Option body: `set data.x true` then `jump
    <parent_label>` with **no guard** checking `data.x` at the top of the
@@ -121,6 +121,29 @@ The option jumps forward only. No flag, no loop. Used for pure navigation.
 
    *Fix:* either promote the option to pattern (b) by advancing the scene, or
    add a cascade guard so the Nth visit jumps forward.
+
+4. **Choice block with more than 6 options.** The `game-tester` caps any
+   single label at 6 visits (rotating strategy picks option N on visit N).
+   A `choice:` block with 7+ options will be visited more than 6 times before
+   all paths are covered, triggering the cap and halting the test.
+
+   *Fix:* add a pre-choice guard at the top of the label that cascades past
+   the choice block once enough topics are covered, reducing the effective
+   visit count below the cap.
+
+   *Example — `japan.narrat:kitchen_conversation` (8 options):*
+   ```narrat
+   kitchen_conversation:
+     if $data.has_necklace:
+       jump use_necklace
+     if $data.talked_zodiac:        # ← guard added per issue #40
+       jump talk_future             # cascades past the 8-option choice block
+     talk k idle "What would you like to know?"
+     choice:
+       ...
+   ```
+   The guard fires after the 6th conversational topic (`talk_zodiac`) is
+   reached, so the label is never rendered more than 6 times.
 
 ---
 
