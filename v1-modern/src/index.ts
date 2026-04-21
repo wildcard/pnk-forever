@@ -7,22 +7,30 @@ import {
   mountAiRibbon,
   registerAiNpcPlugin,
 } from './plugins/ai-npc-plugin';
+import {
+  isTesterMode,
+  mountTesterRibbon,
+  registerTesterPlugin,
+} from './plugins/tester-plugin';
 
 // Register plugins BEFORE startApp so their customCommands are in the
 // narrat parser's root vocabulary when scripts are parsed.
 registerAiNpcPlugin();
+registerTesterPlugin();
 
 const aiMode = isAiMode();
+const testerMode = isTesterMode();
 
 window.addEventListener('load', () => {
-  // Visual tell that AI mode is on (otherwise the feature is invisible).
+  // Visual tells: AI mode (blue) and tester mode (orange) ribbons.
   mountAiRibbon();
+  mountTesterRibbon();
   startApp({
     configPath: 'data/config.yaml',
-    // Enable narrat's dev panel when AI mode is on — useful for jumping
-    // directly to an ai_demo label without playing through the prologue.
-    logging: aiMode,
-    debug: aiMode,
+    // Enable narrat's dev panel when either AI or tester mode is on —
+    // useful for jumping directly to a label without playing prologue.
+    logging: aiMode || testerMode,
+    debug: aiMode || testerMode,
     container: '#app',
     scripts,
   });

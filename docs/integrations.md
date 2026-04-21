@@ -293,33 +293,38 @@ THEN
 
 ## Deployment
 
-### Netlify
+### Vercel
 
 **Status Badge:**
 ```markdown
-[![Netlify Status](https://api.netlify.com/api/v1/badges/4f0e996c-d0d0-419c-b7e2-8b1e4ff805ac/deploy-status)](https://app.netlify.com/sites/p-n-k-forever/deploys)
+[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?logo=vercel&logoColor=white)](https://pnk-forever.vercel.app)
 ```
 
-**Configuration** (`netlify.toml`):
-```toml
-[build]
-  publish = "v0-original-text-engine"
-  command = "echo 'No build needed - static HTML'"
-
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+**Configuration** (`vercel.json`):
+```json
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "cd v1-modern && npm install && npm run build",
+  "outputDirectory": "v1-modern/dist",
+  "framework": null,
+  "cleanUrls": true,
+  "redirects": [
+    { "source": "/v0-original-text-engine", "destination": "/v0-original-text-engine/", "permanent": false },
+    { "source": "/v0", "destination": "/v0-original-text-engine/", "permanent": false }
+  ]
+}
 ```
 
 **Deployment:**
-- Static site hosting
-- No build process needed (pure HTML/JS/CSS)
-- Automatic deploys from git
-- HTTPS provided
-- CDN distribution
+- Static site hosting (v1 narrat build + v0 HTML/JS served side-by-side)
+- v1 built from `v1-modern/` via Vite; v0 served as static assets
+- Automatic deploys from git pushes to `main`
+- HTTPS + CDN distribution
+- Clean URLs (no trailing slashes except the v0 redirect)
 
-**Site URL:** https://p-n-k-forever.netlify.app (presumed)
+**Site URLs:**
+- v1 (current): https://pnk-forever.vercel.app
+- v0 (original): https://pnk-forever.vercel.app/v0-original-text-engine/
 
 ---
 

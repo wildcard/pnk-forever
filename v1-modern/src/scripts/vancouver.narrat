@@ -1,0 +1,97 @@
+vancouver_intro:
+  set_screen kits_beach
+  "KITS BEACH. Cold wet sand. Cedar on the wind. Not Tel Aviv."
+  "You miss the salt-warm. Then you don't."
+  talk k idle "Told you it'd feel like home, P. Just colder."
+  talk phoenix idle "The water's glass today. I can feel SQUAMISH already."
+  "Years after Tel Aviv. VANCOUVER, now. Inseparable, still."
+  jump vancouver_apt_scene
+
+vancouver_apt_scene:
+  set_screen vancouver_apt
+  "Your place. High ceilings. Two desks back-to-back, facing the water."
+  "On your screen: a FIFA striker mid-sprint, rendered polygon by polygon."
+  talk phoenix idle "TTTC taught me the ropes. Now I'm pushing pixels for EA — FC 26."
+  talk k idle "Meanwhile my coder AGENTS are refactoring while I make coffee."
+  talk k idle "I lead. They build. That's AI-first — the future of shipping code."
+  "The cursor blinks. Somewhere in the stack, a commit lands."
+  run trigger_easter_egg pnk_love
+  jump vancouver_day_setup
+
+vancouver_day_setup:
+  set data.did_trails false
+  set data.did_squamish false
+  set data.did_persian false
+  set data.did_costco false
+  jump vancouver_day_prompt
+
+vancouver_day_prompt:
+  choice:
+    "What do you two want to do today?"
+    "Hit the TRAILS — hike or BOARD":
+      jump did_trails
+    "SQUAMISH — go KITE":
+      jump did_squamish
+    "FESENJAN in North Van":
+      jump did_persian
+    "COSTCO run downtown":
+      jump did_costco
+    "Head home":
+      jump vancouver_outro
+
+did_trails:
+  if $data.did_trails:
+    jump did_squamish
+  set_screen vancouver_peak
+  talk k idle "The TRAIL loop above Lions Gate. BOARD or boots — your call."
+  "You hike the ridge when the snow's gone, carve it when it's in."
+  "Cedars dripping. PEAK above. City glittering somewhere below."
+  "MAPLE leaf pressed flat on the path. You pocket it."
+  set data.did_trails true
+  jump vancouver_day_prompt
+
+did_squamish:
+  if $data.did_squamish:
+    jump did_persian
+  set_screen squamish
+  talk phoenix idle "Wind's up. I'm going."
+  talk k idle "Go FLY. I'll watch from the shore."
+  "You unfurl the KITE. Phoenix wings, human harness — old grammar, new language."
+  "K. settles on a driftwood log at the edge of Howe Sound, eyes tracking you."
+  "Inseparable, even when one of you is in the air."
+  run trigger_easter_egg pnk_fly
+  set data.did_squamish true
+  jump vancouver_day_prompt
+
+did_persian:
+  if $data.did_persian:
+    jump did_costco
+  set_screen north_van_persian
+  "A small NORTH VAN restaurant. Saffron light. ROSEWATER in the air."
+  talk k idle "FESENJAN tonight. And crispy TAHDIG — the crust's the whole point."
+  "Walnut. Pomegranate. Slow-cooked for hours."
+  "You share. You always share."
+  set data.did_persian true
+  jump vancouver_day_prompt
+
+did_costco:
+  if $data.did_costco:
+    jump vancouver_outro
+  set_screen costco_downtown
+  "COSTCO. Downtown. A fluorescent cathedral of bulk."
+  talk phoenix idle "Bulk MANGO. Bulk TEA. Bulk LOVE."
+  talk k idle "That's not a product, P."
+  talk phoenix idle "Tell that to my cart."
+  "You leave with three of everything. Somehow that's romance, now."
+  set data.did_costco true
+  jump vancouver_day_prompt
+
+vancouver_outro:
+  set_screen vancouver_apt
+  "Evening. The apartment. Light on the water, thirty floors down."
+  talk k idle "Tel Aviv light. Kyoto light. Vancouver light. All of it, one long day."
+  talk phoenix idle "One long forever."
+  ""
+  "..."
+  ""
+  "And the story keeps going."

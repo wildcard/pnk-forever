@@ -35,7 +35,6 @@ pnk-forever/
 │   └── src/scripts/         ← 5 .narrat files (game, beach, sunset, jaffa, japan)
 ├── scripts/handoff/playtest.sh ← legacy playtest harness (autoplay, first-option)
 ├── vercel.json              ← cleanUrls:true, trailingSlash:false + v0 rewrites
-├── netlify.toml             ← legacy mirror
 └── HANDOVER.md              ← this file
 ```
 
@@ -68,7 +67,8 @@ Chapter flow lives in `v1-modern/src/scripts/game.narrat`. `main:` shows a title
 2. **Ch 2 · The Sunset Walk** — `sunset_scene` (preset: knows_name, talked_business/artist, has_shekel, can_go_sunset)
 3. **Ch 3 · Jaffa Nights** — `jaffa_apt_scene` (preset: all Ch 2 flags + sunset topics + can_fly + agreed_to_travel)
 4. **Ch 4 · Kyoto Kitchen** — `japan_scene` → `kyoto_apt_scene` → `kitchen_scene` (preset: all Ch 3 + slept_with_k + has_kite)
-5. **Ch 5 · Forever Home** — `home_scene` (the sacred-line scene)
+5. **Ch 5 · Forever Home** — `home_scene` (the sacred-line scene — terminates cleanly after "For Anastasia. Forever.")
+6. **Ch 6 · The West Coast Years (Epilogue)** — `vancouver_intro` → `vancouver_apt_scene` → `vancouver_day_prompt` (4-topic cascade: trails, squamish-kite, north-van-persian, costco) → `vancouver_outro`. Accessed via `chapter_select` only; does **not** play after Ch 5 in the main flow (sacred-line constraint). Chronologically: years after Ch 5.
 
 ### 6. Known-good commands
 
@@ -197,6 +197,25 @@ keep the game fresh without a specific task in mind.
   the command file.
 
 ### 11. Open work (in priority order)
+
+0. **Tester escape hatch — shipped.** Append `?tester=1` to any deploy URL
+   (e.g. `https://pnk-forever.vercel.app/?tester=1` or
+   `http://localhost:8765/?tester=1`) to:
+   - skip the linear prologue and land directly on `chapter_select`
+     (all 5 chapters pickable),
+   - show narrat's built-in **Debug Menu** (jump-to-label, skip, data
+     inspector),
+   - render a visible orange **"TESTER MODE · ?tester=1"** ribbon in the
+     top-right so the tester never confuses test-mode with the real player
+     flow.
+
+   A regular URL has zero change: `tester_route` runs as a no-op, the VM
+   advances through the narrator lines and jumps to `chapter_1_start`. The
+   plugin lives in `v1-modern/src/plugins/tester-plugin.ts`; it is invoked
+   from `game.narrat:main` as the bare keyword `tester_route` (NOT
+   `run tester_route` — narrat's built-in `run` calls scripted labels, not
+   custom plugin commands). See the file's header comment for the
+   lifecycle rationale (why a `CommandPlugin` beats `startMenuButtons`).
 
 1. **Volume-select UI** (partially scoped, not shipped). The user wants a volume picker BEFORE chapter-select. Implementation plan:
    - Register a narrat plugin in `v1-modern/src/index.ts` that adds a `CommandPlugin` with keyword `open_url` (one string arg) — runner sets `window.location.href`.
