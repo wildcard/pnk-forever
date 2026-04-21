@@ -104,6 +104,7 @@ talk_making:
   if $data.talked_making:
     jump talk_love
   talk k idle "DIM SUM. Your favorite. Almost ready."
+  talk k idle "Har gow. The translucent ones. I know you eat those first."
   set data.talked_making true
   jump kitchen_conversation
 
@@ -146,6 +147,7 @@ talk_zodiac:
   if $data.talked_zodiac:
     jump talk_future
   talk k idle "Me? I'm SNAKE. Quiet. Watchful. Patient."
+  talk k idle "I noticed you before you noticed me. That's just how I am."
   set data.talked_zodiac true
   jump kitchen_conversation
 
@@ -157,15 +159,18 @@ talk_future:
   talk k idle "Our FUTURE? Only stronger. Year after year."
   talk k idle "We'll challenge each other. Make each other better."
   talk k idle "You protect me. I protect you."
+  talk k idle "Sunday mornings. Tea. Nowhere to be. That's the whole plan."
   talk k idle "Stronger together. One. To eternity."
-  talk k idle "I have something for you. My zodiac — the SNAKE. To watch over you."
   set data.talked_future true
   jump give_necklace
 
 give_necklace:
   "K. opens a small wooden box."
   "Inside — a silver double NECKLACE. An infinity ouroboros amulet, joined by a tiny kite charm."
-  talk k idle "Here. Put it on."
+  talk k idle "Silver. Because it lasts."
+  talk k idle "The KITE — for JAFFA. That morning you found the board. I never forgot."
+  talk k idle "The SNAKE is my ZODIAC. Me, watching over you. Always."
+  talk k idle "Put it on."
   set data.has_necklace true
   jump kitchen_conversation
 

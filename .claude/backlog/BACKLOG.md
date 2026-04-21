@@ -99,21 +99,35 @@
   - completed: 2026-04-20
   - result: **POLISH-BEFORE-SHIP** — see `.claude/reviews/landing-the-ending-2026-04-20.md`. Three specific edits proposed: add one sensory line in `fly_home` bridging necklace to home; cut line 193 "And they lived, and loved..." (steals oxygen from "forever"); cut THE END + blanks. Awaiting author (user) decision before dispatching `game-narrative`.
 
-- [ ] **[P1] Ship or shelve landing-the-ending edits** — act on the reviewer's three proposed edits, or explicitly shelve them with rationale.
+- [x] **[P1] Ship or shelve landing-the-ending edits** — act on the reviewer's three proposed edits, or explicitly shelve them with rationale.
   - owner: user (decides), then game-narrative (executes)
   - acceptance: one of three outcomes — (a) all 3 edits land via game-narrative + game-tester re-pass green; (b) a subset lands with the others explicitly shelved here; (c) all 3 shelved with one-line author rationale recorded below.
   - added: 2026-04-20
+  - completed: 2026-04-20
   - source: `.claude/reviews/landing-the-ending-2026-04-20.md`
+  - result: (a) — user said "all"; all 3 edits landed in commit `ec98c1c`; game-tester SHIP verdict in `.claude/test-reports/2026-04-20-landing-reverdict.md`.
 
-- [ ] **[P2] First-60-seconds polish** — the opening minute decides whether she keeps playing.
+- [x] **[P2] First-60-seconds polish** — the opening minute decides whether she keeps playing.
   - owner: game-narrative + art-director (parallel dispatch)
   - acceptance: the intro_scene through the first choice is reviewed as a unit; one concrete improvement shipped.
   - added: 2026-04-20
+  - completed: 2026-04-20
+  - result: one line added at `game.narrat:116` — *"A napkin pinned by a seashell. This table is hers, for now."* — addressing Flag 1 of the ambient-texture audit (café lacks weight of place). Build green. Art-director flagged `beach_rest.png` as REGEN LATER; filed separately below.
 
-- [ ] **[P2] Personal-detail density pass on kitchen_conversation** — the crescendo scene; the Night-in-the-Woods lens applied to the single most emotionally-loaded scene.
+- [x] **[P2] Personal-detail density pass on kitchen_conversation** — the crescendo scene; the Night-in-the-Woods lens applied to the single most emotionally-loaded scene.
   - owner: game-narrative
   - acceptance: 3+ new lines of personal detail (inside jokes, shared-memory references, things only Anastasia will catch) added to the dim-sum / tiger / zodiac / future thread, without breaking the cascade-guard choice structure.
   - added: 2026-04-20
+  - completed: 2026-04-20
+  - result: 6 new lines landed in `japan.narrat`. Move A (Moment 4 HIGH budget): `give_necklace` expanded from "Here. Put it on." to 4 lines of *why* (silver/kite/snake/invitation); stranded zodiac-snake disclosure in `talk_future:161` folded into the box-open moment. Move B (density): har gow callback in `talk_making`, "I noticed you before you noticed me" in `talk_zodiac`, Sunday-mornings ritual in `talk_future`. Cascade verified; build green.
+
+- [ ] **[P3] Regenerate `beach_rest.png` background** — current image reads generic-romantic-dusk; doesn't carry "her café, her afternoon" mood the narrative polish is building toward, plus has a midday-vs-sunset continuity gap.
+  - owner: art-director (dispatches game-artist)
+  - acceptance: new `v1-modern/public/img/beach_rest.png` that reads as "hot bright midday at P.'s Tel Aviv café" per the brief below.
+  - prompt brief: *Tel Aviv beach café at hot bright midday, overhead sun, wooden table with colorful acai slushy, a sandy flip-flop half-visible under a rattan chair, a napkin weighted by a small seashell, Brompton bicycle leaning nearby, no people, warm haze, visual novel background, painterly, Ghibli-inspired, 16:9.*
+  - added: 2026-04-20
+  - source: art-director's audit during the Item 5/6 first-60s polish dispatch.
+  - note: **post-ship** — do not regen before 2026-04-23. The narrative line added at `game.narrat:116` does enough lifting for the anniversary ship.
 
 ---
 
