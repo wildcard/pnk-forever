@@ -88,10 +88,18 @@
   - acceptance: audit report flagging at least 5 spots in the 5 narrat files where personal-detail density can go up one notch without bloat; each flagged spot has a concrete candidate line of dialog or detail to add.
   - added: 2026-04-20
 
-- [ ] **[P1] Landing-the-ending review** — focused pass on `japan.narrat:home_scene` + the sacred line's setup beats.
+- [x] **[P1] Landing-the-ending review** — focused pass on `japan.narrat:home_scene` + the sacred line's setup beats.
   - owner: game-narrative (brief from game-producer)
   - acceptance: one-page review of the last 60 seconds of gameplay — does the sacred line earn its weight? Is the beat before it still the right beat? Include specific edits if any.
   - added: 2026-04-20
+  - completed: 2026-04-20
+  - result: **POLISH-BEFORE-SHIP** — see `.claude/reviews/landing-the-ending-2026-04-20.md`. Three specific edits proposed: add one sensory line in `fly_home` bridging necklace to home; cut line 193 "And they lived, and loved..." (steals oxygen from "forever"); cut THE END + blanks. Awaiting author (user) decision before dispatching `game-narrative`.
+
+- [ ] **[P1] Ship or shelve landing-the-ending edits** — act on the reviewer's three proposed edits, or explicitly shelve them with rationale.
+  - owner: user (decides), then game-narrative (executes)
+  - acceptance: one of three outcomes — (a) all 3 edits land via game-narrative + game-tester re-pass green; (b) a subset lands with the others explicitly shelved here; (c) all 3 shelved with one-line author rationale recorded below.
+  - added: 2026-04-20
+  - source: `.claude/reviews/landing-the-ending-2026-04-20.md`
 
 - [ ] **[P2] First-60-seconds polish** — the opening minute decides whether she keeps playing.
   - owner: game-narrative + art-director (parallel dispatch)

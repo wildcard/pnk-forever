@@ -184,14 +184,12 @@ use_necklace:
 
 fly_home:
   "You step onto the balcony. He spreads his tail. You lift off."
+  "The silver catches the wind. It stays warm against your chest."
   "The world curves beneath you — Kyoto, then cloud, then sea."
   jump home_scene
 
 home_scene:
   set_screen home
   "Home. Tel Aviv light through the window. Two cups of tea."
-  "And they lived, and loved, and kept going — forever."
-  ""
-  "THE END"
   ""
   "For Anastasia. Forever."
