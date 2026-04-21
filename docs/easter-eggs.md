@@ -12,6 +12,40 @@ This gamification of reality creates a unique experience where:
 
 ---
 
+## Canonical Keyword List
+
+This is the authoritative machine-readable keyword list. It is parsed at
+runtime by `scripts/handoff/playtest.sh` (presence check in rendered page
+content) and by `scripts/check-easter-eggs.sh` (CI check that every keyword
+appears in at least one `v1-modern/src/scripts/*.narrat` file).
+
+**Format:** one keyword per line inside the fenced block below. Do not
+reformat, add prose, or split the block — the parsers look for
+```` ```keywords ```` as the block fence.
+
+```keywords
+MANGO
+TEA
+CHOCOLATE
+KITE
+LOVE
+FLY
+TIGER
+SNAKE
+ZODIAC
+FUTURE
+NECKLACE
+BROMPTON
+JAFFA
+JAPAN
+PNK-n3zk7MAMBG-GIFT
+```
+
+When adding a new easter egg, append its keyword here *and* reference this
+list from any runtime or docs that would otherwise hard-code it.
+
+---
+
 ## IFTTT Integration System
 
 All Easter eggs use IFTTT (If This Then That) webhooks to trigger real-world actions.

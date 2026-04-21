@@ -368,14 +368,23 @@ async function runPlaytest() {
     }
 
     // === Phase 7: Easter egg keywords ===
+    // Keywords are injected via EASTER_EGG_KEYWORDS env var. The single
+    // source of truth is docs/easter-eggs.md (see the ```keywords``` fenced
+    // block). If the env var is unset the check is skipped with a warning.
     const pageContent = await page.content();
-    const eggs = ['mango', 'tea', 'chocolate', 'kite', 'love', 'fly'];
-    const foundEggs = eggs.filter(e => pageContent.toLowerCase().includes(e));
-    if (foundEggs.length >= 3) {
-      findings.ready_criteria.easter_eggs_present = true;
-      findings.positives.push(`Easter egg keywords present: ${foundEggs.join(', ')}`);
+    const rawKeywords = process.env.EASTER_EGG_KEYWORDS || '';
+    const eggs = rawKeywords.split(',').map(k => k.trim()).filter(Boolean);
+    if (eggs.length === 0) {
+      findings.warnings.push('EASTER_EGG_KEYWORDS env var empty — keyword presence check skipped');
     } else {
-      findings.improvements.push(`Only ${foundEggs.length}/6 easter egg keywords found - may need more scenes played`);
+      const foundEggs = eggs.filter(e => pageContent.toLowerCase().includes(e.toLowerCase()));
+      const threshold = Math.max(3, Math.floor(eggs.length / 3));
+      if (foundEggs.length >= threshold) {
+        findings.ready_criteria.easter_eggs_present = true;
+        findings.positives.push(`Easter egg keywords present: ${foundEggs.join(', ')}`);
+      } else {
+        findings.improvements.push(`Only ${foundEggs.length}/${eggs.length} easter egg keywords found (threshold ${threshold}) - may need more scenes played`);
+      }
     }
 
     // === Phase 8: Console errors ===
@@ -403,7 +412,20 @@ console.log(JSON.stringify(results, null, 2));
 EOTEST
 
 echo "Running automated playtest..."
-RESULTS=$(PREVIEW_URL="$URL" node test.mjs 2>/tmp/playtest-stderr.log)
+
+# Parse canonical easter-egg keywords from docs/easter-eggs.md — single
+# source of truth per issue #6. Passed as comma-separated env var to test.mjs.
+EASTER_EGG_KEYWORDS=$(awk '
+  /^```keywords$/ { inblock=1; next }
+  /^```$/ && inblock { exit }
+  inblock && NF > 0 { printf "%s%s", sep, $0; sep="," }
+' "$REPO_ROOT/docs/easter-eggs.md")
+
+if [[ -z "$EASTER_EGG_KEYWORDS" ]]; then
+  echo "WARN: no keywords parsed from docs/easter-eggs.md — easter-egg check will be skipped"
+fi
+
+RESULTS=$(PREVIEW_URL="$URL" EASTER_EGG_KEYWORDS="$EASTER_EGG_KEYWORDS" node test.mjs 2>/tmp/playtest-stderr.log)
 STDERR_OUTPUT=$(cat /tmp/playtest-stderr.log 2>/dev/null || echo "")
 
 if [[ -n "$STDERR_OUTPUT" ]]; then
