@@ -4,7 +4,15 @@ main:
   ai_demo_route
   "P. & K. — A Love Story in Two Volumes"
   ""
-  jump chapter_1_start
+  jump volume_select
+
+volume_select:
+  choice:
+    "Which volume would you like to play?"
+    "Volume 1 · Original Throwback (nostalgia — the text adventure)":
+      open_url "/v0-original-text-engine/index.html"
+    "Volume 2 · Modern Edition (new visual-novel chapters)":
+      jump chapter_1_start
 
 chapter_select:
   choice:

@@ -3,8 +3,8 @@
   "configurations": [
     {
       "name": "pnk-preview",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["--prefix", "v1-modern", "run", "preview", "--", "--port", "4173", "--host", "127.0.0.1"],
+      "runtimeExecutable": "sh",
+      "runtimeArgs": ["-c", "cd v1-modern && npx vite preview --port 4173 --host 127.0.0.1"],
       "port": 4173
     }
   ]

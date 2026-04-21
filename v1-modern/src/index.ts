@@ -7,6 +7,7 @@ import {
   mountAiRibbon,
   registerAiNpcPlugin,
 } from './plugins/ai-npc-plugin';
+import { registerOpenUrlPlugin } from './plugins/open-url-plugin';
 import {
   isTesterMode,
   mountTesterRibbon,
@@ -16,6 +17,7 @@ import {
 // Register plugins BEFORE startApp so their customCommands are in the
 // narrat parser's root vocabulary when scripts are parsed.
 registerAiNpcPlugin();
+registerOpenUrlPlugin();
 registerTesterPlugin();
 
 const aiMode = isAiMode();

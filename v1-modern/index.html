@@ -6,23 +6,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>P&K Forever</title>
     <style>
+      /* Subtle mid-play deep-link to the other volume.
+         The primary picker is the in-game `volume_select` label at boot.
+         This corner chip is a backup for mid-session switching only. */
       .pnk-switcher {
         position: fixed;
-        top: 10px;
-        right: 10px;
+        top: 8px;
+        right: 8px;
         z-index: 9999;
         display: flex;
         gap: 6px;
         font-family: system-ui, sans-serif;
-        font-size: 12px;
+        font-size: 10px;
+        opacity: 0.35;
+        transition: opacity 0.2s;
+      }
+      .pnk-switcher:hover {
+        opacity: 1;
       }
       .pnk-switcher a {
-        background: rgba(0, 0, 0, 0.75);
+        background: rgba(0, 0, 0, 0.55);
         color: #fff;
-        padding: 6px 10px;
+        padding: 4px 8px;
         border-radius: 999px;
         text-decoration: none;
-        border: 1px solid rgba(255, 107, 53, 0.8);
+        border: 1px solid rgba(255, 107, 53, 0.5);
         transition: background 0.2s;
       }
       .pnk-switcher a:hover {
@@ -32,8 +40,8 @@
   </head>
   <body>
     <div id="app"></div>
-    <nav class="pnk-switcher" aria-label="Version switcher">
-      <a href="/v0-original-text-engine/" title="Play the original text adventure">Game 1 · Original Throwback</a>
+    <nav class="pnk-switcher" aria-label="Volume switcher">
+      <a href="/v0-original-text-engine/" title="Switch to Volume 1 — the original text adventure">Vol 1 · throwback</a>
     </nav>
     <script type="module" src="/src/index.ts"></script>
   </body>
