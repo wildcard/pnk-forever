@@ -35,7 +35,6 @@ pnk-forever/
 │   └── src/scripts/         ← 5 .narrat files (game, beach, sunset, jaffa, japan)
 ├── scripts/handoff/playtest.sh ← legacy playtest harness (autoplay, first-option)
 ├── vercel.json              ← cleanUrls:true, trailingSlash:false + v0 rewrites
-├── netlify.toml             ← legacy mirror
 └── HANDOVER.md              ← this file
 ```
 

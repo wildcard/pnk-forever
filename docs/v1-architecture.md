@@ -49,7 +49,7 @@ Backend:
 - API for Easter egg webhooks (secure, tracked)
 
 Frontend Hosting:
-- Netlify (current) or Vercel
+- Vercel
 - CDN for assets
 
 AI Integration:

@@ -6,7 +6,7 @@
 >
 > *April 21, 2021 - Forever*
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/4f0e996c-d0d0-419c-b7e2-8b1e4ff805ac/deploy-status)](https://app.netlify.com/sites/p-n-k-forever/deploys)
+[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?logo=vercel&logoColor=white)](https://pnk-forever.vercel.app)
 
 ---
 
@@ -44,7 +44,7 @@ This is a **monorepo** containing multiple versions of the P&K Forever game, pre
 pnk-forever/
 ├── README.md                    ← You are here
 ├── STORY.md                     ← The complete narrative
-├── netlify.toml                 ← Deployment configuration
+├── vercel.json                  ← Deployment configuration
 │
 ├── v0-original-text-engine/     ← The sacred original (April 2022)
 │   ├── index.html
@@ -179,7 +179,7 @@ This documentation serves two purposes:
 
 **Infrastructure:**
 - Static HTML/CSS/JS
-- Netlify hosting
+- Vercel hosting
 - IFTTT webhooks for Easter eggs
 
 **Total Size:** ~100KB including ASCII art
@@ -237,7 +237,7 @@ The brilliance: **The game isn't just played - it plays out in real life.**
 
 The v0 game is deployed and playable:
 
-**[Play P&K Forever v0 →](https://p-n-k-forever.netlify.app)** *(presumed URL)*
+**[Play P&K Forever v0 →](https://pnk-forever.vercel.app/v0-original-text-engine/)**
 
 Or run locally:
 ```bash
@@ -445,11 +445,11 @@ The P&K Forever game content and story are personal creative works.
 
 ## A Note From Phoenix
 
-*Even a year after knowing Anastasia, I understood how unique she is, and how she's something that I could never really, fully comprehend. The luck that I'm in to know such a woman and to have a romantic relationship with her.*
+*A year into knowing Anastasia, I still find myself unable to fully grasp who she is — not in a frustrating way, but in the way that keeps you paying attention. I am lucky to know her. I am lucky she's in my life.*
 
-*This is my way of creating something unique. This is what I know how to do. I know how to build software, and I always wanted to make games because that brings me joy and makes my connection with computers more meaningful.*
+*This is my way of making something. I build software, and I have always wanted to make games — because games are where craft and meaning meet, and that matters to me.*
 
-*She gave me back the belief in myself that I can maybe someday make a game.*
+*She gave me back the belief that I had it in me to actually do it.*
 
 *So I made this game.*
 
@@ -462,7 +462,7 @@ The P&K Forever game content and story are personal creative works.
 ## Contact & Links
 
 - **Original Engine:** [text-engine by okaybenji](https://github.com/okaybenji/text-engine)
-- **Deployment:** [Netlify](https://www.netlify.com)
+- **Deployment:** [Vercel](https://vercel.com)
 - **Easter Eggs:** [IFTTT Maker Webhooks](https://ifttt.com/maker_webhooks)
 
 ---
