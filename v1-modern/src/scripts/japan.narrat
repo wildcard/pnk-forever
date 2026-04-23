@@ -177,7 +177,15 @@ use_necklace:
 fly_home:
   "You step onto the balcony. He spreads his tail. You lift off."
   "The world curves beneath you — Kyoto, then cloud, then sea."
-  jump home_scene
+  jump epilogue_bridge
+
+epilogue_bridge:
+  choice:
+    "The silver necklace warms against your chest. The story has one more chapter — if you want it."
+    "Continue to the epilogue — The West Coast Years":
+      jump vancouver_intro
+    "Come home to Tel Aviv":
+      jump home_scene
 
 home_scene:
   set_screen home

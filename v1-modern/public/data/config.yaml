@@ -20,13 +20,13 @@ common:
     kyoto_apt: img/kyoto_apt.png
     kitchen: img/kitchen.png
     home: img/home.png
-    # Chapter 6 placeholders — real art TBD via art-director → game-artist
-    kits_beach: img/beach_rest.png
-    vancouver_apt: img/kyoto_apt.png
-    vancouver_peak: img/sunset.png
-    squamish: img/beach.png
-    north_van_persian: img/kitchen.png
-    costco_downtown: img/home.png
+    # Chapter 6 — Vancouver (painterly art shipped in PR #38)
+    kits_beach: img/kits_beach.png
+    vancouver_apt: img/vancouver_apt.png
+    vancouver_peak: img/vancouver_peak.png
+    squamish: img/squamish.png
+    north_van_persian: img/north_van_persian.png
+    costco_downtown: img/costco_downtown.png
   hudStats: {}
 
 dialoguePanel:
