@@ -154,20 +154,18 @@ html, body {
   margin-bottom: 0 !important;
 }
 
-/* Subtitle tagline — positioned at bottom of screen, below all
-   interactive content (z-index: 0 keeps it behind the button).    */
+/* Three cities the couple has been — quiet caption, not a tagline. */
 #game-splash-screen::after {
-  content: 'A Love Story in Two Volumes';
+  content: 'Tel Aviv · Kyoto · Vancouver';
   position: absolute;
   bottom: 2.5rem;
   left: 50%;
   transform: translateX(-50%);
   z-index: 0;
   font-family: Georgia, serif;
-  font-size: 0.8rem;
-  letter-spacing: 0.2em;
-  color: rgba(255, 248, 240, 0.35);
-  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  color: rgba(255, 248, 240, 0.32);
   white-space: nowrap;
   pointer-events: none;
 }
