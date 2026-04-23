@@ -1,6 +1,11 @@
 common:
   gameTitle: P&K Forever
   saveFileName: pnk-forever-save
+  splashScreens:
+    engineSplashScreen:
+      skip: true
+    gameSplashScreen:
+      startButtonText: "Come inside"
   layout:
     backgrounds:
       width: 1280
