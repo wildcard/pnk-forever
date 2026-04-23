@@ -59,12 +59,41 @@ html, body {
    Narrat's game-splash scene shows before the start menu.
    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
-/* Override narrat's black box with our warm-dark radial */
+/* Force game-scene wrappers visible. Narrat's Vue transition leaves
+   .game-scene stuck at opacity: 0 on initial mount — the prod CSS
+   ships .narrat-transition-fade-enter-from/leave-to { opacity: 0 }
+   and -active { transition-property: opacity } but the enter-to class
+   never lands, so the fade-in never commits. Applies to every scene
+   wrapper (splash, start-menu, game body); we provide our own fade-in
+   keyframe so the transition still feels alive.                      */
+.game-scene {
+  opacity: 1 !important;
+  animation: pnkSceneFadeIn 420ms ease-out 0s 1 forwards;
+}
+@keyframes pnkSceneFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  @keyframes pnkSceneFadeIn {
+    from, to { opacity: 1; }
+  }
+}
+
+/* Override narrat's black box with painted splash background.
+   Layering (top to bottom):
+   1. Warm-dark radial vignette — clears center for the wordmark
+   2. Painted balcony-at-sunset scene
+   3. Fallback solid dark
+   Paper texture on splash: not applied (::before/::after already taken).
+   Use .pnk-paper-overlay utility class on the splash wrapper if needed.   */
 #game-splash-screen {
   background:
-    radial-gradient(ellipse 80% 60% at 50% 40%,
-      rgba(45, 24, 16, 0.95) 0%,
-      var(--pnk-dark) 70%) !important;
+    radial-gradient(ellipse 55% 45% at 50% 42%,
+      rgba(18, 14, 10, 0.72) 0%,
+      transparent 70%),
+    url('/img/ui/splash/splash_bg.jpg') center/cover no-repeat,
+    var(--pnk-dark) !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -191,22 +220,53 @@ html, body {
 
 #game-menu {
   background:
-    radial-gradient(ellipse 70% 50% at 50% 35%,
-      rgba(45, 24, 16, 0.9) 0%,
-      var(--pnk-dark) 80%) !important;
+    url('/img/ui/menu/menu_bg.jpg') center/cover no-repeat,
+    var(--pnk-dark) !important;
   position: relative !important;
 }
 
-/* Warm vignette overlay */
+/* Left-side vignette: dims the button stack area for legibility.
+   Right side stays warm and painterly. */
 #game-menu::before {
   content: '';
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 60% 40% at 50% 30%,
-      rgba(255, 107, 53, 0.06) 0%,
-      transparent 70%);
+    linear-gradient(
+      to right,
+      rgba(18, 14, 10, 0.78) 0%,
+      rgba(18, 14, 10, 0.55) 35%,
+      transparent 65%
+    );
   pointer-events: none;
+  z-index: 0;
+}
+
+/* Paper texture overlay — adds tactile warmth at 8% opacity */
+#game-menu::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url('/img/ui/paper_texture.png') repeat;
+  background-size: 512px 512px;
+  opacity: 0.08;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Paper texture utility class — apply to any full-bleed container */
+.pnk-paper-overlay {
+  position: relative;
+}
+.pnk-paper-overlay::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url('/img/ui/paper_texture.png') repeat;
+  background-size: 512px 512px;
+  opacity: 0.08;
+  pointer-events: none;
+  z-index: 0;
 }
 
 #game-title-container {

@@ -2,17 +2,17 @@ main:
   set_screen beach_rest
   tester_route
   ai_demo_route
-  "P. & K. — A Love Story in Two Volumes"
+  "P. & K. — a story kept, chapter by chapter."
   ""
   jump volume_select
 
 volume_select:
   tester_route
   choice:
-    "Which volume would you like to play?"
-    "Volume 1 · Original Throwback (nostalgia — the text adventure)":
+    "Pick up from where you'd like to begin."
+    "The original · read it the way it was first written":
       open_url "/v0-original-text-engine/index.html"
-    "Volume 2 · Modern Edition (new visual-novel chapters)":
+    "The full story · all the chapters, from the beach onward":
       jump chapter_1_start
 
 chapter_select:
