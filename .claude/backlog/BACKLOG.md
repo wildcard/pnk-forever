@@ -68,6 +68,12 @@
   - added: 2026-04-20
   - source: SESSION-GAPS.md #15
 
+- [ ] **[P3] STORY.md stale "in planning" prose** — the closing paragraph still reads *"Now, years later, with Claude Code, we honor that original vision and plan what comes next"*. After the 2026-04-23 ship, this is no longer true; a one-line past-tense update would keep STORY.md consistent with the shipped README.
+  - owner: story-biographer
+  - acceptance: final paragraph of `STORY.md` reflects that v1 shipped on the fifth anniversary; no other STORY.md content touched.
+  - added: 2026-04-23
+  - source: biographer out-of-scope note during PR #52 dispatch.
+
 ---
 
 ## Open — filed from the 2026-04-20 ship-gate verdict
