@@ -109,4 +109,18 @@ export function mountTesterRibbon(): void {
       document.body.appendChild(ribbon);
     });
   }
+
+  // Hide the `.pnk-switcher` volume deep-link chip in tester mode — testers
+  // already have a dedicated chapter-picker panel; the extra overlay is
+  // noise that also collides with this ribbon in the top-right corner.
+  hideSwitcherChip();
+}
+
+function hideSwitcherChip(): void {
+  const hide = () => {
+    const el = document.querySelector<HTMLElement>('.pnk-switcher');
+    if (el) el.style.display = 'none';
+  };
+  if (document.body) hide();
+  else window.addEventListener('DOMContentLoaded', hide);
 }

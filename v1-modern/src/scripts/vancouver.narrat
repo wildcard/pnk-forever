@@ -94,4 +94,5 @@ vancouver_outro:
   ""
   "..."
   ""
-  "And the story keeps going."
+  "And the story keeps going — all the way home."
+  jump home_scene
