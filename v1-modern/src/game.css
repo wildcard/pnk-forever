@@ -1,17 +1,40 @@
-/* P&K Forever - Game theme */
+/* P&K Forever — Game Theme
+   UI artist pass: splash screen, main menu, volume-select polish,
+   systemic focus rings + hover motion.
+   ---------------------------------------------------------------- */
+
+/* ── Design tokens ─────────────────────────────────────────────── */
 :root {
-  --pnk-orange: #FF6B35;
-  --pnk-black: #1A1A1A;
-  --pnk-cream: #FFF8F0;
+  --pnk-orange:  #FF6B35;
+  --pnk-black:   #1A1A1A;
+  --pnk-cream:   #FFF8F0;
+  --pnk-rose:    #E87966;
+  --pnk-teal:    #4CC2BA;
+  --pnk-dark:    #120E0A;        /* richer black for splash bg     */
+  --pnk-amber:   #2D1810;       /* warm brown mid-tone             */
+
+  /* Motion budget — overridden to 0 for reduced-motion users */
+  --motion-hover:  0.18s;
+  --motion-focus:  0.12s;
+  --motion-fade:   0.6s;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-hover:  0s;
+    --motion-focus:  0s;
+    --motion-fade:   0s;
+  }
+}
+
+/* ── Base ───────────────────────────────────────────────────────── */
 html, body {
   margin: 0;
   padding: 0;
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background: #111;
+  background: var(--pnk-dark);
   font-family: 'Georgia', serif;
 }
 
@@ -20,7 +43,7 @@ html, body {
   height: 100%;
 }
 
-/* Scene backgrounds - gradient fallbacks while images load */
+/* ── Scene background gradient fallbacks ────────────────────────── */
 .background-beach_rest  { background: linear-gradient(160deg, #87CEEB 0%, #F0E68C 60%, #DEB887 100%); }
 .background-beach       { background: linear-gradient(180deg, #4FC3F7 0%, #81D4FA 40%, #F5DEB3 70%, #C2B280 100%); }
 .background-beach_sunset{ background: linear-gradient(160deg, #FF6B35 0%, #FF8C42 30%, #FFB347 60%, #4A90D9 100%); }
@@ -31,53 +54,390 @@ html, body {
 .background-kitchen     { background: linear-gradient(135deg, #FFF8DC 0%, #F4A460 50%, #8B6914 100%); }
 .background-home        { background: linear-gradient(160deg, #FFF0E6 0%, #FFD4B8 50%, #FF6B35 100%); }
 
-/* Dialogue box - romantic style */
-.nrt-dialog-box {
-  background: rgba(26, 26, 26, 0.92) !important;
-  border: 1px solid rgba(255, 107, 53, 0.4) !important;
-  border-radius: 8px !important;
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   SPLASH SCREEN  (#game-splash-screen)
+   Narrat's game-splash scene shows before the start menu.
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* Override narrat's black box with our warm-dark radial */
+#game-splash-screen {
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 40%,
+      rgba(45, 24, 16, 0.95) 0%,
+      var(--pnk-dark) 70%) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  position: absolute !important;
+  inset: 0 !important;
+  overflow: hidden !important;
 }
 
-.nrt-dialog-text {
-  color: #FFF8F0 !important;
-  font-family: 'Georgia', serif !important;
-  font-size: 1.05rem !important;
-  line-height: 1.7 !important;
+/* Ambient glow behind the wordmark */
+#game-splash-screen::before {
+  content: '';
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  height: 300px;
+  background: radial-gradient(ellipse, rgba(255, 107, 53, 0.12) 0%, transparent 70%);
+  pointer-events: none;
+  animation: splashGlow 4s ease-in-out infinite alternate;
 }
 
-.nrt-speaker-name {
-  color: var(--pnk-orange) !important;
-  font-weight: bold !important;
+@keyframes splashGlow {
+  from { opacity: 0.6; transform: translate(-50%, -50%) scale(1); }
+  to   { opacity: 1;   transform: translate(-50%, -50%) scale(1.08); }
 }
 
-/* Choice buttons */
-.nrt-choice-button {
-  background: rgba(255, 107, 53, 0.1) !important;
-  border: 1px solid rgba(255, 107, 53, 0.5) !important;
-  color: #FFF8F0 !important;
-  border-radius: 6px !important;
-  transition: all 0.2s ease !important;
+@media (prefers-reduced-motion: reduce) {
+  @keyframes splashGlow {
+    from, to { opacity: 0.8; transform: translate(-50%, -50%) scale(1); }
+  }
 }
 
-.nrt-choice-button:hover {
-  background: rgba(255, 107, 53, 0.3) !important;
+/* Header container — narrat wraps title + button in a div whose id
+   is malformed (contains spaces), so we target the child flex layout
+   via the game-splash-screen's direct children instead. The flex
+   classes narrat applies (.flex.flex-col) already center things;
+   we just need z-index and gap.                                     */
+#game-splash-screen > div {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 2.5rem !important;
+  z-index: 1 !important;
+  position: relative !important;
+}
+
+/* Game title on splash — replaced visually by wordmark SVG via
+   CSS background; we hide the text and show the SVG instead.     */
+#game-splash-title {
+  /* Keep for screen readers, but render as image */
+  font-size: 0 !important;
+  line-height: 0 !important;
+  display: block !important;
+  width: 400px !important;
+  height: 100px !important;
+  background: url('/img/ui/splash/wordmark.svg') center/contain no-repeat !important;
+  margin-bottom: 0 !important;
+}
+
+/* Subtitle tagline — positioned at bottom of screen, below all
+   interactive content (z-index: 0 keeps it behind the button).    */
+#game-splash-screen::after {
+  content: 'A Love Story in Two Volumes';
+  position: absolute;
+  bottom: 2.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 0;
+  font-family: Georgia, serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.2em;
+  color: rgba(255, 248, 240, 0.35);
+  text-transform: uppercase;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* ── Splash start button ──────────────────────────────────────── */
+.splash-start-button {
+  padding: 0.85rem 3rem !important;
+  font-family: Georgia, serif !important;
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+  color: var(--pnk-black) !important;
+  background: linear-gradient(135deg, var(--pnk-orange) 0%, #FF8C42 100%) !important;
+  border: none !important;
+  border-radius: 3px !important;
+  cursor: pointer !important;
+  position: relative !important;
+  box-shadow:
+    0 2px 24px rgba(255, 107, 53, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18) !important;
+  transition:
+    transform var(--motion-hover) ease,
+    box-shadow var(--motion-hover) ease,
+    opacity var(--motion-hover) ease !important;
+}
+
+.splash-start-button:hover {
+  transform: translateY(-2px) !important;
+  box-shadow:
+    0 6px 32px rgba(255, 107, 53, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22) !important;
+}
+
+.splash-start-button:focus-visible {
+  outline: 2px solid var(--pnk-cream) !important;
+  outline-offset: 3px !important;
+}
+
+.splash-start-button:active {
+  transform: translateY(0) !important;
+  box-shadow: 0 1px 8px rgba(255, 107, 53, 0.4) !important;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   START MENU  (#game-menu / #game-title-text)
+   The narrat start-menu scene: shows after the player presses
+   "Begin the Story" on the splash, before the script runs.
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+#game-menu {
+  background:
+    radial-gradient(ellipse 70% 50% at 50% 35%,
+      rgba(45, 24, 16, 0.9) 0%,
+      var(--pnk-dark) 80%) !important;
+  position: relative !important;
+}
+
+/* Warm vignette overlay */
+#game-menu::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 40% at 50% 30%,
+      rgba(255, 107, 53, 0.06) 0%,
+      transparent 70%);
+  pointer-events: none;
+}
+
+#game-title-container {
+  margin-bottom: 0.5rem !important;
+}
+
+/* Hide the plain text title — show the SVG wordmark instead */
+#game-title-text {
+  font-size: 0 !important;
+  line-height: 0 !important;
+  display: block !important;
+  width: 360px !important;
+  height: 90px !important;
+  background: url('/img/ui/splash/wordmark.svg') center/contain no-repeat !important;
+  margin: 0 auto !important;
+}
+
+/* Decorative divider between title and buttons */
+#game-header::after {
+  content: '';
+  display: block;
+  width: 240px;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(255, 107, 53, 0.4) 30%,
+    rgba(255, 107, 53, 0.4) 70%,
+    transparent 100%);
+  margin: 0.75rem auto 1.25rem;
+}
+
+/* Start-menu action buttons (New Game, Load, etc.) */
+.nrt-button.main-menu-button {
+  font-family: Georgia, serif !important;
+  font-size: 0.95rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em !important;
+  color: var(--pnk-cream) !important;
+  background: rgba(255, 248, 240, 0.05) !important;
+  border: 1px solid rgba(255, 107, 53, 0.35) !important;
+  border-radius: 4px !important;
+  padding: 0.7rem 2.5rem !important;
+  margin-bottom: 0.4rem !important;
+  transition:
+    background var(--motion-hover) ease,
+    border-color var(--motion-hover) ease,
+    transform var(--motion-hover) ease,
+    box-shadow var(--motion-hover) ease !important;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3) !important;
+}
+
+.nrt-button.main-menu-button:hover {
+  background: rgba(255, 107, 53, 0.16) !important;
   border-color: var(--pnk-orange) !important;
-  transform: translateX(3px) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 16px rgba(255, 107, 53, 0.2) !important;
 }
 
-/* Main menu */
+.nrt-button.main-menu-button:focus-visible {
+  outline: 2px solid var(--pnk-orange) !important;
+  outline-offset: 2px !important;
+  background: rgba(255, 107, 53, 0.1) !important;
+}
+
+.nrt-button.main-menu-button:active {
+  transform: translateY(0) !important;
+  background: rgba(255, 107, 53, 0.25) !important;
+}
+
+/* ── Legacy selectors kept for forward-compat ─────────────────── */
+/* (game.css originally used these; narrat doesn't emit them but   */
+/*  keeping them costs nothing and avoids confusion.)              */
 .nrt-main-menu {
-  background: linear-gradient(160deg, #1A1A1A 0%, #2D1810 50%, #1A1A1A 100%) !important;
+  background: radial-gradient(ellipse 70% 50% at 50% 35%,
+    rgba(45, 24, 16, 0.9) 0%, var(--pnk-dark) 80%) !important;
 }
 
 .nrt-main-menu-title {
   color: var(--pnk-orange) !important;
-  text-shadow: 0 0 20px rgba(255, 107, 53, 0.5) !important;
+  text-shadow: 0 0 20px rgba(255, 107, 53, 0.4) !important;
 }
 
 .nrt-start-button {
   background: linear-gradient(135deg, var(--pnk-orange), #FF8C42) !important;
-  color: #1A1A1A !important;
-  font-weight: bold !important;
+  color: var(--pnk-black) !important;
+  font-weight: 700 !important;
+  border-radius: 4px !important;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   VOLUME-SELECT CHOICE BUTTONS
+   The `volume_select` label in game.narrat is the first choice
+   the player sees. Give Volume 1 / Volume 2 visual weight.
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* All choice buttons — base system */
+.nrt-choice-button {
+  background: rgba(255, 107, 53, 0.06) !important;
+  border: 1px solid rgba(255, 107, 53, 0.4) !important;
+  color: var(--pnk-cream) !important;
+  border-radius: 5px !important;
+  font-family: Georgia, serif !important;
+  font-size: 1rem !important;
+  line-height: 1.5 !important;
+  padding: 0.7rem 1.25rem !important;
+  transition:
+    background var(--motion-hover) ease,
+    border-color var(--motion-hover) ease,
+    transform var(--motion-hover) ease,
+    box-shadow var(--motion-hover) ease !important;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.25) !important;
+  cursor: pointer !important;
+}
+
+.nrt-choice-button:hover {
+  background: rgba(255, 107, 53, 0.22) !important;
+  border-color: var(--pnk-orange) !important;
+  transform: translateX(4px) !important;
+  box-shadow: 0 3px 12px rgba(255, 107, 53, 0.2) !important;
+}
+
+.nrt-choice-button:focus-visible {
+  outline: 2px solid var(--pnk-orange) !important;
+  outline-offset: 2px !important;
+  background: rgba(255, 107, 53, 0.12) !important;
+}
+
+.nrt-choice-button:active {
+  transform: translateX(2px) !important;
+  background: rgba(255, 107, 53, 0.3) !important;
+}
+
+/* Volume-card treatment — give V1 and V2 choices a mini card look.
+   Narrat emits a <button> with text; we use ::before for a volume
+   label pill and rely on the wider padding for card feel.        */
+.nrt-choice-button:first-child {
+  border-left: 3px solid var(--pnk-rose) !important;
+  padding-left: 1.5rem !important;
+}
+
+.nrt-choice-button:nth-child(2) {
+  border-left: 3px solid var(--pnk-teal) !important;
+  padding-left: 1.5rem !important;
+}
+
+/* Decorative volume accent on the right edge */
+.nrt-choice-button:first-child::after {
+  content: 'Vol. I';
+  float: right;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--pnk-rose);
+  opacity: 0.75;
+  margin-left: 1rem;
+  align-self: center;
+  line-height: 1;
+}
+
+.nrt-choice-button:nth-child(2)::after {
+  content: 'Vol. II';
+  float: right;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--pnk-teal);
+  opacity: 0.75;
+  margin-left: 1rem;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   DIALOGUE BOX
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+.nrt-dialog-box {
+  background: rgba(18, 14, 10, 0.93) !important;
+  border: 1px solid rgba(255, 107, 53, 0.3) !important;
   border-radius: 6px !important;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 107, 53, 0.08) !important;
+}
+
+.nrt-dialog-text {
+  color: var(--pnk-cream) !important;
+  font-family: Georgia, serif !important;
+  font-size: 1.05rem !important;
+  line-height: 1.75 !important;
+}
+
+.nrt-speaker-name {
+  color: var(--pnk-orange) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.04em !important;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   MENU TOGGLE BUTTONS (Auto / Skip / History)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+.nrt-button.menu-toggle-button {
+  color: rgba(255, 248, 240, 0.7) !important;
+  border: 1px solid rgba(255, 107, 53, 0.2) !important;
+  border-radius: 3px !important;
+  transition:
+    color var(--motion-hover) ease,
+    border-color var(--motion-hover) ease,
+    background var(--motion-hover) ease !important;
+}
+
+.nrt-button.menu-toggle-button:hover {
+  color: var(--pnk-cream) !important;
+  border-color: rgba(255, 107, 53, 0.5) !important;
+  background: rgba(255, 107, 53, 0.1) !important;
+}
+
+.nrt-button.menu-toggle-button:focus-visible {
+  outline: 2px solid var(--pnk-orange) !important;
+  outline-offset: 2px !important;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   GLOBAL FOCUS RING — catch-all for any interactive element
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+button:focus-visible,
+[role="button"]:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--pnk-orange) !important;
+  outline-offset: 2px !important;
+  transition: outline-offset var(--motion-focus) ease !important;
 }
