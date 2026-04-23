@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 120" fill="none">
+  <!-- P&K text -->
+  <text
+    x="240" y="72"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-size="64"
+    font-weight="700"
+    letter-spacing="2"
+    fill="#FFF8F0"
+    text-anchor="middle"
+    dominant-baseline="auto">P&amp;K</text>
+
+  <!-- Forever subtitle -->
+  <text
+    x="240" y="104"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-size="18"
+    font-weight="400"
+    letter-spacing="8"
+    fill="#FF6B35"
+    text-anchor="middle"
+    dominant-baseline="auto">FOREVER</text>
+
+  <!-- Decorative rule lines flanking the subtitle -->
+  <line x1="60" y1="93" x2="150" y2="93" stroke="#FF6B35" stroke-width="0.75" opacity="0.6"/>
+  <line x1="330" y1="93" x2="420" y2="93" stroke="#FF6B35" stroke-width="0.75" opacity="0.6"/>
+
+  <!-- Small ampersand accent dots -->
+  <circle cx="60" cy="93" r="2" fill="#FF6B35" opacity="0.6"/>
+  <circle cx="420" cy="93" r="2" fill="#FF6B35" opacity="0.6"/>
+</svg>
