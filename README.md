@@ -61,8 +61,11 @@ pnk-forever/
 │   ├── easter-eggs.md           ← The game-to-reality bridges
 │   └── integrations.md          ← Technical systems & architecture
 │
-└── v1-modern/                   ← Future: Modern reimagining
-    └── (coming soon)
+└── v1-modern/                   ← Volume 2: Modern visual novel (shipped)
+    ├── public/
+    │   ├── data/config.yaml     ← Narrat config, characters, screens
+    │   └── img/                 ← Backgrounds + sprites
+    └── src/scripts/             ← 7 .narrat chapter files
 ```
 
 ---
@@ -79,21 +82,29 @@ The original game created with GitHub Copilot on the first anniversary. It tells
 
 **[Play v0 →](https://pnk-forever.vercel.app/v0-original-text-engine/)** · [source](v0-original-text-engine/)
 
-### v1: Modern Reimagining (In Planning)
+### v1: Modern Visual Novel (Shipped — April 23, 2026)
 
-**Technology:** TBD (researching modern web game engines)
-**Created With:** Claude Code (2024-2025)
-**Status:** 📋 **PLANNING**
+**Technology:** Narrat v3, TypeScript, Vite
+**Created With:** Claude Code (2025–2026)
+**Status:** 🎁 **SHIPPED**
 
-Same narrative essence, same characters, same emotional beats - but brought to life with modern web technology and smart AI integration.
+Six chapters. Real backgrounds. Character sprites. A volume picker at launch so Anastasia can choose which version she wants. The same story, told with new tools.
 
-**Goals:**
-- Preserve the story and soul
-- Enhanced presentation (visuals, sound, interactivity)
-- Smarter Easter egg system
-- Better mobile experience
-- Potential for expanded narrative (more years, more moments)
-- AI-enhanced dialogue and scenarios
+**What shipped:**
+- **Ch 1 · Meet Cute** — Tel Aviv beach café, the Brompton, the first words
+- **Ch 2 · The Sunset Walk** — south toward Jaffa, the shekel, the question about Japan
+- **Ch 3 · Jaffa Nights** — the apartment, the kite, sleeping until morning
+- **Ch 4 · Kyoto Kitchen** — three years later, dim sum, the tiger and the snake
+- **Ch 5 · Forever Home** — the necklace, the flight home, *"For Anastasia. Forever."*
+- **Ch 6 · The West Coast Years (Epilogue)** — trails, kite, Persian food, Costco runs; a chapter for what came after
+
+**Also shipped:**
+- Volume picker at game start (choose the text adventure or the visual novel)
+- AI NPC plugin (`?ai=1`) — opt-in mode where K responds with live LLM-authored lines
+- Keyword-centralization CI — a GitHub Actions workflow ensures easter-egg triggers stay in sync across all chapters
+- Tester escape hatch (`?tester=1`) — drops straight to chapter-select with narrat's debug panel
+
+**[Play v1 →](https://pnk-forever.vercel.app/)** · [source](v1-modern/)
 
 ---
 
@@ -131,20 +142,14 @@ The game is a bridge between code and reality.
 
 ### 4. Honor the Tools
 
-- **v0** was built with GitHub Copilot - the early days of AI-assisted development
-- **v1** is being planned with Claude Code - continuing the tradition
+- **v0** was built with GitHub Copilot — the early days of AI-assisted development
+- **v1** was built with Claude Code — the tradition continued, and extended
 
-There's a poetic continuity: AI helped create something deeply human, twice, years apart.
+AI helped create something deeply human, twice, years apart. The tools changed. The intention didn't.
 
 ### 5. Don't Over-Engineer
 
-The original's beauty is its simplicity:
-- No dependencies
-- No build process
-- No frameworks
-- Just HTML, JavaScript, CSS, and a story
-
-Any modernization must ask: "Does this serve the story and the player, or just the technology?"
+v0's beauty is its simplicity — no dependencies, no build step, just HTML and a story. v1 earns its build process by using it to serve the story. The question every version asks is the same: does this serve Anastasia, or does it serve the technology?
 
 ---
 
@@ -186,31 +191,21 @@ This documentation serves two purposes:
 
 **Development Assistant:** GitHub Copilot (Tab9 era)
 
-### v1 Technology (TBD - In Research)
+### v1 Technology Stack (2025–2026)
 
-**Goals:**
-- Modern web game engine (researching options)
-- Enhanced visuals while respecting the story
-- Smarter Easter egg system (backend, not exposed keys)
-- AI integration for dynamic elements
-- Mobile-first responsive design
-- Improved accessibility
+**Engine:** Narrat v3
+- TypeScript + Vite build
+- YAML-based character and screen config
+- Custom plugin system (tester escape hatch, AI NPC, `open_url` volume picker)
+- narrat's built-in dialog, choice, and data-flag system
 
-**Candidates:**
-- Phaser (popular, mature, 2D focused)
-- Ren'Py Web (visual novel oriented)
-- ink + inkjs (narrative scripting)
-- Custom React/Vue + game engine
-- Godot (web export)
-- Three.js / PixiJS (if going visual)
+**Infrastructure:**
+- Vite build → `v1-modern/dist/`
+- Vercel hosting (same deployment as v0)
+- GitHub Actions CI for easter-egg keyword integrity
+- IFTTT webhooks for easter eggs (same as v0, same event names)
 
-**Must Maintain:**
-- Browser-based (no installation)
-- Story-first focus
-- Lightweight and fast
-- Respect for the original's aesthetic
-
-**Development Assistant:** Claude Code (2024-2025)
+**Development Assistant:** Claude Code (2025–2026)
 
 ---
 
@@ -275,15 +270,16 @@ One year later, Phoenix created the game with GitHub Copilot. A way to say: "Thi
 A love letter in code. A memory made interactive.
 
 ### December 2024
-**Preservation & Planning - v1 Begins**
+**Preservation — v1 Begins**
 
-With Claude Code, the project evolves:
-1. Restructured into monorepo
-2. Original preserved with full git history
-3. Complete documentation extracted
-4. Planning the modern reimagining
+With Claude Code, the project restructures into a monorepo. v0 preserved with full git history. Documentation extracted. The modern reimagining starts in earnest.
 
-The story continues.
+### 2025–April 2026
+**v1 Ships**
+
+Six chapters built with Narrat v3 and a team of specialized sub-agents — narrative, art, UI, tester, producer. Five chapters of Volume 2, then Ch 6 (the Vancouver epilogue, a chapter for what came after Japan), then a full ship-gate pass with zero loop risks and the sacred line confirmed terminal.
+
+The game shipped on April 23, 2026 — the fifth anniversary of the day they met.
 
 ---
 
@@ -401,37 +397,30 @@ Nothing is arbitrary. Everything matters.
 
 ---
 
+## What's Shipped
+
+v1 is complete and deployed. Here is what exists in the wild as of April 23, 2026:
+
+- ✅ Monorepo with v0 preserved and full git history intact
+- ✅ Six-chapter visual novel (Narrat v3, TypeScript, Vite)
+- ✅ Volume picker at game start — one choice, two worlds
+- ✅ All six easter-egg triggers wired (`pnk_mango`, `pnk_drink`, `pnk_chocolate`, `pnk_kite`, `pnk_love`, `pnk_fly`)
+- ✅ Keyword-centralization CI — `scripts/check-easter-eggs.sh` + GitHub Actions prevent silent drift
+- ✅ AI NPC plugin — opt-in `?ai=1` mode, zero impact on the main player path
+- ✅ Tester escape hatch — `?tester=1` for QA, invisible to Anastasia
+- ✅ Ship-gate passed: all 10 acceptance criteria green, zero loop risks, sacred line verified
+
 ## What's Next
 
-### Immediate (Current)
+The game is a gift, not a product. These are things worth doing when the moment is right — not a roadmap, not a deadline.
 
-- ✅ Restructure into monorepo
-- ✅ Preserve v0 with git history
-- ✅ Extract and document complete narrative
-- ✅ Document all mechanics, characters, items, Easter eggs
-- 🔄 Research modern web game engines
-- 🔄 Design v1 architecture
-- ⏳ Plan AI integration strategy
+- **Retina keycaps** — upgrade the UI button-prompt PNGs to SVG for crisper rendering at high DPI
+- **`beach_rest.png` regen** — the café background reads generic-romantic-dusk; a midday Tel Aviv version would match the prose better
+- **Mobile viewport coverage** — the playtest harness runs desktop only; add 375px and 390px passes
+- **Audio** — ambient beds per scene (beach waves, Kyoto rain, Tel Aviv night) whenever the core loop earns it
+- **`vercel.json` → `vercel.ts`** — typed config, easier to read
 
-### v1 Development
-
-- Choose technology stack
-- Design visual style (honoring original aesthetic)
-- Implement core engine
-- Port narrative to new format
-- Enhance Easter egg system (secure backend)
-- Add new content? (More years, more moments)
-- Mobile optimization
-- Accessibility improvements
-- Beta testing with Anastasia
-- Launch
-
-### Future Possibilities
-
-- **v2+:** Continued evolution
-- **Other formats:** Visual novel? Point-and-click? Interactive fiction?
-- **Other stories:** New chapters, new adventures
-- **Community:** Tools for others to create game-to-reality experiences?
+The backlog with full acceptance criteria lives at `.claude/backlog/BACKLOG.md`.
 
 ---
 

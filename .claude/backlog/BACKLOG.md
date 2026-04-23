@@ -42,10 +42,12 @@
   - completed: 2026-04-20 (shipped on main in PR #43 `915c1bb` — CI workflow + scripts/check-easter-eggs.sh; stronger than the sunset.narrat registry-comment approach originally planned).
   - source: SESSION-GAPS.md #12
 
-- [ ] **[P1] Update `README.md` "What's Next" to match shipped state** — main has since added Ch6 Vancouver (#12/#38), AI NPC plugin (#34), volume picker (#41); README needs a fresh pass.
+- [x] **[P1] Update `README.md` "What's Next" to match shipped state** — main has since added Ch6 Vancouver (#12/#38), AI NPC plugin (#34), volume picker (#41); README needs a fresh pass.
   - owner: story-biographer
   - acceptance: section reflects reality — 5 chapters + Ch6 Vancouver epilogue all shipped, volume-select + AI NPC plugin live, chapter-select hidden from main flow, Vercel deploy live at production URL.
   - added: 2026-04-20
+  - completed: 2026-04-23
+  - result: README fully updated — v1 section rewritten as SHIPPED with chapter list; "What's Next" replaced by "What's Shipped" + post-ship roadmap; Technology section replaced with actual Narrat/Vite stack; Development History updated through April 2026; Core Principles §4 and §5 corrected to past tense; project-structure tree updated to reflect v1-modern's actual layout. Commit on branch `polish/readme-refresh-post-ch6`.
   - note: deferred from 2026-04-20 producer sequence — the rewrite prepared then went stale when main merged PRs #12/#34/#38/#41/#42/#43/#44. Fresh dispatch needed.
 
 - [ ] **[P2] Upgrade keycaps from PIL-generated PNG to SVG** — crisper UI at retina zoom.
