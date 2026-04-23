@@ -21,6 +21,13 @@
   - result: **BLOCK** — one P0 blocker (kitchen 8-option hub exceeds 6-visit cap). 5/12 criteria PASS as isolated checks; Ch 1–4 fail because all funnel into Ch5 kitchen. Sacred line + backgrounds + sprites + 0 console.errors all GREEN. Full report: `.claude/test-reports/2026-04-20.md`.
   - source: SESSION-GAPS.md #10
 
+- [x] **[P0] Re-run `game-tester` on the integrated branch** — previous ship-gate was against the superseded Hub A/B structure from #39; needs a fresh verdict against `main`'s top-guard structure combined with producer-sequence narrative polish.
+  - owner: game-tester (dispatched by game-producer)
+  - acceptance: SHIP/BLOCK verdict against commit `203107d` on branch `integrate/producer-sequence`; all 10 acceptance criteria checked; kitchen_conversation 8-option hub with PR #42 top-guard validated at 6-visit cap.
+  - added: 2026-04-22
+  - completed: 2026-04-22
+  - result: **SHIP** — all 10 acceptance criteria PASS, zero self-jumps, kitchen 8-option hub exits cleanly at visit 6 via top-guard cascade, sacred line terminal and unique per chapter, all 15 easter-egg keywords reachable, all 6 chapters end at `home_scene`. Full report: `.claude/test-reports/2026-04-22-integrated-shipgate.md`.
+
 - [x] **[P0] Volume picker UI before chapter select** — let Anastasia pick Volume 1 (v0) or Volume 2 (v1) at game start.
   - owner: game-ui-artist
   - acceptance: `v1-modern/src/scripts/game.narrat` opening screen offers both routes; both paths deploy and load without 404.
